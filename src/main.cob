@@ -5,5 +5,4 @@ ENVIRONMENT DIVISION.
 DATA DIVISION.
 PROCEDURE DIVISION.
     DISPLAY "Hello from GNU Cobol in Docker + VS Code!".
-    DISPLAY "Trevor Flahardy"
     STOP RUN.
