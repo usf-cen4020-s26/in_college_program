@@ -13,7 +13,14 @@
   },
   "extensions": [
     "bitlang.cobol",
-    "ms-vscode.makefile-tools"
+    "ms-vscode.makefile-tools",
+    "GitHub.copilot",
+    "GitHub.copilot-chat",
+    "aaron-bond.better-comments",
+    "streetsidesoftware.code-spell-checker",
+    "usernamehw.errorlens",
+    "GitHub.vscode-pull-request-github",
+    "vscode-icons-team.vscode-icons"
   ],
   "postCreateCommand": "mkdir -p bin src && echo 'Devcontainer ready.'"
 }
