@@ -1,0 +1,28 @@
+name: Build COBOL Project
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GNU COBOL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y open-cobol
+
+      - name: Build COBOL source with -free and -x
+        run: |
+          mkdir -p bin
+          cobc -x -free -o bin/main src/main.cob
+
+      - name: Check build output
+        run: |
+          test -f bin/main
