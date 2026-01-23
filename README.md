@@ -2,31 +2,6 @@
 
 This repository contains the InCollege application - a COBOL-based career networking platform with user authentication, job search, and skill learning features. The project includes a comprehensive test suite and CI/CD pipeline.
 
-## Project Structure
-
-```
-.
-├── src/
-│   └── main.cob              # Main COBOL program
-├── bin/                      # Compiled executables
-├── tests/
-│   ├── test_runner.py        # Python test automation system
-│   ├── fixtures/
-│   │   └── login/            # Test fixtures for login functionality
-│   │       ├── 1_existing_account/
-│   │       │   ├── inputs/   # Input files for existing account tests
-│   │       │   └── expected/ # Expected outputs
-│   │       └── 2_new_account/
-│   │           ├── inputs/   # Input files for new account tests
-│   │           └── expected/ # Expected outputs
-│   ├── TestCases-README.MD   # Test case documentation
-│   └── user_inputs.md        # User input patterns
-├── .github/
-│   └── workflows/
-│       └── test.yml          # CI/CD pipeline configuration
-└── .devcontainer/            # Development container configuration
-```
-
 ## Getting Started
 
 ### Prerequisites
@@ -80,10 +55,7 @@ This project includes a comprehensive Python-based testing system that automatic
 
 ### Test Structure
 
-Tests are organized in the `tests/fixtures/login/` directory:
-
-- **1_existing_account/**: Tests for logging into pre-existing accounts
-- **2_new_account/**: Tests for creating new accounts and account validation
+Tests are organized in the `tests/fixtures` directory:
 
 Each test category contains:
 - `inputs/`: Input files (`.in.txt`) containing user interactions
