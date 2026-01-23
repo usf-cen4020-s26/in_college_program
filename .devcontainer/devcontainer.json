@@ -20,7 +20,9 @@
     "streetsidesoftware.code-spell-checker",
     "usernamehw.errorlens",
     "GitHub.vscode-pull-request-github",
-    "vscode-icons-team.vscode-icons"
+    "vscode-icons-team.vscode-icons",
+    "ms-python.python",
+    "ms-python.vscode-pylance"
   ],
   "postCreateCommand": "mkdir -p bin src && echo 'Devcontainer ready.'"
 }

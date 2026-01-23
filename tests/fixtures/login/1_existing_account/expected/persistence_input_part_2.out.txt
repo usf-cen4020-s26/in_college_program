@@ -1,0 +1,35 @@
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice:
+1
+Please enter your username:
+PersistUser1
+Please enter your password:
+Persist1!
+You have successfully logged in
+Welcome, PersistUser1!
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+Enter your choice:
+4
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice:
+1
+Please enter your username:
+PersistUser2
+Please enter your password:
+Persist2!
+You have successfully logged in
+Welcome, PersistUser2!
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+4. Logout
+Enter your choice:
+4
+Goodbye!
