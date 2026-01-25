@@ -279,15 +279,22 @@ def discover_tests(test_root: Path) -> List[List[TestCase]]:
     """
     test_groups: dict[str, List[TestCase]] = {}
 
-    for category_dir in test_root.iterdir():
-        if not category_dir.is_dir():
-            continue
+    # Recursively find all directories containing 'inputs' and 'expected' subdirectories
+    def find_test_dirs(root: Path) -> List[Path]:
+        """Find all directories that contain both 'inputs' and 'expected' subdirectories."""
+        test_dirs = []
+        for item in root.rglob("*"):
+            if item.is_dir():
+                inputs_dir = item / "inputs"
+                expected_dir = item / "expected"
+                if inputs_dir.exists() and expected_dir.exists():
+                    test_dirs.append(item)
+        return test_dirs
 
+    # Discover all test directories
+    for category_dir in find_test_dirs(test_root):
         inputs_dir = category_dir / "inputs"
         expected_dir = category_dir / "expected"
-
-        if not inputs_dir.exists() or not expected_dir.exists():
-            continue
 
         for input_file in sorted(inputs_dir.glob("*.in.txt")):
             test_base_name = input_file.stem.replace(".in", "")
