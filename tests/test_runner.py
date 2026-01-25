@@ -85,6 +85,9 @@ class CobolTestRunner:
         Raises:
             FileNotFoundError: If executable doesn't exist
         """
+        # Resolve to absolute path to avoid issues when changing working directory
+        executable_path = executable_path.resolve()
+
         if not executable_path.exists():
             raise FileNotFoundError(f"Executable not found: {executable_path}")
 
