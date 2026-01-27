@@ -129,7 +129,7 @@ WORKING-STORAGE SECTION.
 01  WS-TEMP-EDU-DEGREE          PIC X(50).
 01  WS-TEMP-EDU-UNIVERSITY      PIC X(50).
 01  WS-TEMP-EDU-YEARS           PIC X(20).
-01  WS-CONTINUE-ADDING          PIC X(4).
+01  WS-CONTINUE-ADDING          PIC X(80).
 
 01  WS-YEAR-VALID               PIC 9 VALUE 0.
 01  WS-YEAR-NUMERIC             PIC 9 VALUE 0.
@@ -1154,18 +1154,13 @@ PROCEDURE DIVISION.
            MOVE "ADD" TO WS-CONTINUE-ADDING.
 
            PERFORM UNTIL WS-EXP-LOOP-INDEX >= 3
+               OR WS-CONTINUE-ADDING = "DONE"
                OR WS-EOF-FLAG = 1
 
                MOVE " " TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
-
-               IF WS-EXP-LOOP-INDEX = 0
-                   MOVE "Add Experience? (Enter experience title or 'DONE' to skip):"
-                       TO WS-OUTPUT-LINE
-               ELSE
-                   MOVE "Add another experience? (Enter experience title or 'DONE' to finish):"
-                       TO WS-OUTPUT-LINE
-               END-IF
+               MOVE "Add Experience (optional, max 3 entries. Enter 'DONE' to finish):"
+                   TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
 
                PERFORM 8100-READ-INPUT
@@ -1182,7 +1177,6 @@ PROCEDURE DIVISION.
                END-IF
 
                ADD 1 TO WS-EXP-LOOP-INDEX
-               MOVE WS-CONTINUE-ADDING TO WS-TEMP-EXP-TITLE
                PERFORM 7311-GET-SINGLE-EXPERIENCE
            END-PERFORM.
 
@@ -1190,6 +1184,19 @@ PROCEDURE DIVISION.
 *> *      *> 7311-GET-SINGLE-EXPERIENCE: Collect one experience entry      *
 *> *      *>*****************************************************************
        7311-GET-SINGLE-EXPERIENCE.
+           STRING "Experience #" WS-EXP-LOOP-INDEX " - Title: "
+               DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+           END-STRING.
+           PERFORM 8000-WRITE-OUTPUT.
+
+           PERFORM 8100-READ-INPUT.
+           IF WS-EOF-FLAG = 1
+               EXIT PARAGRAPH
+           END-IF.
+           MOVE INPUT-RECORD TO WS-TEMP-EXP-TITLE.
+           MOVE WS-TEMP-EXP-TITLE TO WS-OUTPUT-LINE.
+           PERFORM 8000-WRITE-OUTPUT.
+
            STRING "Experience #" WS-EXP-LOOP-INDEX
                " - Company/Organization: "
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
@@ -1247,18 +1254,13 @@ PROCEDURE DIVISION.
            MOVE "ADD" TO WS-CONTINUE-ADDING.
 
            PERFORM UNTIL WS-EDU-LOOP-INDEX >= 3
+               OR WS-CONTINUE-ADDING = "DONE"
                OR WS-EOF-FLAG = 1
 
                MOVE " " TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
-
-               IF WS-EDU-LOOP-INDEX = 0
-                   MOVE "Add Education? (Enter degree or 'DONE' to skip):"
-                       TO WS-OUTPUT-LINE
-               ELSE
-                   MOVE "Add another education entry? (Enter degree or 'DONE' to finish):"
-                       TO WS-OUTPUT-LINE
-               END-IF
+               MOVE "Add Education (optional, max 3 entries. Enter 'DONE' to finish):"
+                   TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
 
                PERFORM 8100-READ-INPUT
@@ -1274,8 +1276,9 @@ PROCEDURE DIVISION.
                    EXIT PERFORM
                END-IF
 
+      *>       If the user did not enter "DONE", proceed to get education entry -> this encompasses blank lines and other inputs.
+
                ADD 1 TO WS-EDU-LOOP-INDEX
-               MOVE WS-CONTINUE-ADDING TO WS-TEMP-EDU-DEGREE
                PERFORM 7321-GET-SINGLE-EDUCATION
            END-PERFORM.
 
@@ -1283,6 +1286,19 @@ PROCEDURE DIVISION.
 *> *      *> 7321-GET-SINGLE-EDUCATION: Collect one education entry        *
 *> *      *>*****************************************************************
        7321-GET-SINGLE-EDUCATION.
+           STRING "Education #" WS-EDU-LOOP-INDEX " - Degree: "
+               DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+           END-STRING.
+           PERFORM 8000-WRITE-OUTPUT.
+
+           PERFORM 8100-READ-INPUT.
+           IF WS-EOF-FLAG = 1
+               EXIT PARAGRAPH
+           END-IF.
+           MOVE INPUT-RECORD TO WS-TEMP-EDU-DEGREE.
+           MOVE WS-TEMP-EDU-DEGREE TO WS-OUTPUT-LINE.
+           PERFORM 8000-WRITE-OUTPUT.
+
            STRING "Education #" WS-EDU-LOOP-INDEX
                " - University/College: "
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
