@@ -9,7 +9,7 @@ It supports single test execution and batch testing with multi-part test support
 import argparse
 import difflib
 import json
-import os
+import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -74,13 +74,16 @@ class CobolTestRunner:
     comparison of actual output against expected output.
     """
 
-    def __init__(self, executable_path: Path, persistence_dir: Optional[Path] = None):
+    def __init__(
+        self, executable_path: Path, work_dir: Optional[Path] = None, timeout: int = 10
+    ):
         """
         Initialize the test runner.
 
         Args:
             executable_path: Path to the compiled COBOL executable
-            persistence_dir: Directory for persistent storage (for multi-part tests)
+            work_dir: Working directory where INPUT.TXT, OUTPUT.TXT, and ACCOUNTS.DAT will be stored
+            timeout: Maximum execution time in seconds for each test (default: 10)
 
         Raises:
             FileNotFoundError: If executable doesn't exist
@@ -92,10 +95,14 @@ class CobolTestRunner:
             raise FileNotFoundError(f"Executable not found: {executable_path}")
 
         self.executable_path = executable_path
-        self.persistence_dir = persistence_dir or Path(
-            "/tmp/incollege_test_persistence"
-        )
-        self.persistence_dir.mkdir(parents=True, exist_ok=True)
+        self.work_dir = work_dir or Path("/tmp/incollege_test_work")
+        self.work_dir.mkdir(parents=True, exist_ok=True)
+        self.timeout = timeout
+
+        # Define the file paths that COBOL program uses
+        self.input_txt = self.work_dir / "INPUT.TXT"
+        self.output_txt = self.work_dir / "OUTPUT.TXT"
+        self.accounts_dat = self.work_dir / "ACCOUNTS.DAT"
 
     def run_single_test(
         self, input_file: Path, expected_output_file: Path, test_name: str
@@ -137,6 +144,15 @@ class CobolTestRunner:
                     diff=diff,
                 )
 
+        except subprocess.TimeoutExpired:
+            return TestResult(
+                test_name=test_name,
+                status=TestStatus.ERROR,
+                expected_output="",
+                actual_output="",
+                error_message=f"Test timed out after {self.timeout} seconds. "
+                f"Program may be waiting for input or in an infinite loop.",
+            )
         except Exception as e:
             return TestResult(
                 test_name=test_name,
@@ -150,30 +166,37 @@ class CobolTestRunner:
         """
         Execute the COBOL program with the given input file.
 
+        The COBOL program reads from INPUT.TXT and writes to OUTPUT.TXT.
+        This method:
+        1. Copies the test input file to INPUT.TXT in the work directory
+        2. Removes OUTPUT.TXT if it exists from previous runs
+        3. Runs the executable in the work directory
+        4. Reads and returns the contents of OUTPUT.TXT
+
         Args:
-            input_file: Path to the input file
+            input_file: Path to the test input file
 
         Returns:
-            Program output as a string
+            Program output from OUTPUT.TXT as a string
 
         Raises:
             subprocess.CalledProcessError: If program execution fails
+            FileNotFoundError: If OUTPUT.TXT is not created
         """
-        with open(input_file, "r") as f:
-            input_data = f.read()
+        # Copy input file to INPUT.TXT in the work directory
+        shutil.copy2(input_file, self.input_txt)
 
-        # Set environment for persistence
-        env = os.environ.copy()
-        env["INCOLLEGE_DATA_DIR"] = str(self.persistence_dir)
+        # Remove OUTPUT.TXT if it exists from a previous run
+        if self.output_txt.exists():
+            self.output_txt.unlink()
 
+        # Run the COBOL executable in the work directory
         result = subprocess.run(
             [str(self.executable_path)],
-            input=input_data,
             capture_output=True,
             text=True,
-            cwd=self.persistence_dir,
-            env=env,
-            timeout=10,
+            cwd=self.work_dir,
+            timeout=self.timeout,
         )
 
         if result.returncode != 0:
@@ -184,7 +207,14 @@ class CobolTestRunner:
                 stderr=result.stderr,
             )
 
-        return result.stdout
+        # Read the output from OUTPUT.TXT
+        if not self.output_txt.exists():
+            raise FileNotFoundError(
+                f"OUTPUT.TXT was not created by the COBOL program. "
+                f"stdout: {result.stdout}, stderr: {result.stderr}"
+            )
+
+        return self.output_txt.read_text()
 
     def _generate_diff(self, expected: str, actual: str, test_name: str) -> str:
         """
@@ -212,11 +242,26 @@ class CobolTestRunner:
         return "".join(diff)
 
     def clear_persistence(self) -> None:
-        """Clear persistent storage between test suites."""
-        if self.persistence_dir.exists():
-            for file in self.persistence_dir.iterdir():
-                if file.is_file():
-                    file.unlink()
+        """
+        Clear persistent storage (ACCOUNTS.DAT) between test groups.
+
+        This should be called before each test group to ensure a clean state.
+        For multi-part tests, this is called before the first part only,
+        allowing persistence across parts within the same group.
+        """
+        if self.accounts_dat.exists():
+            self.accounts_dat.unlink()
+
+    def cleanup_work_dir(self) -> None:
+        """
+        Clean up all files in the work directory.
+
+        This removes INPUT.TXT, OUTPUT.TXT, and ACCOUNTS.DAT.
+        Useful for complete cleanup after all tests.
+        """
+        for file_path in [self.input_txt, self.output_txt, self.accounts_dat]:
+            if file_path.exists():
+                file_path.unlink()
 
 
 def discover_tests(test_root: Path) -> List[List[TestCase]]:
@@ -226,7 +271,7 @@ def discover_tests(test_root: Path) -> List[List[TestCase]]:
     Multi-part tests (files ending with _part_N) are grouped together.
 
     Args:
-        test_root: Root directory for tests (e.g., tests/fixtures/login)
+        test_root: Root directory for tests (e.g., tests/fixtures)
 
     Returns:
         List of test case groups. Each group is a list of TestCase objects.
@@ -234,15 +279,23 @@ def discover_tests(test_root: Path) -> List[List[TestCase]]:
     """
     test_groups: dict[str, List[TestCase]] = {}
 
-    for category_dir in test_root.iterdir():
-        if not category_dir.is_dir():
-            continue
+    # Recursively find all directories containing 'inputs' and 'expected' subdirectories
+    def find_test_dirs(root: Path) -> List[Path]:
+        """Find all directories that contain both 'inputs' and 'expected' subdirectories."""
+        test_dirs: List[Path] = []
+        for item in root.rglob("*"):
+            if item.is_dir():
+                inputs_dir = item / "inputs"
+                expected_dir = item / "expected"
+                if inputs_dir.exists() and expected_dir.exists():
+                    test_dirs.append(item)
 
+        return test_dirs
+
+    # Discover all test directories
+    for category_dir in find_test_dirs(test_root):
         inputs_dir = category_dir / "inputs"
         expected_dir = category_dir / "expected"
-
-        if not inputs_dir.exists() or not expected_dir.exists():
-            continue
 
         for input_file in sorted(inputs_dir.glob("*.in.txt")):
             test_base_name = input_file.stem.replace(".in", "")
@@ -338,7 +391,7 @@ def print_test_result(result: TestResult, verbose: bool = False) -> None:
 
 
 def run_test_suite(
-    executable_path: Path, test_root: Path, verbose: bool = False
+    executable_path: Path, test_root: Path, verbose: bool = False, timeout: int = 10
 ) -> Tuple[List[TestResult], int, int, int]:
     """
     Run all discovered tests.
@@ -347,11 +400,12 @@ def run_test_suite(
         executable_path: Path to the COBOL executable
         test_root: Root directory for tests
         verbose: If True, print detailed output
+        timeout: Maximum execution time in seconds for each test
 
     Returns:
         Tuple of (all_results, passed_count, failed_count, error_count)
     """
-    runner = CobolTestRunner(executable_path)
+    runner = CobolTestRunner(executable_path, timeout=timeout)
     test_groups = discover_tests(test_root)
 
     all_results: List[TestResult] = []
@@ -489,8 +543,8 @@ def main() -> int:
     parser.add_argument(
         "--test-root",
         type=Path,
-        default=Path("tests/fixtures/login"),
-        help="Root directory for test fixtures (default: tests/fixtures/login)",
+        default=Path("tests/fixtures"),
+        help="Root directory for test fixtures (default: tests/fixtures)",
     )
 
     parser.add_argument(
@@ -502,6 +556,13 @@ def main() -> int:
 
     parser.add_argument(
         "--report", type=Path, help="Generate JSON report at specified path"
+    )
+
+    parser.add_argument(
+        "--timeout",
+        type=int,
+        default=10,
+        help="Maximum execution time in seconds for each test (default: 10)",
     )
 
     args = parser.parse_args()
@@ -519,7 +580,7 @@ def main() -> int:
 
     try:
         results, passed, failed, errors = run_test_suite(
-            args.executable, args.test_root, args.verbose
+            args.executable, args.test_root, args.verbose, args.timeout
         )
 
         generate_report(results, passed, failed, errors, args.report)

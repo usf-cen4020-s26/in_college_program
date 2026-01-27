@@ -2,7 +2,8 @@
 # Quick test script for InCollege COBOL program
 # Usage: ./run_tests.sh [--verbose] [--report]
 
-set -e
+# Note: Not using 'set -e' here because we want to continue running
+# all test categories even if some fail, and collect overall results
 
 # Colors for output
 RED='\033[0;31m'
@@ -59,16 +60,35 @@ echo ""
 
 # Convert to absolute path
 EXECUTABLE_PATH="$(cd "$(dirname "$EXECUTABLE")" && pwd)/$(basename "$EXECUTABLE")"
-python3 tests/test_runner.py "$EXECUTABLE_PATH" $VERBOSE $REPORT
 
-exit_code=$?
+# Initialize counters
+total_exit_code=0
 
-if [ $exit_code -eq 0 ]; then
-    echo ""
+# Find all test fixture directories
+for test_dir in tests/fixtures/*/; do
+    if [ -d "$test_dir" ]; then
+        test_name=$(basename "$test_dir")
+        echo ""
+        echo -e "${YELLOW}═══════════════════════════════════════${NC}"
+        echo -e "${YELLOW}Running ${test_name} tests...${NC}"
+        echo -e "${YELLOW}═══════════════════════════════════════${NC}"
+
+        python3 tests/test_runner.py "$EXECUTABLE_PATH" --test-root "$test_dir" $VERBOSE $REPORT
+        exit_code=$?
+
+        if [ $exit_code -ne 0 ]; then
+            total_exit_code=1
+        fi
+    fi
+done
+
+echo ""
+echo -e "${YELLOW}═══════════════════════════════════════${NC}"
+if [ $total_exit_code -eq 0 ]; then
     echo -e "${GREEN}✓ All tests passed!${NC}"
 else
-    echo ""
     echo -e "${RED}✗ Some tests failed. See details above.${NC}"
 fi
+echo -e "${YELLOW}═══════════════════════════════════════${NC}"
 
-exit $exit_code
+exit $total_exit_code

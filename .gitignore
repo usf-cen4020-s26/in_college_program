@@ -46,3 +46,9 @@ test_results/
 
 # Developer-specific files that should not be shared (custom files)
 .dev/local/*
+
+# runtime/test data - only at workspace root, not in test fixtures
+/*.DAT
+/*.TXT
+/tmp/**/*.DAT
+/tmp/**/*.TXT

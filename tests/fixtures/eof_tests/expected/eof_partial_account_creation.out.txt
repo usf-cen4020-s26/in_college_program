@@ -1,0 +1,15 @@
+========================================
+     WELCOME TO INCOLLEGE
+========================================
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+2
+
+=== CREATE NEW ACCOUNT ===
+Enter username:
+
+Thank you for using InCollege!

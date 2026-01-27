@@ -1,18 +1,32 @@
-Welcome to InCollege!
-1. Log In
-2. Create New Account
-Enter your choice:
+========================================
+     WELCOME TO INCOLLEGE
+========================================
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
 2
-Please enter your username:
+
+=== CREATE NEW ACCOUNT ===
+Enter username:
 TestUser3
-Please enter your password:
-password1!
-Password must be between 8 and 12 characters, contain at least one capital letter, one digit, and one special character.
-Please enter your password:
-1
-Welcome to InCollege!
-1. Log In
-2. Create New Account
-Enter your choice:
-1
-Goodbye!
+Enter password (8-12 chars, 1 uppercase,
+1 digit, 1 special character):
+********
+Password does not meet requirements.
+Please try again.
+Enter password (8-12 chars, 1 uppercase,
+1 digit, 1 special character):
+********
+Account created successfully!
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+3
+
+Thank you for using InCollege!

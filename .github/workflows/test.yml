@@ -55,11 +55,13 @@ jobs:
 
     - name: Run all tests
       id: run-tests
+      timeout-minutes: 5
       run: |
         echo "Running test suite..."
         python3 tests/test_runner.py bin/main \
-          --test-root tests/fixtures/login \
+          --test-root tests/fixtures \
           --report test-report.json \
+          --timeout 15 \
           --verbose
       continue-on-error: true
 

@@ -12,21 +12,38 @@ The InCollege test infrastructure provides automated testing for the COBOL appli
 
 ### Run All Tests
 
+The easiest way to run all tests is using the provided shell script:
+
 ```bash
-# Simple run
+# Simple run - runs all test categories (login, main_menu, etc.)
 ./run_tests.sh
 
-# With verbose output
+# With verbose output - shows full expected/actual outputs
 ./run_tests.sh --verbose
 
 # Generate JSON report
 ./run_tests.sh --report
 ```
 
-Or directly with Python:
+The script will:
+1. Compile the COBOL program if needed
+2. Discover and run all test categories in `tests/fixtures/`
+3. Display results for each category separately
+4. Show an overall summary
+
+### Run Tests Manually
+
+You can also run tests directly with Python:
 
 ```bash
+# Run all tests
 python3 tests/test_runner.py bin/main
+
+# Run tests for a specific category
+python3 tests/test_runner.py bin/main --test-root tests/fixtures/login
+
+# Run with options
+python3 tests/test_runner.py bin/main --verbose --report test-report.json
 ```
 
 ### Test Files
@@ -83,6 +100,18 @@ Persist1!
 
 ### Command Line Options
 
+**For run_tests.sh:**
+
+```bash
+./run_tests.sh [options]
+```
+
+**Options:**
+- `--verbose`, `-v`: Print detailed output including full expected/actual outputs
+- `--report`, `-r`: Generate JSON report at `test-report.json`
+
+**For direct Python usage:**
+
 ```bash
 python3 tests/test_runner.py <executable> [options]
 ```
@@ -91,24 +120,31 @@ python3 tests/test_runner.py <executable> [options]
 - `executable`: Path to compiled COBOL program (e.g., `bin/main`)
 
 **Options:**
-- `--test-root PATH`: Root directory for tests (default: `tests/fixtures/login`)
+- `--test-root PATH`: Root directory for tests. Can be `tests/fixtures` for all tests or a specific category like `tests/fixtures/login`
 - `--verbose`, `-v`: Print detailed output including full expected/actual outputs
 - `--report PATH`: Generate JSON report at specified path
+- `--timeout SECONDS`: Maximum execution time per test (default: 10)
 
 ### Examples
 
 ```bash
-# Basic test run
+# Run all tests using the shell script (recommended)
+./run_tests.sh
+
+# Run all tests with verbose output
+./run_tests.sh --verbose
+
+# Run all tests directly with Python
 python3 tests/test_runner.py bin/main
 
-# Verbose output
-python3 tests/test_runner.py bin/main --verbose
+# Run only login tests
+python3 tests/test_runner.py bin/main --test-root tests/fixtures/login
+
+# Run only main menu tests with verbose output
+python3 tests/test_runner.py bin/main --test-root tests/fixtures/main_menu --verbose
 
 # Generate JSON report
 python3 tests/test_runner.py bin/main --report results.json
-
-# Custom test directory
-python3 tests/test_runner.py bin/main --test-root tests/fixtures/custom
 ```
 
 ### Exit Codes
@@ -187,26 +223,34 @@ TestPass1!
 
 ### Step 2: Run the Program Manually
 
-Execute the program with your input to capture the expected output:
+Execute the program with your input to capture the expected output. Note that the COBOL program reads from and writes to `INPUT.TXT` and `OUTPUT.TXT`, so you need to:
 
 ```bash
-./bin/main < tests/fixtures/login/2_new_account/inputs/my_new_test.in.txt > expected_output.txt
+# Copy your test input to INPUT.TXT
+cp tests/fixtures/login/2_new_account/inputs/my_new_test.in.txt INPUT.TXT
+
+# Run the program
+./bin/main
+
+# Copy the output to your expected output file
+cp OUTPUT.TXT tests/fixtures/login/2_new_account/expected/my_new_test.out.txt
+
+# Clean up
+rm INPUT.TXT OUTPUT.TXT
 ```
 
-### Step 3: Create Expected Output File
+Alternatively, let the test fail first to see the actual output, then create the expected file if the output looks correct.
 
-Review and save the output:
+### Step 3: Verify the Test
 
-```bash
-mv expected_output.txt tests/fixtures/login/2_new_account/expected/my_new_test.out.txt
-```
-
-### Step 4: Verify the Test
-
-Run the test to ensure it works:
+Run the tests to ensure your new test works:
 
 ```bash
-python3 tests/test_runner.py bin/main
+# Run all tests
+./run_tests.sh
+
+# Or run just the specific category
+python3 tests/test_runner.py bin/main --test-root tests/fixtures/login
 ```
 
 ### Adding Multi-Part Tests

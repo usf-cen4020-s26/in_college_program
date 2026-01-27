@@ -141,7 +141,7 @@ Navigation:
 Purpose: Confirms feature is not implemented.
 
 ```bash
-Job search/internship is under construction.
+Search for a job is under construction.
 <insert main menu screen here>
 ```
 

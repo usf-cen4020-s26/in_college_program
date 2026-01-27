@@ -1,9 +1,8 @@
 2
 FailUser
 GoodPass1!
-4
 1
 FailUser
 WrongPass1!
-FailUserGoodPass1!
-4
+FailUser
+GoodPass1!

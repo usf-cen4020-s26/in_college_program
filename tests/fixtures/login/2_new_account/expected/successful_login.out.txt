@@ -1,34 +1,50 @@
-Welcome to InCollege!
-1. Log In
-2. Create New Account
-Enter your choice:
+========================================
+     WELCOME TO INCOLLEGE
+========================================
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
 2
-Please enter your username:
+
+=== CREATE NEW ACCOUNT ===
+Enter username:
 LoginUser
-Please enter your password:
-MyPass99!
+Enter password (8-12 chars, 1 uppercase,
+1 digit, 1 special character):
+********
 Account created successfully!
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-4. Logout
-Enter your choice:
-4
-Welcome to InCollege!
-1. Log In
-2. Create New Account
-Enter your choice:
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
 1
-Please enter your username:
+
+=== LOGIN ===
+Enter username:
 LoginUser
-Please enter your password:
-MyPass99!
+Enter password:
+********
 You have successfully logged in
-Welcome, LoginUser!
+
+=== MAIN MENU ===
 1. Search for a job
 2. Find someone you know
 3. Learn a new skill
 4. Logout
-Enter your choice:
+Enter choice (1-4):
 4
-Goodbye!
+Logging out...
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+3
+
+Thank you for using InCollege!
