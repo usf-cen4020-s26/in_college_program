@@ -103,6 +103,7 @@ class CobolTestRunner:
         self.input_txt = self.work_dir / "INPUT.TXT"
         self.output_txt = self.work_dir / "OUTPUT.TXT"
         self.accounts_dat = self.work_dir / "ACCOUNTS.DAT"
+        self.profiles_dat = self.work_dir / "PROFILES.DAT"
 
     def run_single_test(
         self, input_file: Path, expected_output_file: Path, test_name: str
@@ -252,14 +253,22 @@ class CobolTestRunner:
         if self.accounts_dat.exists():
             self.accounts_dat.unlink()
 
+        if self.profiles_dat.exists():
+            self.profiles_dat.unlink()
+
     def cleanup_work_dir(self) -> None:
         """
         Clean up all files in the work directory.
 
-        This removes INPUT.TXT, OUTPUT.TXT, and ACCOUNTS.DAT.
+        This removes INPUT.TXT, OUTPUT.TXT, ACCOUNTS.DAT, and PROFILES.DAT.
         Useful for complete cleanup after all tests.
         """
-        for file_path in [self.input_txt, self.output_txt, self.accounts_dat]:
+        for file_path in [
+            self.input_txt,
+            self.output_txt,
+            self.accounts_dat,
+            self.profiles_dat,
+        ]:
             if file_path.exists():
                 file_path.unlink()
 
@@ -470,17 +479,17 @@ def generate_report(
     print(f"{'=' * 70}\n")
     print(f"Total Tests: {total}")
     print(
-        f"Passed: \033[92m{passed}\033[0m ({passed/total*100:.1f}%)"
+        f"Passed: \033[92m{passed}\033[0m ({passed / total * 100:.1f}%)"
         if total > 0
         else "Passed: 0"
     )
     print(
-        f"Failed: \033[91m{failed}\033[0m ({failed/total*100:.1f}%)"
+        f"Failed: \033[91m{failed}\033[0m ({failed / total * 100:.1f}%)"
         if total > 0
         else "Failed: 0"
     )
     print(
-        f"Errors: \033[93m{errors}\033[0m ({errors/total*100:.1f}%)"
+        f"Errors: \033[93m{errors}\033[0m ({errors / total * 100:.1f}%)"
         if total > 0
         else "Errors: 0"
     )
