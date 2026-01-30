@@ -1,0 +1,54 @@
+========================================
+     WELCOME TO INCOLLEGE
+========================================
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+1
+
+=== LOGIN ===
+Enter username:
+ProfileUser4
+Enter password:
+********
+You have successfully logged in
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. Learn a new skill
+6. Logout
+Enter choice (1-6):
+2
+
+=== YOUR PROFILE ===
+Name: Alice Johnson
+University: Miami University
+Major: Data Science
+Graduation Year: 2026
+About Me: Aspiring data scientist with a focus on machine learning.
+--------------------
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. Learn a new skill
+6. Logout
+Enter choice (1-6):
+6
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+3
+
+Thank you for using InCollege!
