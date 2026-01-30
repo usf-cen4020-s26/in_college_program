@@ -178,3 +178,4 @@ Please select an option:
 Enter choice (1-3):
 3
 
+Thank you for using InCollege!
