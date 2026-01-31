@@ -1,0 +1,18 @@
+2
+testuser
+Pass123!
+1
+testuser
+Pass123!
+1
+John
+Doe
+Example University
+Computer Science
+2025
+This is a very long about me section that exceeds the 200 character limit. It contains way too much information about the person and should be rejected or truncated by the system. We are testing to ensure the validation works properly for this field.
+DONE
+DONE
+2
+6
+3

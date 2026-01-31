@@ -1,0 +1,32 @@
+2
+testuser
+Pass123!
+1
+testuser
+Pass123!
+1
+John
+Doe
+Example University
+Computer Science
+2025
+
+
+Software Intern
+Tech Corp
+Summer 2023
+Built testing tools
+
+Marketing Assistant
+Brand Co
+Fall 2023
+Social media campaigns
+
+Research Assistant
+State Lab
+Spring 2024
+Data analysis projects
+DONE
+2
+6
+3
