@@ -1,0 +1,99 @@
+========================================
+     WELCOME TO INCOLLEGE
+========================================
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+2
+
+=== CREATE NEW ACCOUNT ===
+Enter username:
+ProfileUser6
+Enter password (8-12 chars, 1 uppercase, 1 digit, 1 special character):
+********
+Account created successfully!
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+1
+
+=== LOGIN ===
+Enter username:
+ProfileUser6
+Enter password:
+********
+You have successfully logged in
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. Learn a new skill
+6. Logout
+Enter choice (1-6):
+1
+
+=== CREATE MY PROFILE ===
+Enter First Name:
+Sarah
+Enter Last Name:
+Miller
+Enter University/College Attended:
+Stanford University
+Enter Major:
+Computer Science
+Enter Graduation Year (YYYY):
+2025
+Enter About Me (optional, max 200 chars, enter blank line to skip):
+Passionate about AI and machine learning.
+
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+DONE
+
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+
+Education #1 - Degree:
+Bachelor of Science
+Education #1 - University/College:
+Stanford University
+Education #1 - Years Attended (e.g., 2023-2025):
+2021-2025
+
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+
+Education #2 - Degree:
+High School Diploma
+Education #2 - University/College:
+Lincoln High School
+Education #2 - Years Attended (e.g., 2023-2025):
+2017-2021
+
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+DONE
+Profile saved successfully!
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. Learn a new skill
+6. Logout
+Enter choice (1-6):
+6
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+3
+
+Thank you for using InCollege!

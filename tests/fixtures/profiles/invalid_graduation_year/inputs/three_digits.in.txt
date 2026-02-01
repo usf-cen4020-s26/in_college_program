@@ -1,0 +1,18 @@
+2
+testuser
+Pass123!
+1
+testuser
+Pass123!
+1
+John
+Doe
+Example University
+Computer Science
+123
+2025
+Passionate CS student interested in software engineering.
+DONE
+DONE
+6
+3

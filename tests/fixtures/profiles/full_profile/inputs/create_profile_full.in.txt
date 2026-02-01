@@ -1,0 +1,43 @@
+2
+testuser
+Pass123!
+1
+testuser
+Pass123!
+1
+John
+Doe
+Example University
+Computer Science
+2025
+Passionate CS student interested in software engineering.
+ADD
+Software Intern
+Tech Corp
+Summer 2023
+Worked on internal tools.
+ADD
+Research Assistant
+Example University
+2022-2023
+Assisted with data analysis.
+ADD
+Teaching Assistant
+Example University
+Fall 2024
+Operated manufacturing equipment
+ADD
+Bachelor of Science
+Example University
+2025-2027
+ADD
+Certificate in AI
+Online University
+2024
+ADD
+Master of Science
+Example University
+2025-2027
+2
+6
+3

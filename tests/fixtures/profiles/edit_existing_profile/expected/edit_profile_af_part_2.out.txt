@@ -1,0 +1,102 @@
+========================================
+     WELCOME TO INCOLLEGE
+========================================
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+1
+
+=== LOGIN ===
+Enter username:
+ProfileUser7
+Enter password:
+********
+You have successfully logged in
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. Learn a new skill
+6. Logout
+Enter choice (1-6):
+1
+
+=== EDIT MY PROFILE ===
+Enter First Name:
+Thomas
+Enter Last Name:
+Anderson-Smith
+Enter University/College Attended:
+Massachusetts Institute of Technology
+Enter Major:
+Applied Physics
+Enter Graduation Year (YYYY):
+2024
+Enter About Me (optional, max 200 chars, enter blank line to skip):
+Updated my profile with more details.
+
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+
+Experience #1 - Title:
+Lab Assistant
+Experience #1 - Company/Organization:
+MIT Physics Lab
+Experience #1 - Dates (e.g., Summer 2024):
+2022-2024
+Experience #1 - Description (optional, max 100 chars,
+blank to skip):
+Assisted with quantum mechanics experiments
+
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+DONE
+
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+DONE
+Profile saved successfully!
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. Learn a new skill
+6. Logout
+Enter choice (1-6):
+2
+
+=== YOUR PROFILE ===
+Name: Thomas Anderson-Smith
+University: Massachusetts Institute of Technology
+Major: Applied Physics
+Graduation Year: 2024
+About Me: Updated my profile with more details.
+Experience:
+  Title: Lab Assistant
+  Company/Organization: MIT Physics Lab
+  Dates: 2022-2024
+  Description: Assisted with quantum mechanics experiments
+--------------------
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. Learn a new skill
+6. Logout
+Enter choice (1-6):
+6
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+3
+
+Thank you for using InCollege!

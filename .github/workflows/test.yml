@@ -1,0 +1,152 @@
+name: InCollege COBOL Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install GNU COBOL
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gnucobol
+        cobc --version
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Create build directory
+      run: mkdir -p bin
+
+    - name: Compile COBOL program
+      id: compile
+      run: |
+        echo "Compiling src/main.cob..."
+        cobc -x -free -o bin/main src/main.cob
+        echo "Compilation successful!"
+        ls -lh bin/main
+      continue-on-error: false
+
+    - name: Verify executable
+      run: |
+        if [ ! -f bin/main ]; then
+          echo "Error: Executable bin/main not found after compilation"
+          exit 1
+        fi
+        if [ ! -x bin/main ]; then
+          echo "Error: bin/main is not executable"
+          exit 1
+        fi
+        echo "Executable verified successfully"
+
+    - name: Make test runner executable
+      run: chmod +x tests/test_runner.py
+
+    - name: Run all tests
+      id: run-tests
+      timeout-minutes: 5
+      run: |
+        echo "Running test suite..."
+        python3 tests/test_runner.py bin/main \
+          --test-root tests/fixtures \
+          --report test-report.json \
+          --timeout 15 \
+          --verbose
+      continue-on-error: true
+
+    - name: Upload test report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-report
+        path: test-report.json
+        retention-days: 30
+
+    - name: Check test results
+      if: steps.run-tests.outcome == 'failure'
+      run: |
+        echo "❌ Tests failed! Check the logs above for details."
+        exit 1
+
+    - name: Test summary
+      if: always()
+      run: |
+        if [ -f test-report.json ]; then
+          echo "## Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Extract summary from JSON report
+          total=$(jq '.summary.total' test-report.json)
+          passed=$(jq '.summary.passed' test-report.json)
+          failed=$(jq '.summary.failed' test-report.json)
+          errors=$(jq '.summary.errors' test-report.json)
+
+          echo "- **Total Tests:** $total" >> $GITHUB_STEP_SUMMARY
+          echo "- **Passed:** ✅ $passed" >> $GITHUB_STEP_SUMMARY
+          echo "- **Failed:** ❌ $failed" >> $GITHUB_STEP_SUMMARY
+          echo "- **Errors:** ⚠️ $errors" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$failed" -gt 0 ] || [ "$errors" -gt 0 ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Failed Tests" >> $GITHUB_STEP_SUMMARY
+            jq -r '.results[] | select(.status != "PASSED") | "- " + .test_name + " (" + .status + ")"' test-report.json >> $GITHUB_STEP_SUMMARY
+          fi
+        else
+          echo "⚠️ Test report not generated" >> $GITHUB_STEP_SUMMARY
+        fi
+
+  lint-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Python linting tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install mypy pylint black isort
+
+    - name: Check Python code formatting with black
+      run: |
+        black --check tests/test_runner.py || {
+          echo "❌ Code formatting issues found. Run 'black tests/test_runner.py' to fix."
+          exit 1
+        }
+
+    - name: Check import ordering with isort
+      run: |
+        isort --check-only tests/test_runner.py || {
+          echo "❌ Import ordering issues found. Run 'isort tests/test_runner.py' to fix."
+          exit 1
+        }
+
+    - name: Run mypy type checking
+      run: |
+        mypy tests/test_runner.py --strict --ignore-missing-imports || {
+          echo "⚠️ Type checking issues found"
+          exit 0
+        }
+
+    - name: Run pylint
+      run: |
+        pylint tests/test_runner.py --disable=C0114,C0115,C0116 || {
+          echo "⚠️ Linting issues found"
+          exit 0
+        }

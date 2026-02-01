@@ -1,0 +1,8 @@
+2
+FailUser
+GoodPass1!
+1
+FailUser
+WrongPass1!
+FailUser
+GoodPass1!

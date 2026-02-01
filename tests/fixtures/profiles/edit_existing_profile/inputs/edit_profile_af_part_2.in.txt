@@ -1,0 +1,20 @@
+1
+ProfileUser7
+Pass123!
+1
+Thomas
+Anderson-Smith
+Massachusetts Institute of Technology
+Applied Physics
+2024
+Updated my profile with more details.
+
+Lab Assistant
+MIT Physics Lab
+2022-2024
+Assisted with quantum mechanics experiments
+DONE
+DONE
+2
+6
+3

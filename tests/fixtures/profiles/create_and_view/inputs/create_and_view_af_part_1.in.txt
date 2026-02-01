@@ -1,0 +1,17 @@
+2
+ProfileUser4
+Pass123!
+1
+ProfileUser4
+Pass123!
+1
+Alice
+Johnson
+Miami University
+Data Science
+2026
+Aspiring data scientist with a focus on machine learning.
+DONE
+DONE
+6
+3

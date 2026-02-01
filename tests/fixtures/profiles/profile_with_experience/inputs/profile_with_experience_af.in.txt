@@ -1,0 +1,22 @@
+2
+ProfileUser2
+Pass123!
+1
+ProfileUser2
+Pass123!
+1
+Jane
+Smith
+Florida State University
+Software Engineering
+2024
+I am passionate about software development and problem-solving.
+
+Software Developer Intern
+Tech Corp
+Summer 2023
+Developed web applications using React and Node.js
+DONE
+DONE
+6
+3
