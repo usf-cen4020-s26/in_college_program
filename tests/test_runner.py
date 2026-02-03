@@ -378,7 +378,7 @@ def print_test_result(result: TestResult, verbose: bool = False) -> None:
     if result.status == TestStatus.ERROR:
         print(f"  Error: {result.error_message}")
     elif result.status == TestStatus.FAILED:
-        print(f"\n  Differences found:")
+        print("\n  Differences found:")
         if result.diff:
             for line in result.diff.split("\n"):
                 if line.startswith("+") and not line.startswith("+++"):
@@ -391,10 +391,10 @@ def print_test_result(result: TestResult, verbose: bool = False) -> None:
                     print(f"    {line}")
 
     if verbose and result.status != TestStatus.ERROR:
-        print(f"\n  Expected Output:")
+        print("\n  Expected Output:")
         for line in result.expected_output.split("\n")[:10]:
             print(f"    {line}")
-        print(f"\n  Actual Output:")
+        print("\n  Actual Output:")
         for line in result.actual_output.split("\n")[:10]:
             print(f"    {line}")
 
@@ -423,7 +423,7 @@ def run_test_suite(
     errors = 0
 
     print(f"\n{'=' * 70}")
-    print(f"Running InCollege COBOL Test Suite")
+    print("Running InCollege COBOL Test Suite")
     print(f"{'=' * 70}\n")
     print(f"Executable: {executable_path}")
     print(f"Test Root: {test_root}")
@@ -475,7 +475,7 @@ def generate_report(
     total = passed + failed + errors
 
     print(f"\n{'=' * 70}")
-    print(f"Test Summary")
+    print("Test Summary")
     print(f"{'=' * 70}\n")
     print(f"Total Tests: {total}")
     print(
