@@ -878,23 +878,11 @@ PROCEDURE DIVISION.
 
            PERFORM 7110-DISPLAY-BASIC-INFO.
 
-           IF WS-ABOUT-ME(WS-DISPLAY-PROFILE-INDEX) NOT = SPACES
-               PERFORM 7120-DISPLAY-ABOUT-ME
-           END-IF.
+           PERFORM 7120-DISPLAY-ABOUT-ME.
 
-           IF WS-EXP-COUNT(WS-DISPLAY-PROFILE-INDEX) > 0
-               PERFORM 7130-DISPLAY-EXPERIENCE
-           ELSE
-               MOVE "Experience: None" TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-           END-IF.
+           PERFORM 7130-DISPLAY-EXPERIENCE.
 
-           IF WS-EDU-COUNT(WS-DISPLAY-PROFILE-INDEX) > 0
-               PERFORM 7140-DISPLAY-EDUCATION
-           ELSE
-               MOVE "Education: None" TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-           END-IF.
+           PERFORM 7140-DISPLAY-EDUCATION.
 
            MOVE "--------------------" TO WS-OUTPUT-LINE.
            PERFORM 8000-WRITE-OUTPUT.
@@ -974,23 +962,11 @@ PROCEDURE DIVISION.
 
            PERFORM 7110-DISPLAY-BASIC-INFO.
 
-           IF WS-ABOUT-ME(WS-DISPLAY-PROFILE-INDEX) NOT = SPACES
-               PERFORM 7120-DISPLAY-ABOUT-ME
-           END-IF.
+           PERFORM 7120-DISPLAY-ABOUT-ME.
 
-           IF WS-EXP-COUNT(WS-DISPLAY-PROFILE-INDEX) > 0
-               PERFORM 7130-DISPLAY-EXPERIENCE
-           ELSE
-               MOVE "Experience: None" TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-           END-IF.
+           PERFORM 7130-DISPLAY-EXPERIENCE.
 
-           IF WS-EDU-COUNT(WS-DISPLAY-PROFILE-INDEX) > 0
-               PERFORM 7140-DISPLAY-EDUCATION
-           ELSE
-               MOVE "Education: None" TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-           END-IF.
+           PERFORM 7140-DISPLAY-EDUCATION.
 
            MOVE "-------------------------" TO WS-OUTPUT-LINE.
            PERFORM 8000-WRITE-OUTPUT.
@@ -1033,26 +1009,36 @@ PROCEDURE DIVISION.
 *> *      *> 7120-DISPLAY-ABOUT-ME: Display About Me section               *
 *> *      *>*****************************************************************
        7120-DISPLAY-ABOUT-ME.
-           MOVE SPACES TO WS-OUTPUT-LINE.
-           STRING "About Me: "
-               FUNCTION TRIM(WS-ABOUT-ME(WS-DISPLAY-PROFILE-INDEX))
-               DELIMITED BY SIZE INTO WS-OUTPUT-LINE
-           END-STRING.
-           PERFORM 8000-WRITE-OUTPUT.
+           IF WS-ABOUT-ME(WS-DISPLAY-PROFILE-INDEX) NOT = SPACES
+               MOVE SPACES TO WS-OUTPUT-LINE
+               STRING "About Me: "
+                   FUNCTION TRIM(WS-ABOUT-ME(WS-DISPLAY-PROFILE-INDEX))
+                   DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+               END-STRING
+               PERFORM 8000-WRITE-OUTPUT
+           ELSE
+               MOVE "About Me: None" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF.
 
 *> *      *>*****************************************************************
 *> *      *> 7130-DISPLAY-EXPERIENCE: Display all experience entries       *
 *> *      *>*****************************************************************
        7130-DISPLAY-EXPERIENCE.
-           MOVE "Experience:" TO WS-OUTPUT-LINE.
-           PERFORM 8000-WRITE-OUTPUT.
+           IF WS-EXP-COUNT(WS-DISPLAY-PROFILE-INDEX) > 0
+               MOVE "Experience:" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
 
-           PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
-               UNTIL WS-DISPLAY-INDEX >
-                   WS-EXP-COUNT(WS-DISPLAY-PROFILE-INDEX)
+               PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
+                   UNTIL WS-DISPLAY-INDEX >
+                       WS-EXP-COUNT(WS-DISPLAY-PROFILE-INDEX)
 
-               PERFORM 7131-DISPLAY-SINGLE-EXPERIENCE
-           END-PERFORM.
+                   PERFORM 7131-DISPLAY-SINGLE-EXPERIENCE
+               END-PERFORM
+           ELSE
+               MOVE "Experience: None" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF.
 
 *> *      *>*****************************************************************
 *> *      *> 7131-DISPLAY-SINGLE-EXPERIENCE: Display one experience entry  *
@@ -1097,15 +1083,20 @@ PROCEDURE DIVISION.
 *> *      *> 7140-DISPLAY-EDUCATION: Display all education entries         *
 *> *      *>*****************************************************************
        7140-DISPLAY-EDUCATION.
-           MOVE "Education:" TO WS-OUTPUT-LINE.
-           PERFORM 8000-WRITE-OUTPUT.
+           IF WS-EDU-COUNT(WS-DISPLAY-PROFILE-INDEX) > 0
+               MOVE "Education:" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
 
-           PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
-               UNTIL WS-DISPLAY-INDEX >
-                   WS-EDU-COUNT(WS-DISPLAY-PROFILE-INDEX)
+               PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
+                   UNTIL WS-DISPLAY-INDEX >
+                       WS-EDU-COUNT(WS-DISPLAY-PROFILE-INDEX)
 
-               PERFORM 7141-DISPLAY-SINGLE-EDUCATION
-           END-PERFORM.
+                   PERFORM 7141-DISPLAY-SINGLE-EDUCATION
+               END-PERFORM
+           ELSE
+               MOVE "Education: None" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF.
 
 *> *      *>*****************************************************************
 *> *      *> 7141-DISPLAY-SINGLE-EDUCATION: Display one education entry    *
