@@ -122,6 +122,7 @@ Experience:
   Company/Organization: State Lab
   Dates: Spring 2024
   Description: Data analysis projects
+Education: None
 --------------------
 
 === MAIN MENU ===

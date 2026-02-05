@@ -76,6 +76,8 @@ Name: Charlie Davis
 University: Example University
 Major: Computer Science
 Graduation Year: 2050
+Experience: None
+Education: None
 --------------------
 
 === MAIN MENU ===
