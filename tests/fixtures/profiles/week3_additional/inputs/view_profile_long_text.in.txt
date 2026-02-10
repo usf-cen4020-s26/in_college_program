@@ -1,0 +1,28 @@
+; Week 3 - view_profile_with_long_text_sections
+; Creates a user with long About Me, Experience, and Education fields and then views profile.
+;
+; NOTE: This is a tester-designed input file. The exact prompts must match src/main.cob.
+
+2
+Week3User1
+Pass123!
+1
+Week3User1
+Pass123!
+1
+John
+Longtext
+University of South Florida
+Computer Science
+2025
+This is a very long About Me section designed to approach the two-hundred character limit so that we can verify wrapping and full display in both console and output file without truncation occurring.
+DONE
+DONE
+6
+1
+Week3User1
+Pass123!
+2
+6
+3
+

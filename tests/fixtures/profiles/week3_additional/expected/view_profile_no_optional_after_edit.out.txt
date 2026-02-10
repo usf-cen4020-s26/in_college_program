@@ -1,0 +1,3 @@
+; Expected output for Week 3 - view_profile_no_optional_sections_after_edit
+; To be filled in with exact OUTPUT.TXT contents after implementation.
+

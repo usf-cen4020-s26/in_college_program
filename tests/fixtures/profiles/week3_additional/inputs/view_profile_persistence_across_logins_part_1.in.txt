@@ -1,0 +1,21 @@
+; Week 3 - view_profile_persistence_across_multiple_logins (Part 1)
+; Create profile for User C and exit.
+
+2
+Week3User3
+Pass123!
+1
+Week3User3
+Pass123!
+1
+Chris
+Persist
+USF
+CS
+2027
+About me for persistence test.
+DONE
+DONE
+6
+3
+

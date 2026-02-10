@@ -1,0 +1,46 @@
+; Week 3 - view_profile_no_optional_sections_after_edit
+; Create full profile, then edit to remove About Me, Experience, Education, and view profile.
+
+2
+Week3User2
+Pass123!
+1
+Week3User2
+Pass123!
+1
+Alice
+Original
+USF
+IT
+2026
+Original About Me that will be removed later.
+Job1
+Company1
+2020-2021
+Some description
+DONE
+BS
+USF
+2018-2022
+DONE
+6
+1
+Week3User2
+Pass123!
+1
+Alice
+Original
+USF
+IT
+2026
+
+DONE
+DONE
+6
+1
+Week3User2
+Pass123!
+2
+6
+3
+

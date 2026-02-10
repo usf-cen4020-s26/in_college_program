@@ -1,0 +1,24 @@
+; Week 3 - search_found_after_profile_edit (Part 1)
+; Create users E (searcher) and F (target) and set initial profile name Alice Brown.
+
+2
+Week3UserE
+Pass123!
+2
+Week3UserF
+Pass123!
+1
+Week3UserF
+Pass123!
+1
+Alice
+Brown
+USF
+IT
+2026
+Original profile for Alice Brown.
+DONE
+DONE
+6
+3
+

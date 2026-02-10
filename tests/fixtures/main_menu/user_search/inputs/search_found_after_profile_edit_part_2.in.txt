@@ -1,0 +1,26 @@
+; Week 3 - search_found_after_profile_edit (Part 2)
+; Edit User F's last name to Green and verify search behavior.
+
+1
+Week3UserF
+Pass123!
+1
+Alice
+Green
+USF
+IT
+2026
+Updated profile after name change.
+DONE
+DONE
+6
+1
+Week3UserE
+Pass123!
+4
+Alice Brown
+4
+Alice Green
+6
+3
+
