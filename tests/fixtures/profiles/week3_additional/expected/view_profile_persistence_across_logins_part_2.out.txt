@@ -1,3 +1,0 @@
-; Expected output for Week 3 - view_profile_persistence_across_multiple_logins (Part 2)
-; To be captured from OUTPUT.TXT after running part 2.
-

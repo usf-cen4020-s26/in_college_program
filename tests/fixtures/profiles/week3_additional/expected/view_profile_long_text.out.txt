@@ -1,3 +1,0 @@
-; Expected output for Week 3 - view_profile_with_long_text_sections
-; This file should be updated after running the program and capturing actual OUTPUT.TXT
-
