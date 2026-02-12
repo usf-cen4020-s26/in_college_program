@@ -292,6 +292,12 @@ def discover_tests(test_root: Path) -> List[List[TestCase]]:
     def find_test_dirs(root: Path) -> List[Path]:
         """Find all directories that contain both 'inputs' and 'expected' subdirectories."""
         test_dirs: List[Path] = []
+
+        # First check if the root itself is a test directory
+        if (root / "inputs").exists() and (root / "expected").exists():
+            test_dirs.append(root)
+
+        # Then check all subdirectories
         for item in root.rglob("*"):
             if item.is_dir():
                 inputs_dir = item / "inputs"
