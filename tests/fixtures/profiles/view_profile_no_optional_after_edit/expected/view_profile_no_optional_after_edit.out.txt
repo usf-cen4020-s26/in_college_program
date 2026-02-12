@@ -116,7 +116,7 @@ You have successfully logged in
 Enter choice (1-6):
 1
 
-=== CREATE MY PROFILE ===
+=== EDIT MY PROFILE ===
 Enter First Name:
 Alice
 Enter Last Name:
