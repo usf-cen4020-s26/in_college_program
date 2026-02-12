@@ -77,6 +77,8 @@ University: Example University
 Major: Computer Science
 Graduation Year: 2025
 About Me: Passionate CS student interested in software engineering.
+Experience: None
+Education: None
 --------------------
 
 === MAIN MENU ===

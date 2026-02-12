@@ -79,6 +79,9 @@ Name: John Doe
 University: Example University
 Major: Computer Science
 Graduation Year: 2025
+About Me: None
+Experience: None
+Education: None
 --------------------
 
 === MAIN MENU ===

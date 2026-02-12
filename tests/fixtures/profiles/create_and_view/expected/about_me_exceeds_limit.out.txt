@@ -77,6 +77,8 @@ University: Example University
 Major: Computer Science
 Graduation Year: 2025
 About Me: This is a very long about me section that exceeds the 200 character limit. It contains way too much information about the person and should be rejected or truncated by the system. We are testing to en
+Experience: None
+Education: None
 --------------------
 
 === MAIN MENU ===

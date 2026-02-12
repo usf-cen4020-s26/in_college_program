@@ -151,6 +151,13 @@ WORKING-STORAGE SECTION.
 01  WS-DISPLAY-INDEX            PIC 9.
 01  WS-PROFILE-EXISTS           PIC 9 VALUE 0.
 
+01  WS-SEARCH-NAME              PIC X(80).
+01  WS-SEARCH-FIRST-NAME        PIC X(30).
+01  WS-SEARCH-LAST-NAME         PIC X(30).
+01  WS-SEARCH-FOUND-INDEX       PIC 9 VALUE 0.
+01  WS-USER-FOUND               PIC 9 VALUE 0.
+01  WS-DISPLAY-PROFILE-INDEX    PIC 9 VALUE 0.
+
 01  WS-OUTPUT-LINE              PIC X(500).
 
 PROCEDURE DIVISION.
@@ -747,8 +754,7 @@ PROCEDURE DIVISION.
                            MOVE "Search for a job is under construction." TO WS-OUTPUT-LINE
                            PERFORM 8000-WRITE-OUTPUT
                        WHEN "4"
-                           MOVE "Find someone you know is under construction." TO WS-OUTPUT-LINE
-                           PERFORM 8000-WRITE-OUTPUT
+                           PERFORM 7500-FIND-SOMEONE-YOU-KNOW
                        WHEN "5"
                            PERFORM 6000-SKILLS-MENU
                        WHEN "6"
@@ -868,21 +874,101 @@ PROCEDURE DIVISION.
            MOVE "=== YOUR PROFILE ===" TO WS-OUTPUT-LINE.
            PERFORM 8000-WRITE-OUTPUT.
 
+           MOVE WS-CURRENT-PROFILE-INDEX TO WS-DISPLAY-PROFILE-INDEX.
+
            PERFORM 7110-DISPLAY-BASIC-INFO.
 
-           IF WS-ABOUT-ME(WS-CURRENT-PROFILE-INDEX) NOT = SPACES
-               PERFORM 7120-DISPLAY-ABOUT-ME
-           END-IF.
+           PERFORM 7120-DISPLAY-ABOUT-ME.
 
-           IF WS-EXP-COUNT(WS-CURRENT-PROFILE-INDEX) > 0
-               PERFORM 7130-DISPLAY-EXPERIENCE
-           END-IF.
+           PERFORM 7130-DISPLAY-EXPERIENCE.
 
-           IF WS-EDU-COUNT(WS-CURRENT-PROFILE-INDEX) > 0
-               PERFORM 7140-DISPLAY-EDUCATION
-           END-IF.
+           PERFORM 7140-DISPLAY-EDUCATION.
 
            MOVE "--------------------" TO WS-OUTPUT-LINE.
+           PERFORM 8000-WRITE-OUTPUT.
+
+*> *      *>*****************************************************************
+*> *      *> 7500-FIND-SOMEONE-YOU-KNOW: Search for user by full name     *
+*> *      *> USER STORY (Epic 3): Basic user search functionality          *
+*> *      *>*****************************************************************
+       7500-FIND-SOMEONE-YOU-KNOW.
+           MOVE " " TO WS-OUTPUT-LINE.
+           PERFORM 8000-WRITE-OUTPUT.
+           MOVE "Enter the full name of the person you are looking for: "
+               TO WS-OUTPUT-LINE.
+           PERFORM 8000-WRITE-OUTPUT.
+
+           PERFORM 8100-READ-INPUT.
+
+           IF WS-EOF-FLAG = 1
+               MOVE 0 TO WS-PROGRAM-RUNNING
+               EXIT PARAGRAPH
+           END-IF.
+
+           MOVE INPUT-RECORD TO WS-SEARCH-NAME.
+           MOVE FUNCTION TRIM(WS-SEARCH-NAME) TO WS-SEARCH-NAME.
+           MOVE WS-SEARCH-NAME TO WS-OUTPUT-LINE.
+           PERFORM 8000-WRITE-OUTPUT.
+
+           PERFORM 7510-SEARCH-FOR-USER.
+
+           IF WS-USER-FOUND = 1
+               PERFORM 7520-DISPLAY-FOUND-PROFILE
+           ELSE
+               MOVE "No one by that name could be found." TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF.
+
+*> *      *>*****************************************************************
+*> *      *> 7510-SEARCH-FOR-USER: Search profiles for matching name      *
+*> *      *> USER STORY (Epic 3): Exact match search by full name         *
+*> *      *>*****************************************************************
+       7510-SEARCH-FOR-USER.
+           MOVE 0 TO WS-USER-FOUND.
+           MOVE 0 TO WS-SEARCH-FOUND-INDEX.
+           MOVE SPACES TO WS-SEARCH-FIRST-NAME.
+           MOVE SPACES TO WS-SEARCH-LAST-NAME.
+
+           UNSTRING WS-SEARCH-NAME
+               DELIMITED BY " "
+               INTO WS-SEARCH-FIRST-NAME
+                    WS-SEARCH-LAST-NAME
+           END-UNSTRING.
+
+           PERFORM VARYING WS-ACCOUNT-INDEX FROM 1 BY 1
+               UNTIL WS-ACCOUNT-INDEX > WS-PROFILE-COUNT
+                   OR WS-USER-FOUND = 1
+
+               IF WS-HAS-PROFILE(WS-ACCOUNT-INDEX) = 1
+                   IF FUNCTION TRIM(WS-FIRST-NAME(WS-ACCOUNT-INDEX)) =
+                       FUNCTION TRIM(WS-SEARCH-FIRST-NAME)
+                       AND FUNCTION TRIM(WS-LAST-NAME(WS-ACCOUNT-INDEX)) =
+                       FUNCTION TRIM(WS-SEARCH-LAST-NAME)
+                       MOVE 1 TO WS-USER-FOUND
+                       MOVE WS-ACCOUNT-INDEX TO WS-SEARCH-FOUND-INDEX
+                   END-IF
+               END-IF
+           END-PERFORM.
+
+*> *      *>*****************************************************************
+*> *      *> 7520-DISPLAY-FOUND-PROFILE: Display profile of found user    *
+*> *      *> USER STORY (Epic 3): Display full profile when user found    *
+*> *      *>*****************************************************************
+       7520-DISPLAY-FOUND-PROFILE.
+           MOVE "--- Found User Profile ---" TO WS-OUTPUT-LINE.
+           PERFORM 8000-WRITE-OUTPUT.
+
+           MOVE WS-SEARCH-FOUND-INDEX TO WS-DISPLAY-PROFILE-INDEX.
+
+           PERFORM 7110-DISPLAY-BASIC-INFO.
+
+           PERFORM 7120-DISPLAY-ABOUT-ME.
+
+           PERFORM 7130-DISPLAY-EXPERIENCE.
+
+           PERFORM 7140-DISPLAY-EDUCATION.
+
+           MOVE "-------------------------" TO WS-OUTPUT-LINE.
            PERFORM 8000-WRITE-OUTPUT.
 
 *> *      *>*****************************************************************
@@ -891,30 +977,30 @@ PROCEDURE DIVISION.
        7110-DISPLAY-BASIC-INFO.
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "Name: "
-               FUNCTION TRIM(WS-FIRST-NAME(WS-CURRENT-PROFILE-INDEX))
+               FUNCTION TRIM(WS-FIRST-NAME(WS-DISPLAY-PROFILE-INDEX))
                " "
-               FUNCTION TRIM(WS-LAST-NAME(WS-CURRENT-PROFILE-INDEX))
+               FUNCTION TRIM(WS-LAST-NAME(WS-DISPLAY-PROFILE-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
            PERFORM 8000-WRITE-OUTPUT.
 
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "University: "
-               FUNCTION TRIM(WS-UNIVERSITY(WS-CURRENT-PROFILE-INDEX))
+               FUNCTION TRIM(WS-UNIVERSITY(WS-DISPLAY-PROFILE-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
            PERFORM 8000-WRITE-OUTPUT.
 
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "Major: "
-               FUNCTION TRIM(WS-MAJOR(WS-CURRENT-PROFILE-INDEX))
+               FUNCTION TRIM(WS-MAJOR(WS-DISPLAY-PROFILE-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
            PERFORM 8000-WRITE-OUTPUT.
 
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "Graduation Year: "
-               WS-GRAD-YEAR(WS-CURRENT-PROFILE-INDEX)
+               WS-GRAD-YEAR(WS-DISPLAY-PROFILE-INDEX)
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
            PERFORM 8000-WRITE-OUTPUT.
@@ -923,26 +1009,36 @@ PROCEDURE DIVISION.
 *> *      *> 7120-DISPLAY-ABOUT-ME: Display About Me section               *
 *> *      *>*****************************************************************
        7120-DISPLAY-ABOUT-ME.
-           MOVE SPACES TO WS-OUTPUT-LINE.
-           STRING "About Me: "
-               FUNCTION TRIM(WS-ABOUT-ME(WS-CURRENT-PROFILE-INDEX))
-               DELIMITED BY SIZE INTO WS-OUTPUT-LINE
-           END-STRING.
-           PERFORM 8000-WRITE-OUTPUT.
+           IF WS-ABOUT-ME(WS-DISPLAY-PROFILE-INDEX) NOT = SPACES
+               MOVE SPACES TO WS-OUTPUT-LINE
+               STRING "About Me: "
+                   FUNCTION TRIM(WS-ABOUT-ME(WS-DISPLAY-PROFILE-INDEX))
+                   DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+               END-STRING
+               PERFORM 8000-WRITE-OUTPUT
+           ELSE
+               MOVE "About Me: None" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF.
 
 *> *      *>*****************************************************************
 *> *      *> 7130-DISPLAY-EXPERIENCE: Display all experience entries       *
 *> *      *>*****************************************************************
        7130-DISPLAY-EXPERIENCE.
-           MOVE "Experience:" TO WS-OUTPUT-LINE.
-           PERFORM 8000-WRITE-OUTPUT.
+           IF WS-EXP-COUNT(WS-DISPLAY-PROFILE-INDEX) > 0
+               MOVE "Experience:" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
 
-           PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
-               UNTIL WS-DISPLAY-INDEX >
-                   WS-EXP-COUNT(WS-CURRENT-PROFILE-INDEX)
+               PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
+                   UNTIL WS-DISPLAY-INDEX >
+                       WS-EXP-COUNT(WS-DISPLAY-PROFILE-INDEX)
 
-               PERFORM 7131-DISPLAY-SINGLE-EXPERIENCE
-           END-PERFORM.
+                   PERFORM 7131-DISPLAY-SINGLE-EXPERIENCE
+               END-PERFORM
+           ELSE
+               MOVE "Experience: None" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF.
 
 *> *      *>*****************************************************************
 *> *      *> 7131-DISPLAY-SINGLE-EXPERIENCE: Display one experience entry  *
@@ -950,7 +1046,7 @@ PROCEDURE DIVISION.
        7131-DISPLAY-SINGLE-EXPERIENCE.
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "  Title: "
-               FUNCTION TRIM(WS-EXP-TITLE(WS-CURRENT-PROFILE-INDEX,
+               FUNCTION TRIM(WS-EXP-TITLE(WS-DISPLAY-PROFILE-INDEX,
                    WS-DISPLAY-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
@@ -958,7 +1054,7 @@ PROCEDURE DIVISION.
 
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "  Company/Organization: "
-               FUNCTION TRIM(WS-EXP-COMPANY(WS-CURRENT-PROFILE-INDEX,
+               FUNCTION TRIM(WS-EXP-COMPANY(WS-DISPLAY-PROFILE-INDEX,
                    WS-DISPLAY-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
@@ -966,17 +1062,17 @@ PROCEDURE DIVISION.
 
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "  Dates: "
-               FUNCTION TRIM(WS-EXP-DATES(WS-CURRENT-PROFILE-INDEX,
+               FUNCTION TRIM(WS-EXP-DATES(WS-DISPLAY-PROFILE-INDEX,
                    WS-DISPLAY-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
            PERFORM 8000-WRITE-OUTPUT.
 
-           IF WS-EXP-DESC(WS-CURRENT-PROFILE-INDEX, WS-DISPLAY-INDEX)
+           IF WS-EXP-DESC(WS-DISPLAY-PROFILE-INDEX, WS-DISPLAY-INDEX)
                NOT = SPACES
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "  Description: "
-                   FUNCTION TRIM(WS-EXP-DESC(WS-CURRENT-PROFILE-INDEX,
+                   FUNCTION TRIM(WS-EXP-DESC(WS-DISPLAY-PROFILE-INDEX,
                        WS-DISPLAY-INDEX))
                    DELIMITED BY SIZE INTO WS-OUTPUT-LINE
                END-STRING
@@ -987,15 +1083,20 @@ PROCEDURE DIVISION.
 *> *      *> 7140-DISPLAY-EDUCATION: Display all education entries         *
 *> *      *>*****************************************************************
        7140-DISPLAY-EDUCATION.
-           MOVE "Education:" TO WS-OUTPUT-LINE.
-           PERFORM 8000-WRITE-OUTPUT.
+           IF WS-EDU-COUNT(WS-DISPLAY-PROFILE-INDEX) > 0
+               MOVE "Education:" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
 
-           PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
-               UNTIL WS-DISPLAY-INDEX >
-                   WS-EDU-COUNT(WS-CURRENT-PROFILE-INDEX)
+               PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
+                   UNTIL WS-DISPLAY-INDEX >
+                       WS-EDU-COUNT(WS-DISPLAY-PROFILE-INDEX)
 
-               PERFORM 7141-DISPLAY-SINGLE-EDUCATION
-           END-PERFORM.
+                   PERFORM 7141-DISPLAY-SINGLE-EDUCATION
+               END-PERFORM
+           ELSE
+               MOVE "Education: None" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF.
 
 *> *      *>*****************************************************************
 *> *      *> 7141-DISPLAY-SINGLE-EDUCATION: Display one education entry    *
@@ -1003,7 +1104,7 @@ PROCEDURE DIVISION.
        7141-DISPLAY-SINGLE-EDUCATION.
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "  Degree: "
-               FUNCTION TRIM(WS-EDU-DEGREE(WS-CURRENT-PROFILE-INDEX,
+               FUNCTION TRIM(WS-EDU-DEGREE(WS-DISPLAY-PROFILE-INDEX,
                    WS-DISPLAY-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
@@ -1011,7 +1112,7 @@ PROCEDURE DIVISION.
 
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "  University: "
-               FUNCTION TRIM(WS-EDU-UNIVERSITY(WS-CURRENT-PROFILE-INDEX,
+               FUNCTION TRIM(WS-EDU-UNIVERSITY(WS-DISPLAY-PROFILE-INDEX,
                    WS-DISPLAY-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.
@@ -1019,7 +1120,7 @@ PROCEDURE DIVISION.
 
            MOVE SPACES TO WS-OUTPUT-LINE.
            STRING "  Years: "
-               FUNCTION TRIM(WS-EDU-YEARS(WS-CURRENT-PROFILE-INDEX,
+               FUNCTION TRIM(WS-EDU-YEARS(WS-DISPLAY-PROFILE-INDEX,
                    WS-DISPLAY-INDEX))
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING.

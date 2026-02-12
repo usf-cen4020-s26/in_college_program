@@ -80,6 +80,7 @@ Experience:
   Company/Organization: MIT Physics Lab
   Dates: 2022-2024
   Description: Assisted with quantum mechanics experiments
+Education: None
 --------------------
 
 === MAIN MENU ===

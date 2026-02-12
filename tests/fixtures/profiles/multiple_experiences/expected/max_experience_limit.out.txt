@@ -109,6 +109,7 @@ Name: John Doe
 University: Example University
 Major: Computer Science
 Graduation Year: 2025
+About Me: None
 Experience:
   Title: Software Intern
   Company/Organization: Tech Corp
@@ -122,6 +123,7 @@ Experience:
   Company/Organization: State Lab
   Dates: Spring 2024
   Description: Data analysis projects
+Education: None
 --------------------
 
 === MAIN MENU ===

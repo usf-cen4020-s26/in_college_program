@@ -77,6 +77,8 @@ University: !@#
 Major: !@#
 Graduation Year: 2025
 About Me: !@#
+Experience: None
+Education: None
 --------------------
 
 === MAIN MENU ===

@@ -11,7 +11,7 @@ Enter choice (1-3):
 
 === LOGIN ===
 Enter username:
-ProfileUser4
+PersistUser
 Enter password:
 ********
 You have successfully logged in
@@ -27,11 +27,11 @@ Enter choice (1-6):
 2
 
 === YOUR PROFILE ===
-Name: Alice Johnson
-University: Miami University
-Major: Data Science
-Graduation Year: 2026
-About Me: Aspiring data scientist with a focus on machine learning.
+Name: Chris Persist
+University: USF
+Major: CS
+Graduation Year: 2027
+About Me: About me for persistence test.
 Experience: None
 Education: None
 --------------------

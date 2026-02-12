@@ -76,6 +76,9 @@ Name: Alice Brown
 University: Example University
 Major: Computer Science
 Graduation Year: 1950
+About Me: None
+Experience: None
+Education: None
 --------------------
 
 === MAIN MENU ===
