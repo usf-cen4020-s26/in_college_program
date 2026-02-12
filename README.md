@@ -1,6 +1,49 @@
 # InCollege COBOL Project
 
-This repository contains the InCollege application - a COBOL-based career networking platform with user authentication, job search, and skill learning features. The project includes a comprehensive test suite and CI/CD pipeline.
+InCollege is a career networking platform implemented in COBOL using GNU COBOL. The application allows students and professionals to create profiles, connect with others, and explore career development opportunities. This project demonstrates file-based persistence, menu-driven interfaces, and comprehensive input validation in COBOL.
+
+## Features
+
+### User Authentication (Epic 1)
+- Create new user accounts with secure password validation
+- Login with existing credentials
+- Account limit enforcement (maximum 5 accounts)
+- Unlimited login attempts until successful
+- Persistent storage of user credentials across program runs
+
+**Password Requirements:**
+- 8-12 characters in length
+- At least one uppercase letter
+- At least one digit (0-9)
+- At least one special character (!@#$%^&*)
+
+### User Profile Management (Epic 2)
+- Create and edit personal profiles with comprehensive information
+- View your own complete profile
+- Profile data persists across sessions and logins
+
+**Profile Fields:**
+- Required: First Name, Last Name, University/College, Major, Graduation Year
+- Optional: About Me section
+- Up to 3 work experience entries (title, employer, dates, description)
+- Up to 3 education entries (school name, degree, years attended)
+
+**Profile Validations:**
+- Graduation year must be 4 digits between 1950 and 2050
+- All required fields must be filled before saving
+- Optional fields can be skipped
+
+### User Search (Epic 3)
+- Search for other InCollege users by their full name
+- View complete profiles of found users
+- Exact name matching with informative feedback
+- Search results display all profile information
+
+### Additional Features
+- Skills menu framework (placeholder for future expansion)
+- Job search framework (placeholder for future expansion)
+- Logout functionality
+- Graceful handling of end-of-file conditions
 
 ## Getting Started
 
@@ -39,182 +82,174 @@ cobc -x -free -o bin/main src/main.cob
 
 ### Running the Program
 
+The program operates on a file-based input/output system designed for automated testing and scripted interactions.
+
+**Input:** All user input is read from `INPUT.TXT` line by line. Each line represents one user interaction (menu choice, username, password, search query, etc.).
+
+**Output:** All program output is written to two destinations:
+1. Standard output (your terminal screen)
+2. `OUTPUT.TXT` file (identical copy for verification)
+
+To run the program:
+
 ```sh
 ./bin/main
 ```
 
-The program reads input from stdin and writes output to stdout. For automated testing, input can be provided via file redirection:
+The program will read from `INPUT.TXT` and write to both the screen and `OUTPUT.TXT`. When the input file is exhausted (end-of-file), the program terminates gracefully.
 
-```sh
-./bin/main < tests/fixtures/login/2_new_account/inputs/valid_account.in.txt
+**Example INPUT.TXT:**
 ```
+1
+testuser
+MyPass123!
+2
+6
+3
+```
+
+This input would:
+1. Select "Login" (1)
+2. Enter username "testuser"
+3. Enter password "MyPass123!"
+4. Select "View My Profile" (2)
+5. Select "Logout" (6)
+6. Select "Exit" (3) from the main welcome screen
+
+**Data Persistence:**
+User accounts are stored in `ACCOUNTS.DAT` and profiles in `PROFILES.DAT`. These files persist between program executions, allowing users to log in across multiple runs.
 
 ## Testing
 
-This project includes a comprehensive Python-based testing system that automatically validates the COBOL program against expected outputs.
+The project includes an automated testing system written in Python that validates program behavior against expected outputs. Tests are comprehensive, covering login flows, profile management, user search, error handling, and edge cases.
 
-### Test Structure
+### Important: Compile Before Testing
 
-Tests are organized in the `tests/fixtures` directory:
+Always compile the COBOL program before running tests. The test runner executes the compiled binary, so changes to source code won't be reflected until you recompile:
 
-Each test category contains:
-- `inputs/`: Input files (`.in.txt`) containing user interactions
-- `expected/`: Expected output files (`.out.txt`) for validation
+```sh
+mkdir -p bin
+cobc -x -free -o bin/main src/main.cob
+```
 
-### Multi-Part Tests
+### Test Organization
 
-Some tests require multiple program executions to test persistence (e.g., creating an account in one run and logging in during another). These tests are identified by the `_part_N` suffix (e.g., `persistence_input_part_1.in.txt`, `persistence_input_part_2.in.txt`).
+Tests are organized by feature category under `tests/fixtures/`:
 
-The test runner automatically:
-- Detects multi-part tests
-- Executes them in order
-- Maintains persistent storage between parts
-- Clears storage between different test groups
+- `login/` - Authentication and account creation tests
+- `profiles/` - Profile creation, editing, and viewing tests
+- `main_menu/` - Post-login menu navigation tests
+- `eof_tests/` - End-of-file handling validation
+
+Each test consists of:
+- An input file (`.in.txt`) containing line-by-line user interactions
+- An expected output file (`.out.txt`) containing the exact expected program output
+
+### Multi-Part Tests (Persistence Testing)
+
+Some features require testing persistence across multiple program executions. For example, creating an account in one run and then logging in with that account in a subsequent run. These tests use the `_part_N` naming convention:
+
+- `create_and_login_part_1.in.txt` - Creates a new account
+- `create_and_login_part_2.in.txt` - Logs in with the created account
+
+The test runner automatically detects these multi-part tests and:
+- Executes parts sequentially in numerical order
+- Maintains `ACCOUNTS.DAT` and `PROFILES.DAT` between parts
+- Clears persistent storage between different test groups
 
 ### Running Tests
 
-#### Run All Tests
+Run all tests:
+
+```sh
+./run_tests.sh
+```
+
+Or use the Python test runner directly:
 
 ```sh
 python3 tests/test_runner.py bin/main
 ```
 
-#### Run Tests with Verbose Output
+Show detailed differences for failed tests:
 
 ```sh
 python3 tests/test_runner.py bin/main --verbose
 ```
 
-#### Generate JSON Report
-
-```sh
-python3 tests/test_runner.py bin/main --report test-report.json
-```
-
-#### Specify Custom Test Directory
+Test a specific feature category:
 
 ```sh
 python3 tests/test_runner.py bin/main --test-root tests/fixtures/login
 ```
 
-### Test Runner Features
+Generate a JSON report for CI/CD:
 
-The test runner ([tests/test_runner.py](tests/test_runner.py)) provides:
-
-- **Automatic Test Discovery**: Scans test directories and discovers all test cases
-- **Multi-Part Test Support**: Handles tests requiring persistent state across multiple runs
-- **Detailed Diff Output**: Shows exact differences between expected and actual output with colored highlighting
-- **Summary Reports**: Provides comprehensive pass/fail statistics
-- **Strict Type Checking**: Written with Python type hints for maintainability
-- **CI/CD Integration**: Generates JSON reports for automated workflows
-
-### Test Output
-
-The test runner provides color-coded results:
-- ✓ **Green**: Test passed
-- ✗ **Red**: Test failed (with detailed diff)
-- ⚠ **Yellow**: Test error (execution failure)
-
-Example output:
+```sh
+python3 tests/test_runner.py bin/main --report test-report.json
 ```
-======================================================================
-Running InCollege COBOL Test Suite
-======================================================================
 
-Executable: bin/main
-Test Root: tests/fixtures/login
-Found 16 test groups
+### Understanding Test Results
 
-✓ valid_account: PASSED
+The test runner provides color-coded output:
+
+- Green checkmark: Test passed
+- Red X: Test failed (shows differences between expected and actual output)
+- Yellow warning: Test error (program crash, timeout, or execution failure)
+
+Failed tests display a unified diff showing exactly what differs:
+
+```
 ✗ password_too_short: FAILED
 
   Differences found:
     --- password_too_short (expected)
     +++ password_too_short (actual)
-    @@ -3,7 +3,7 @@
-     Please enter your username:
-     TestUser2
+    @@ -5,7 +5,7 @@
      Please enter your password:
+     Pass1!
     -Password must be between 8 and 12 characters...
-    +Password requirements not met
-
-======================================================================
-Test Summary
-======================================================================
-
-Total Tests: 16
-Passed: 14 (87.5%)
-Failed: 2 (12.5%)
-Errors: 0 (0.0%)
+    +Invalid password
 ```
+
+After all tests complete, a summary shows total counts and percentages for passed, failed, and error cases.
+
+### Writing New Tests
+
+To add a new test:
+
+1. Create an input file in the appropriate subdirectory under `tests/fixtures/`:
+   ```
+   tests/fixtures/login/2_new_account/inputs/my_new_test.in.txt
+   ```
+
+2. Create the corresponding expected output file:
+   ```
+   tests/fixtures/login/2_new_account/expected/my_new_test.out.txt
+   ```
+
+3. For multi-part tests, use the `_part_N` suffix:
+   ```
+   my_new_test_part_1.in.txt and my_new_test_part_1.out.txt
+   my_new_test_part_2.in.txt and my_new_test_part_2.out.txt
+   ```
+
+4. Recompile and run tests to validate:
+   ```sh
+   cobc -x -free -o bin/main src/main.cob
+   python3 tests/test_runner.py bin/main
+   ```
 
 ## Continuous Integration
 
-This project uses GitHub Actions for continuous integration. The workflow:
+The project uses GitHub Actions for automated testing. On each push or pull request, the workflow:
 
-1. **Builds** the COBOL program
-2. **Runs** the complete test suite
-3. **Generates** test reports
-4. **Uploads** artifacts for review
-5. **Checks** Python code quality (formatting, type checking, linting)
+- Compiles the COBOL program
+- Runs the complete test suite
+- Generates test reports
+- Uploads artifacts for review
 
-The CI pipeline runs on:
-- Push to `main` or `develop` branches
-- Pull requests to `main` or `develop`
-- Manual workflow dispatch
-
-View the workflow configuration in [.github/workflows/test.yml](.github/workflows/test.yml).
-
-### CI Workflow Status
-
-After each run, the workflow provides:
-- ✅ Build status
-- 📊 Test summary in GitHub Actions summary
-- 📁 Downloadable test report artifact
-- 🔍 Detailed logs for failures
-
-## Development
-
-### Code Quality
-
-Python code follows strict typing and formatting standards:
-
-```sh
-# Format code
-black tests/test_runner.py
-
-# Sort imports
-isort tests/test_runner.py
-
-# Type checking
-mypy tests/test_runner.py --strict
-
-# Linting
-pylint tests/test_runner.py
-```
-
-### Adding New Tests
-
-1. Create input file in appropriate `inputs/` directory:
-   ```
-   tests/fixtures/login/2_new_account/inputs/my_test.in.txt
-   ```
-
-2. Create expected output file:
-   ```
-   tests/fixtures/login/2_new_account/expected/my_test.out.txt
-   ```
-
-3. For multi-part tests, use the `_part_N` naming convention:
-   ```
-   my_test_part_1.in.txt / my_test_part_1.out.txt
-   my_test_part_2.in.txt / my_test_part_2.out.txt
-   ```
-
-4. Run tests to validate:
-   ```sh
-   python3 tests/test_runner.py bin/main
-   ```
+Results appear in the GitHub Actions tab with test summaries and downloadable reports.
 
 ## License
 
