@@ -1,0 +1,22 @@
+2
+LongTextUser
+Pass123!
+1
+LongTextUser
+Pass123!
+1
+John
+Longtext
+University of South Florida
+Computer Science
+2025
+This is a very long About Me section designed to approach the two-hundred character limit so that we can verify wrapping and full display in both console and output file without truncation occurring.
+DONE
+DONE
+6
+1
+LongTextUser
+Pass123!
+2
+6
+3
