@@ -34,7 +34,14 @@ From the project root, run:
 
 ```sh
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src/copybooks -o bin/main src/main.cob src/app_init.cob src/app_term.cob src/io_service.cob src/data_store.cob src/login_module.cob src/account_module.cob src/post_login_menu.cob src/skills_menu.cob src/profile_module.cob src/profile_display.cob src/search_module.cob
+```
+
+**Alternative (automatically discovers all modules):**
+```sh
+mkdir -p bin
+OTHER_SOURCES=$(find src -name "*.cob" -not -name "main.cob" | sort | tr '\n' ' ')
+cobc -x -free -I src/copybooks -o bin/main src/main.cob $OTHER_SOURCES
 ```
 
 ### Running the Program

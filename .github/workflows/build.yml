@@ -23,7 +23,10 @@ jobs:
       - name: Build COBOL source with -free and -x
         run: |
           mkdir -p bin
-          cobc -x -free -o bin/main src/main.cob
+          echo "Discovering COBOL source files..."
+          OTHER_SOURCES=$(find src -name "*.cob" -not -name "main.cob" | sort | tr '\n' ' ')
+          echo "Compiling: src/main.cob $OTHER_SOURCES"
+          cobc -x -free -I src/copybooks -o bin/main src/main.cob $OTHER_SOURCES
 
       - name: Check build output
         run: |

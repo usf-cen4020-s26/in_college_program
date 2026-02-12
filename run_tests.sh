@@ -43,7 +43,7 @@ echo ""
 if [ ! -f "$EXECUTABLE" ]; then
     echo -e "${YELLOW}Executable not found. Compiling...${NC}"
     mkdir -p bin
-    cobc -x -free -o bin/main src/main.cob
+    cobc -x -free -I src/copybooks -o bin/main src/*.cob
 
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✓ Compilation successful${NC}"

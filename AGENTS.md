@@ -33,29 +33,24 @@ InCollege is a career networking platform implemented in COBOL (GNU COBOL/GnuCOB
 
 ### 1. File Structure
 
-Every COBOL program follows this structure:
+Every COBOL program follows this structure (module/subprogram pattern):
 
 ```cobol
 IDENTIFICATION DIVISION.
-PROGRAM-ID. INCOLLEGE.
+PROGRAM-ID. SOME-MODULE.
 
 ENVIRONMENT DIVISION.
-INPUT-OUTPUT SECTION.
-FILE-CONTROL.
-    SELECT INPUT-FILE ASSIGN TO "INPUT.TXT"
-        ORGANIZATION IS LINE SEQUENTIAL
-        FILE STATUS IS WS-INPUT-STATUS.
-    [... other files ...]
 
 DATA DIVISION.
-FILE SECTION.
-    [... file record structures ...]
-
 WORKING-STORAGE SECTION.
     [... variables and data structures ...]
 
+LINKAGE SECTION.
+01  LS-CONTEXT.
+    COPY "context.cpy".
+
 PROCEDURE DIVISION.
-    [... program logic ...]
+    [... program logic using LS-CONTEXT ...]
 ```
 
 ### 2. Naming Conventions
@@ -112,20 +107,20 @@ PROCEDURE DIVISION.
 
 ### 4. Common COBOL Patterns
 
-**Reading from file:**
+**Reading from file (centralized I/O):**
 ```cobol
-PERFORM 8100-READ-INPUT.
+CALL "IO-SERVICE" USING "READ " WS-INPUT-LINE WS-EOF-FLAG.
 IF WS-EOF-FLAG = 1
     MOVE 0 TO WS-PROGRAM-RUNNING
     EXIT PARAGRAPH
 END-IF.
-MOVE INPUT-RECORD TO WS-VARIABLE-NAME.
+MOVE WS-INPUT-LINE TO WS-VARIABLE-NAME.
 ```
 
 **Writing output (dual screen + file):**
 ```cobol
 MOVE "Your message here" TO WS-OUTPUT-LINE.
-PERFORM 8000-WRITE-OUTPUT.
+CALL "IO-SERVICE" USING "WRITE" WS-OUTPUT-LINE WS-EOF-FLAG.
 ```
 
 **Looping with PERFORM VARYING:**
@@ -152,7 +147,7 @@ STRING "Name: "
     FUNCTION TRIM(WS-LAST-NAME)
     DELIMITED BY SIZE INTO WS-OUTPUT-LINE
 END-STRING.
-PERFORM 8000-WRITE-OUTPUT.
+CALL "IO-SERVICE" USING "WRITE" WS-OUTPUT-LINE WS-EOF-FLAG.
 ```
 
 ### 5. Input Validation
@@ -181,30 +176,46 @@ PERFORM 8000-WRITE-OUTPUT.
 
 The program is organized into logical sections with clear separation of concerns:
 
-**Main Program Flow:**
+**Program Flow (multi-file):**
 ```
-0000-MAIN-PROGRAM
-├── 1000-INITIALIZE (load files)
+INCOLLEGE (src/main.cob)
+├── CALL APP-INIT (src/app_init.cob)
 ├── 2000-PROCESS-APPLICATION (main menu loop)
-│   ├── 3000-LOGIN-PROCESS
-│   └── 4000-CREATE-ACCOUNT
-└── 9000-TERMINATE (close files)
+│   ├── CALL LOGIN-MODULE (src/login_module.cob)
+│   └── CALL ACCOUNT-MODULE (src/account_module.cob)
+└── CALL APP-TERM (src/app_term.cob)
 ```
 
-**Post-Login Menu:**
+**Post-Login Menu (subprogram):**
 ```
-5000-POST-LOGIN-MENU
-├── 6000-SKILLS-MENU
-├── 7000-CREATE-EDIT-PROFILE
-│   ├── 7200-GET-REQUIRED-FIELDS
-│   ├── 7300-GET-OPTIONAL-FIELDS
-│   └── 7400-SAVE-PROFILE-DATA
-└── 7100-VIEW-PROFILE
-    ├── 7110-DISPLAY-BASIC-INFO
-    ├── 7120-DISPLAY-ABOUT-ME
-    ├── 7130-DISPLAY-EXPERIENCE
-    └── 7140-DISPLAY-EDUCATION
+POST-LOGIN-MENU (src/post_login_menu.cob)
+├── CALL PROFILE-MODULE (create/edit) / PROFILE-VIEW (view)
+├── CALL SEARCH-MODULE
+├── CALL SKILLS-MENU
+└── Job search placeholder message
 ```
+
+**Shared Services:**
+- `IO-SERVICE` (src/io_service.cob): Centralized input/output (INIT/READ/WRITE/CLOSE)
+- `DATA-STORE` (src/data_store.cob): Load/save accounts and profiles (LOAD/SAVE-ACCT/SAVE-PROF)
+- `PROFILE-DISPLAY` (src/profile_display.cob): Render profile sections for view/search
+- `context.cpy` (src/copybooks/context.cpy): Shared working-storage context
+
+IO-SERVICE opcodes are 5 characters: use `"INIT "`, `"READ "`, `"WRITE"`, `"CLOSE"`.
+
+**File Layout (src/):**
+- `src/main.cob`: Main menu loop only (dispatches to modules)
+- `src/app_init.cob`: Startup initialization + welcome banner
+- `src/app_term.cob`: Shutdown message + close IO
+- `src/io_service.cob`: Input/output service (INPUT.TXT / OUTPUT.TXT)
+- `src/data_store.cob`: Accounts/profiles load/save
+- `src/login_module.cob`: Login flow
+- `src/account_module.cob`: Account creation + password validation
+- `src/post_login_menu.cob`: Post-login menu and routing
+- `src/skills_menu.cob`: Skills submenu
+- `src/profile_module.cob`: Create/edit profile; entry `PROFILE-VIEW` for viewing
+- `src/profile_display.cob`: Profile rendering sections
+- `src/search_module.cob`: “Find someone you know” search
 
 ### 2. File Persistence
 
@@ -218,27 +229,19 @@ The program is organized into logical sections with clear separation of concerns
 - Complex record structure with nested arrays
 - Loaded on initialization, written after profile creation/edit
 
-**Loading Pattern:**
+**Loading Pattern (DATA-STORE):**
 ```cobol
-1000-INITIALIZE.
-    PERFORM 1100-LOAD-ACCOUNTS.
-    PERFORM 1150-LOAD-PROFILES.
-
-1100-LOAD-ACCOUNTS.
-    OPEN INPUT ACCOUNTS-FILE.
-    PERFORM 1110-READ-ACCOUNT-LOOP.
-    CLOSE ACCOUNTS-FILE.
+MOVE "LOAD" TO WS-DATA-ACTION.
+CALL "DATA-STORE" USING WS-DATA-ACTION LS-CONTEXT.
 ```
 
-**Saving Pattern:**
+**Saving Pattern (DATA-STORE):**
 ```cobol
-4600-WRITE-ACCOUNTS-FILE.
-    OPEN OUTPUT ACCOUNTS-FILE.
-    PERFORM VARYING WS-ACCOUNT-INDEX FROM 1 BY 1
-        UNTIL WS-ACCOUNT-INDEX > WS-ACCOUNT-COUNT
-        [... write each account ...]
-    END-PERFORM.
-    CLOSE ACCOUNTS-FILE.
+MOVE "SAVE-ACCT" TO WS-DATA-ACTION.
+CALL "DATA-STORE" USING WS-DATA-ACTION LS-CONTEXT.
+
+MOVE "SAVE-PROF" TO WS-DATA-ACTION.
+CALL "DATA-STORE" USING WS-DATA-ACTION LS-CONTEXT.
 ```
 
 ### 3. User Session Management
@@ -266,7 +269,7 @@ The program tracks the logged-in user using:
 
 **Critical pattern for graceful termination:**
 ```cobol
-PERFORM 8100-READ-INPUT.
+CALL "IO-SERVICE" USING "READ " WS-INPUT-LINE WS-EOF-FLAG.
 
 IF WS-EOF-FLAG = 1
     MOVE 0 TO WS-PROGRAM-RUNNING
@@ -288,9 +291,7 @@ END-IF
 **All output must go to BOTH screen and file:**
 
 ```cobol
-8000-WRITE-OUTPUT.
-    DISPLAY WS-OUTPUT-LINE.
-    WRITE OUTPUT-RECORD FROM WS-OUTPUT-LINE.
+CALL "IO-SERVICE" USING "WRITE" WS-OUTPUT-LINE WS-EOF-FLAG.
 ```
 
 **This means:**
@@ -298,6 +299,8 @@ END-IF
 - Every user input echo is in the output file
 - Every message is in the output file
 - Screen and file must be IDENTICAL
+
+Use `CALL "IO-SERVICE" USING "WRITE" WS-OUTPUT-LINE WS-EOF-FLAG.` for all output.
 
 ### 2. Input File Format
 
@@ -366,7 +369,7 @@ Each test directory contains:
 ```bash
 # Step 1: Compile the COBOL program
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src/copybooks -o bin/main src/*.cob
 
 # Step 2: Run tests
 ./run_tests.sh
@@ -377,7 +380,7 @@ python3 tests/test_runner.py bin/main
 
 **Why compilation is required:**
 - Tests run the compiled binary in `bin/main`
-- Changes to `src/main.cob` don't affect tests until recompiled
+- Changes to any `src/*.cob` or `src/copybooks/*.cpy` don't affect tests until recompiled
 - Stale binaries produce incorrect test results
 
 ### 3. Test Types
@@ -436,7 +439,7 @@ python3 tests/test_runner.py bin/main
 ```bash
 # 1. Ensure current code compiles
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src/copybooks -o bin/main src/*.cob
 
 # 2. Run existing tests to establish baseline
 ./run_tests.sh
@@ -453,7 +456,7 @@ cobc -x -free -o bin/main src/main.cob
 
 ```bash
 # 1. Compile
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src/copybooks -o bin/main src/*.cob
 
 # 2. Test manually (optional)
 echo "3" > INPUT.TXT
@@ -569,7 +572,12 @@ cat OUTPUT.TXT
 
 ### Compile Command
 ```bash
-mkdir -p bin && cobc -x -free -o bin/main src/main.cob
+mkdir -p bin && cobc -x -free -I src/copybooks -o bin/main src/main.cob src/app_init.cob src/app_term.cob src/io_service.cob src/data_store.cob src/login_module.cob src/account_module.cob src/post_login_menu.cob src/skills_menu.cob src/profile_module.cob src/profile_display.cob src/search_module.cob
+```
+
+**Alternative (Dynamic discovery - useful for CI/CD):**
+```bash
+mkdir -p bin && OTHER_SOURCES=$(find src -name "*.cob" -not -name "main.cob" | sort | tr '\n' ' ') && cobc -x -free -I src/copybooks -o bin/main src/main.cob $OTHER_SOURCES
 ```
 
 ### Run Tests
@@ -599,7 +607,7 @@ cat OUTPUT.TXT
 ```bash
 rm -f bin/main ACCOUNTS.DAT PROFILES.DAT INPUT.TXT OUTPUT.TXT
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src/copybooks -o bin/main src/main.cob src/app_init.cob src/app_term.cob src/io_service.cob src/data_store.cob src/login_module.cob src/account_module.cob src/post_login_menu.cob src/skills_menu.cob src/profile_module.cob src/profile_display.cob src/search_module.cob
 ```
 
 ---

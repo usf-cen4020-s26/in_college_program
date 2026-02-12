@@ -32,8 +32,11 @@ jobs:
     - name: Compile COBOL program
       id: compile
       run: |
-        echo "Compiling src/main.cob..."
-        cobc -x -free -o bin/main src/main.cob
+        echo "Discovering COBOL source files..."
+        OTHER_SOURCES=$(find src -name "*.cob" -not -name "main.cob" | sort | tr '\n' ' ')
+        echo "Found modules: $OTHER_SOURCES"
+        echo "Compiling InCollege COBOL program..."
+        cobc -x -free -I src/copybooks -o bin/main src/main.cob $OTHER_SOURCES
         echo "Compilation successful!"
         ls -lh bin/main
       continue-on-error: false
