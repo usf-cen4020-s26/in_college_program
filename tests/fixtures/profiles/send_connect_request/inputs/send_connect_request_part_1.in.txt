@@ -1,0 +1,34 @@
+2
+UserA
+Pass123!
+2
+UserB
+Pass123!
+1
+UserA
+Pass123!
+1
+Victoria
+Kirkland
+USF
+Biomedical Engineering
+2027
+I love biomed and am passionate about engineering research.
+DONE
+DONE
+6
+1
+UserB
+Pass123!
+1
+Mason
+Russell
+UCF
+Computer Science
+2026
+I'm CS but I love other majors, only if they're engineering related.
+DONE
+DONE
+6
+3
+
