@@ -17,7 +17,7 @@ FILE-CONTROL.
          ORGANIZATION IS LINE SEQUENTIAL
          FILE STATUS IS WS-PROFILES-STATUS.
      SELECT PENDING-FILE ASSIGN TO "PENDING.DAT"
-         ORGANIZATION IS SEQUENTIAL
+         ORGANIZATION IS LINE SEQUENTIAL
          FILE STATUS IS WS-PENDING-STATUS.
 DATA DIVISION.
 FILE SECTION.
@@ -188,6 +188,11 @@ WORKING-STORAGE SECTION.
 01  WS-SENDER-FOUND              PIC 9 VALUE 0.
 01  WS-SENDER-IDX                PIC 9 VALUE 0.
 
+01  WS-VIEWREQ-FOUND-FLAG        PIC X VALUE "N".
+01  WS-VIEWREQ-PEND-IDX          PIC 99 VALUE 0.
+01  WS-VIEWREQ-SENDER-USERNAME   PIC x(20).
+01  WS-VIEWREQ-SENDER-IDX        PIC 9 VALUE 0.
+
 
 
 PROCEDURE DIVISION.
@@ -270,7 +275,7 @@ PROCEDURE DIVISION.
                CLOSE PROFILES-FILE
            END-IF.
 
-*> * 
+*> *
 
 *> *      *>*****************************************************************
 *> *      *> 9200-LOAD-PENDING-REQUESTS: Load pending requests at startup *
@@ -301,13 +306,13 @@ PROCEDURE DIVISION.
            END-EVALUATE.
 
            *> (Optional debug) show how many loaded
-           MOVE SPACES TO WS-OUTPUT-LINE
-           STRING "DEBUG: Pending requests loaded = "
-               WS-PENDING-COUNT
-               DELIMITED BY SIZE
-               INTO WS-OUTPUT-LINE
-           END-STRING
-           PERFORM 8000-WRITE-OUTPUT.
+           *> MOVE SPACES TO WS-OUTPUT-LINE
+           *> STRING "DEBUG: Pending requests loaded = "
+           *>     WS-PENDING-COUNT
+           *>     DELIMITED BY SIZE
+           *>    INTO WS-OUTPUT-LINE
+           *> END-STRING
+           *> PERFORM 8000-WRITE-OUTPUT.
            EXIT.
 
 *> *      *>*****************************************************************
@@ -424,7 +429,7 @@ PROCEDURE DIVISION.
            PERFORM 8000-WRITE-OUTPUT.
 
            PERFORM 8100-READ-INPUT.
-        
+
            IF WS-EOF-FLAG = 1
                MOVE 0 TO WS-PROGRAM-RUNNING
                EXIT PARAGRAPH
@@ -1072,7 +1077,7 @@ PROCEDURE DIVISION.
            MOVE "-------------------------" TO WS-OUTPUT-LINE.
 
            PERFORM 8000-WRITE-OUTPUT.
-           
+
            PERFORM 7600-SEND-REQUEST-MENU.
            EXIT.
 
