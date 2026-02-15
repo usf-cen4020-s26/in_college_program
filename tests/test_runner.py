@@ -15,7 +15,7 @@ import sys
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 
 class TestStatus(Enum):
@@ -256,7 +256,7 @@ class CobolTestRunner:
 
         if self.profiles_dat.exists():
             self.profiles_dat.unlink()
-            
+
         if self.pending_dat.exists():
             self.pending_dat.unlink()
 
@@ -522,7 +522,7 @@ def generate_report(
 
     # Generate JSON report if requested
     if output_file:
-        report_data: dict[str, object] = {
+        report_data: Dict[str, object] = {
             "summary": {
                 "total": total,
                 "passed": passed,
