@@ -98,7 +98,7 @@ class CobolTestRunner:
         self.work_dir = work_dir or Path("/tmp/incollege_test_work")
         self.work_dir.mkdir(parents=True, exist_ok=True)
         self.timeout = timeout
-
+        self.pending_dat = self.work_dir / "PENDING.DAT"
         # Define the file paths that COBOL program uses
         self.input_txt = self.work_dir / "INPUT.TXT"
         self.output_txt = self.work_dir / "OUTPUT.TXT"
@@ -250,11 +250,15 @@ class CobolTestRunner:
         For multi-part tests, this is called before the first part only,
         allowing persistence across parts within the same group.
         """
+
         if self.accounts_dat.exists():
             self.accounts_dat.unlink()
 
         if self.profiles_dat.exists():
             self.profiles_dat.unlink()
+            
+        if self.pending_dat.exists():
+            self.pending_dat.unlink()
 
     def cleanup_work_dir(self) -> None:
         """
@@ -268,6 +272,7 @@ class CobolTestRunner:
             self.output_txt,
             self.accounts_dat,
             self.profiles_dat,
+            self.pending_dat,
         ]:
             if file_path.exists():
                 file_path.unlink()
