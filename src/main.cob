@@ -16,7 +16,9 @@ FILE-CONTROL.
      SELECT PROFILES-FILE ASSIGN TO "PROFILES.DAT"
          ORGANIZATION IS LINE SEQUENTIAL
          FILE STATUS IS WS-PROFILES-STATUS.
-
+     SELECT PENDING-FILE ASSIGN TO "PENDING.DAT"
+         ORGANIZATION IS LINE SEQUENTIAL
+         FILE STATUS IS WS-PENDING-STATUS.
 DATA DIVISION.
 FILE SECTION.
 FD  INPUT-FILE.
@@ -51,6 +53,12 @@ FD  PROFILES-FILE.
         10  PROF-EDU-DEGREE     PIC X(50).
         10  PROF-EDU-UNIVERSITY PIC X(50).
         10  PROF-EDU-YEARS      PIC X(20).
+FD  PENDING-FILE.
+01  PENDING-REC.
+    05  PEND-SENDER-USERNAME     PIC X(20).
+    05  PEND-RECIPIENT-USERNAME  PIC X(20).
+    05  PEND-STATUS              PIC X(1).
+
 
 WORKING-STORAGE SECTION.
 01  WS-USER-ACCOUNTS.
@@ -80,6 +88,15 @@ WORKING-STORAGE SECTION.
             15  WS-EDU-UNIVERSITY PIC X(50).
             15  WS-EDU-YEARS    PIC X(20).
 
+01  WS-PENDING-COUNT            PIC 99 VALUE 0.
+01  WS-PENDING-TABLE.
+    05  WS-PENDING-ENTRY OCCURS 50 TIMES.
+        10  WS-PEND-SENDER-USERNAME     PIC X(20).
+        10  WS-PEND-RECIPIENT-USERNAME  PIC X(20).
+        10  WS-PEND-STATUS              PIC X(1).
+
+01  WS-MAX-PENDING              PIC 99 VALUE 50.
+
 01  WS-ACCOUNT-COUNT            PIC 9 VALUE 0.
 01  WS-MAX-ACCOUNTS             PIC 9 VALUE 5.
 01  WS-PROFILE-COUNT            PIC 9 VALUE 0.
@@ -106,6 +123,8 @@ WORKING-STORAGE SECTION.
 01  WS-OUTPUT-STATUS            PIC XX.
 01  WS-ACCOUNTS-STATUS          PIC XX.
 01  WS-PROFILES-STATUS          PIC XX.
+01  WS-PENDING-STATUS           PIC XX.
+01  WS-PENDING-EOF              PIC X VALUE "N".
 01  WS-EOF-FLAG                 PIC 9 VALUE 0.
 01  WS-PROGRAM-RUNNING          PIC 9 VALUE 1.
 
@@ -160,6 +179,22 @@ WORKING-STORAGE SECTION.
 
 01  WS-OUTPUT-LINE              PIC X(500).
 
+01  WS-SENDREQ-CHOICE           PIC X(2).
+
+01  WS-SENDREQ-TARGET-INDEX     PIC 9 VALUE 0.
+
+01  WS-VIEWREQ-FOUND             PIC X VALUE "N".
+01  WS-PEND-IDX                  PIC 99 VALUE 0.
+01  WS-SENDER-FOUND              PIC 9 VALUE 0.
+01  WS-SENDER-IDX                PIC 9 VALUE 0.
+
+01  WS-VIEWREQ-FOUND-FLAG        PIC X VALUE "N".
+01  WS-VIEWREQ-PEND-IDX          PIC 99 VALUE 0.
+01  WS-VIEWREQ-SENDER-USERNAME   PIC x(20).
+01  WS-VIEWREQ-SENDER-IDX        PIC 9 VALUE 0.
+
+
+
 PROCEDURE DIVISION.
        0000-MAIN-PROGRAM.
            PERFORM 1000-INITIALIZE.
@@ -189,6 +224,7 @@ PROCEDURE DIVISION.
 
            PERFORM 1100-LOAD-ACCOUNTS.
            PERFORM 1150-LOAD-PROFILES.
+           PERFORM 9200-LOAD-PENDING-REQUESTS.
 
            MOVE "========================================"
            TO WS-OUTPUT-LINE.
@@ -239,7 +275,72 @@ PROCEDURE DIVISION.
                CLOSE PROFILES-FILE
            END-IF.
 
+*> *
+
 *> *      *>*****************************************************************
+*> *      *> 9200-LOAD-PENDING-REQUESTS: Load pending requests at startup *
+*> *      *>*****************************************************************
+       9200-LOAD-PENDING-REQUESTS.
+           MOVE 0 TO WS-PENDING-COUNT.
+           MOVE "N" TO WS-PENDING-EOF.
+
+           OPEN INPUT PENDING-FILE.
+
+           EVALUATE WS-PENDING-STATUS
+               WHEN "00"
+                   PERFORM 9210-READ-PENDING-LOOP
+                   CLOSE PENDING-FILE
+               WHEN "35"
+                   *> file not found: that's ok (no pending yet)
+                   MOVE 0 TO WS-PENDING-COUNT
+               WHEN OTHER
+                   *> unexpected error, but don't crash program
+                   MOVE SPACES TO WS-OUTPUT-LINE
+                   STRING "WARNING: Could not open PENDING.DAT. FILE STATUS = "
+                    WS-PENDING-STATUS
+                    DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+                    END-STRING
+               PERFORM 8000-WRITE-OUTPUT
+
+                   MOVE 0 TO WS-PENDING-COUNT
+           END-EVALUATE.
+
+           *> (Optional debug) show how many loaded
+           *> MOVE SPACES TO WS-OUTPUT-LINE
+           *> STRING "DEBUG: Pending requests loaded = "
+           *>     WS-PENDING-COUNT
+           *>     DELIMITED BY SIZE
+           *>    INTO WS-OUTPUT-LINE
+           *> END-STRING
+           *> PERFORM 8000-WRITE-OUTPUT.
+           EXIT.
+
+*> *      *>*****************************************************************
+*> *      *> 9210-READ-PENDING-LOOP: Read records into WS-PENDING-TABLE    *
+*> *      *>*****************************************************************
+       9210-READ-PENDING-LOOP.
+           READ PENDING-FILE
+               AT END
+                   MOVE "Y" TO WS-PENDING-EOF
+               NOT AT END
+                   IF WS-PENDING-COUNT < WS-MAX-PENDING
+                       ADD 1 TO WS-PENDING-COUNT
+                       MOVE PEND-SENDER-USERNAME TO
+                           WS-PEND-SENDER-USERNAME(WS-PENDING-COUNT)
+                       MOVE PEND-RECIPIENT-USERNAME TO
+                           WS-PEND-RECIPIENT-USERNAME(WS-PENDING-COUNT)
+                       MOVE PEND-STATUS TO
+                           WS-PEND-STATUS(WS-PENDING-COUNT)
+                   END-IF
+           END-READ.
+
+           IF WS-PENDING-EOF = "N"
+               PERFORM 9210-READ-PENDING-LOOP
+           END-IF.
+           EXIT.
+
+
+*>*****************************************************************
 *> *      *> 1160-READ-PROFILE-LOOP: Read profile records into memory      *
 *> *      *>*****************************************************************
        1160-READ-PROFILE-LOOP.
@@ -713,7 +814,7 @@ PROCEDURE DIVISION.
        5000-POST-LOGIN-MENU.
            MOVE "1" TO WS-MAIN-MENU-CHOICE.
 
-           PERFORM UNTIL WS-MAIN-MENU-CHOICE = "6"
+           PERFORM UNTIL WS-MAIN-MENU-CHOICE = "7"
            OR WS-PROGRAM-RUNNING = 0
                    MOVE " " TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
@@ -727,11 +828,13 @@ PROCEDURE DIVISION.
                    PERFORM 8000-WRITE-OUTPUT
                    MOVE "4. Find someone you know" TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
-                   MOVE "5. Learn a new skill" TO WS-OUTPUT-LINE
+                   MOVE "5. View Pending Connection Requests" TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
-                   MOVE "6. Logout" TO WS-OUTPUT-LINE
+                   MOVE "6. Learn a new skill" TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
-                   MOVE "Enter choice (1-6): " TO WS-OUTPUT-LINE
+                   MOVE "7. Logout" TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE "Enter choice (1-7): " TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
 
                    PERFORM 8100-READ-INPUT
@@ -756,8 +859,10 @@ PROCEDURE DIVISION.
                        WHEN "4"
                            PERFORM 7500-FIND-SOMEONE-YOU-KNOW
                        WHEN "5"
-                           PERFORM 6000-SKILLS-MENU
+                           PERFORM 7500-VIEW-PENDING-REQUESTS
                        WHEN "6"
+                           PERFORM 6000-SKILLS-MENU
+                       WHEN "7"
                            EXIT PERFORM
                        WHEN OTHER
                           MOVE "Invalid choice. Please try again."
@@ -959,6 +1064,7 @@ PROCEDURE DIVISION.
            PERFORM 8000-WRITE-OUTPUT.
 
            MOVE WS-SEARCH-FOUND-INDEX TO WS-DISPLAY-PROFILE-INDEX.
+           MOVE WS-SEARCH-FOUND-INDEX TO WS-SENDREQ-TARGET-INDEX
 
            PERFORM 7110-DISPLAY-BASIC-INFO.
 
@@ -969,7 +1075,11 @@ PROCEDURE DIVISION.
            PERFORM 7140-DISPLAY-EDUCATION.
 
            MOVE "-------------------------" TO WS-OUTPUT-LINE.
+
            PERFORM 8000-WRITE-OUTPUT.
+
+           PERFORM 7600-SEND-REQUEST-MENU.
+           EXIT.
 
 *> *      *>*****************************************************************
 *> *      *> 7110-DISPLAY-BASIC-INFO: Display required profile fields      *
@@ -1562,7 +1672,72 @@ PROCEDURE DIVISION.
                MOVE WS-TEMP-EDU-YEARS(WS-SAVE-INDEX) TO
                    WS-EDU-YEARS(WS-CURRENT-PROFILE-INDEX, WS-SAVE-INDEX)
            END-PERFORM.
+        *>*****************************************************************
+      *> 9300-WRITE-PENDING-REQUEST
+      *>   - Adds a new pending request to memory + appends to PENDING.DAT
+      *>*****************************************************************
+       9300-WRITE-PENDING-REQUEST.
+           *> Guard: table full
+           IF WS-PENDING-COUNT >= WS-MAX-PENDING
+               MOVE "ERROR: Pending requests table is full." TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
+           END-IF
 
+           *> Increment count and populate in-memory entry
+           ADD 1 TO WS-PENDING-COUNT
+
+           MOVE WS-USERNAME(WS-CURRENT-USER-INDEX)
+               TO WS-PEND-SENDER-USERNAME(WS-PENDING-COUNT)
+
+           MOVE WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX)
+               TO WS-PEND-RECIPIENT-USERNAME(WS-PENDING-COUNT)
+
+           MOVE "P" TO WS-PEND-STATUS(WS-PENDING-COUNT)
+
+           *> Prepare file record
+           MOVE WS-PEND-SENDER-USERNAME(WS-PENDING-COUNT)
+               TO PEND-SENDER-USERNAME
+           MOVE WS-PEND-RECIPIENT-USERNAME(WS-PENDING-COUNT)
+               TO PEND-RECIPIENT-USERNAME
+           MOVE WS-PEND-STATUS(WS-PENDING-COUNT)
+               TO PEND-STATUS
+
+           *> Append to file (create if missing)
+           OPEN EXTEND PENDING-FILE
+
+           IF WS-PENDING-STATUS = "35"
+               *> File not found -> create it
+               OPEN OUTPUT PENDING-FILE
+               CLOSE PENDING-FILE
+               OPEN EXTEND PENDING-FILE
+           END-IF
+
+           IF WS-PENDING-STATUS NOT = "00"
+               MOVE SPACES TO WS-OUTPUT-LINE
+               STRING "ERROR: Could not open PENDING.DAT for append. STATUS="
+                   WS-PENDING-STATUS
+                   DELIMITED BY SIZE
+                   INTO WS-OUTPUT-LINE
+               END-STRING
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
+           END-IF
+
+           WRITE PENDING-REC
+
+           IF WS-PENDING-STATUS NOT = "00"
+               MOVE SPACES TO WS-OUTPUT-LINE
+               STRING "ERROR: Could not write to PENDING.DAT. STATUS="
+                   WS-PENDING-STATUS
+                   DELIMITED BY SIZE
+                   INTO WS-OUTPUT-LINE
+               END-STRING
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF
+
+           CLOSE PENDING-FILE
+           EXIT.
 *> *      *>*****************************************************************
 *> *      *> 8000-WRITE-OUTPUT: Output to both screen and file             *
 *> *      *> Implements requirement to display AND preserve output         *
@@ -1581,6 +1756,10 @@ PROCEDURE DIVISION.
                    MOVE 1 to WS-EOF-FLAG
                    MOVE SPACES TO INPUT-RECORD
            END-READ.
+           EXIT.
+
+        COPY SENDREQ_SRC.
+        COPY VIEWREQ_SRC.
 
 *> *      *>*****************************************************************
 *> *      *> 9000-TERMINATE: Cleanup and close files                       *
