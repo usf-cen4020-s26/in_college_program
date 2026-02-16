@@ -109,6 +109,26 @@
                    MOVE 0 TO WS-VALID
                    EXIT PERFORM
                END-IF
+
+               *> Check if already connected (bidirectional with status "A")
+               IF (FUNCTION TRIM(WS-PEND-SENDER-USERNAME(WS-PEND-IDX))
+                    = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
+                   AND FUNCTION TRIM(WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX))
+                    = FUNCTION TRIM(WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX))
+                   AND WS-PEND-STATUS(WS-PEND-IDX) = "A")
+                  OR
+                  (FUNCTION TRIM(WS-PEND-SENDER-USERNAME(WS-PEND-IDX))
+                    = FUNCTION TRIM(WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX))
+                   AND FUNCTION TRIM(WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX))
+                    = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
+                   AND WS-PEND-STATUS(WS-PEND-IDX) = "A")
+
+                   MOVE "You are already connected with this user."
+                       TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE 0 TO WS-VALID
+                   EXIT PERFORM
+               END-IF
            END-PERFORM
            EXIT.
 
