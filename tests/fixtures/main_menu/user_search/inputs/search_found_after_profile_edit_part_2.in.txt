@@ -10,7 +10,7 @@ IT
 Updated profile after name change.
 DONE
 DONE
-6
+7
 1
 SearcherUser
 Pass123!
@@ -18,5 +18,6 @@ Pass123!
 Alice Brown
 4
 Alice Green
-6
+2
+7
 3

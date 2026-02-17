@@ -42,8 +42,17 @@ You have successfully logged in
 2. View My Profile
 3. Search for a job
 4. Find someone you know
-5. Learn a new skill
-6. Logout
-Enter choice (1-6):
+5. View Pending Connection Requests
+6. Learn a new skill
+7. Logout
+Enter choice (1-7):
+7
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+3
 
 Thank you for using InCollege!
