@@ -1,0 +1,36 @@
+2
+UserE
+Pass123!
+1
+UserE
+Pass123!
+1
+Anna
+Collins
+USF
+Computer Science
+2027
+Code until tonight's hackathon, then sleep.
+DONE
+DONE
+7
+2
+UserF
+Pass123!
+1
+UserF
+Pass123!
+1
+James
+Anderson
+UF
+Computer Science
+2027
+Aspiring software developer with a passion for complex problems.
+DONE
+DONE
+4
+Anna Collins
+1
+6
+3
