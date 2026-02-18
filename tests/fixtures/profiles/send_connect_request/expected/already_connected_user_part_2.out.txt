@@ -24,7 +24,7 @@ You have successfully logged in
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 4
 
 Enter the full name of the person you are looking for:
@@ -38,11 +38,13 @@ About Me: Vivid IT student with a passion for cybersecurity and network administ
 Experience: None
 Education: None
 -------------------------
+
+=== SEND CONNECTION REQUEST ===
 1. Send Connection Request
 2. Back to Main Menu
 Enter your choice:
 1
-You are already connected with this user.
+You have already sent a connection request to this user.
 
 === MAIN MENU ===
 1. Create/Edit My Profile
@@ -54,10 +56,6 @@ You are already connected with this user.
 7. Logout
 Enter choice (1-6):
 7
-
-========================================
-     WELCOME TO INCOLLEGE
-========================================
 
 Please select an option:
 1. Login with existing account

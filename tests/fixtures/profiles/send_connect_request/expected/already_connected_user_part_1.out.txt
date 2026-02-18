@@ -144,10 +144,6 @@ Profile saved successfully!
 Enter choice (1-7):
 7
 
-========================================
-     WELCOME TO INCOLLEGE
-========================================
-
 Please select an option:
 1. Login with existing account
 2. Create new account
@@ -184,11 +180,13 @@ About Me: Vivid IT student with a passion for cybersecurity and network administ
 Experience: None
 Education: None
 -------------------------
+
+=== SEND CONNECTION REQUEST ===
 1. Send Connection Request
 2. Back to Main Menu
 Enter your choice:
 1
-Connection request sent to Alice Smith
+Connection request sent!
 
 === MAIN MENU ===
 1. Create/Edit My Profile
@@ -200,10 +198,6 @@ Connection request sent to Alice Smith
 7. Logout
 Enter choice (1-7):
 7
-
-========================================
-     WELCOME TO INCOLLEGE
-========================================
 
 Please select an option:
 1. Login with existing account
@@ -247,10 +241,6 @@ Connection request from UserC accepted.
 7. Logout
 Enter choice (1-7):
 7
-
-========================================
-     WELCOME TO INCOLLEGE
-========================================
 
 Please select an option:
 1. Login with existing account

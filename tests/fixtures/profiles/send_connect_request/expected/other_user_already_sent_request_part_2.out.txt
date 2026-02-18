@@ -38,6 +38,8 @@ About Me: Aspiring software developer with a passion for complex problems.
 Experience: None
 Education: None
 -------------------------
+
+=== SEND CONNECTION REQUEST ===
 1. Send Connection Request
 2. Back to Main Menu
 Enter your choice:
@@ -49,8 +51,9 @@ This user has already sent you a connection request.
 2. View My Profile
 3. Search for a job
 4. Find someone you know
-5. Learn a new skill
-6. Logout
+5. View Pending Connection Requests
+6. Learn a new skill
+7. Logout
 Enter choice (1-7):
 7
 

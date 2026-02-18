@@ -38,10 +38,13 @@ About Me: I'm CS but I love other majors, only if they're engineering related.
 Experience: None
 Education: None
 -------------------------
+
+=== SEND CONNECTION REQUEST ===
 1. Send Connection Request
 2. Back to Main Menu
 Enter your choice:
-Connection request sent to Mason Russell.
+1
+Connection request sent!
 
 === MAIN MENU ===
 1. Create/Edit My Profile
