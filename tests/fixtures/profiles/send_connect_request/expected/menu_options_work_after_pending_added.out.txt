@@ -72,7 +72,6 @@ Profile saved successfully!
 7. Logout
 Enter choice (1-7):
 5
-
 --- Pending Connection Requests ---
 You have no pending connection requests at this time.
 -----------------------------------
@@ -117,4 +116,3 @@ Enter choice (1-3):
 3
 
 Thank you for using InCollege!
-

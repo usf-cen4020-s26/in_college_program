@@ -85,7 +85,7 @@ Profile saved successfully!
 6. Learn a new skill
 7. Logout
 Enter choice (1-7):
-6
+7
 
 Please select an option:
 1. Login with existing account
@@ -142,7 +142,7 @@ Profile saved successfully!
 6. Learn a new skill
 7. Logout
 Enter choice (1-7):
-6
+7
 
 Please select an option:
 1. Login with existing account
