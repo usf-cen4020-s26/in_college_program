@@ -1758,8 +1758,8 @@ PROCEDURE DIVISION.
            END-READ.
            EXIT.
 
-        COPY "./SENDREQ_SRC.cpy".
-        COPY "./VIEWREQ_SRC.cpy".
+        COPY "src/SENDREQ_SRC.cpy".
+        COPY "src/VIEWREQ_SRC.cpy".
 
 *> *      *>*****************************************************************
 *> *      *> 9000-TERMINATE: Cleanup and close files                       *
