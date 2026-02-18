@@ -38,7 +38,7 @@ You have successfully logged in
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 1
 
 === CREATE MY PROFILE ===
@@ -70,7 +70,7 @@ Profile saved successfully!
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 7
 
 Please select an option:
@@ -109,7 +109,7 @@ You have successfully logged in
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 1
 
 === CREATE MY PROFILE ===
@@ -141,7 +141,7 @@ Profile saved successfully!
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 7
 
 ========================================
@@ -170,7 +170,7 @@ You have successfully logged in
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 4
 
 Enter the full name of the person you are looking for:
@@ -198,7 +198,7 @@ Connection request sent to Alice Smith
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 7
 
 ========================================
@@ -227,7 +227,7 @@ You have successfully logged in
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 5
 
 --- Pending Connection Requests ---
@@ -245,7 +245,7 @@ Connection request from UserC accepted.
 5. View Pending Connection Requests
 6. Learn a new skill
 7. Logout
-Enter choice (1-6):
+Enter choice (1-7):
 7
 
 ========================================
