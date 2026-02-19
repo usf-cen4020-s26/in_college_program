@@ -1,0 +1,47 @@
+2
+UserC
+Pass123!
+1
+UserC
+Pass123!
+1
+John
+Sanders
+UF
+Computer Science
+2027
+Coding enthusiast and aspiring software engineer.
+DONE
+DONE
+7
+2
+UserD
+Pass123!
+1
+UserD
+Pass123!
+1
+Alice
+Smith
+UF
+IT
+2027
+Vivid IT student with a passion for cybersecurity and network administration.
+DONE
+DONE
+7
+1
+UserC
+Pass123!
+4
+Alice Smith
+1
+7
+1
+UserD
+Pass123!
+5
+7
+3
+
+
