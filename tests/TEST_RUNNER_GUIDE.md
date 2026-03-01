@@ -274,9 +274,13 @@ python3 tests/test_runner.py <executable> [options]
 
 **Options:**
 - `--test-root PATH`: Root directory for tests. Can be `tests/fixtures` for all tests or a specific category like `tests/fixtures/login`
+- `--input-file PATH`: Run exactly one input fixture file (`*.in.txt`)
+- `--expected-file PATH`: Expected output for `--input-file` mode (optional, auto-derived if omitted)
 - `--verbose`, `-v`: Print detailed output including full expected/actual outputs
 - `--report PATH`: Generate JSON report at specified path
 - `--timeout SECONDS`: Maximum execution time per test (default: 10)
+- `--dump-output PATH`: Write actual outputs to PATH as `*.actual.out.txt`
+- `--dump-only`: Skip expected-output diff checks and only execute + dump outputs
 
 ### Examples
 
@@ -298,7 +302,29 @@ python3 tests/test_runner.py bin/main --test-root tests/fixtures/main_menu --ver
 
 # Generate JSON report
 python3 tests/test_runner.py bin/main --report results.json
+
+# Dump actual outputs while still comparing diffs
+python3 tests/test_runner.py bin/main --test-root tests/fixtures/profiles --dump-output test-dumps
+
+# Dump-only mode (no diff checking), useful when creating new expected outputs
+python3 tests/test_runner.py bin/main --test-root tests/fixtures/seeding --dump-only --dump-output test-dumps
+
+# Run exactly one fixture (auto-derive expected path)
+python3 tests/test_runner.py bin/main --input-file tests/fixtures/login/1_existing_account/inputs/successful_login.in.txt
+
+# Run exactly one fixture without expected file and dump actual output
+python3 tests/test_runner.py bin/main --input-file tests/fixtures/profiles/accept_reject_connection_request/inputs/deny_multiple_requests_part_1.in.txt --dump-only --dump-output test-dumps
 ```
+
+### Dump Output Behavior
+
+- Dump files preserve fixture structure relative to `--test-root`.
+- Input path segment `inputs/` is replaced with `actual/` in the dump folder.
+- Output names use `.actual.out.txt` suffix.
+
+Example:
+- Input: `tests/fixtures/profiles/search/inputs/find_user.in.txt`
+- Dump: `test-dumps/profiles/search/actual/find_user.actual.out.txt`
 
 ### Exit Codes
 

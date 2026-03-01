@@ -276,6 +276,10 @@ class CobolTestRunner:
                 error_message=str(e),
             )
 
+    def execute_with_input_text(self, input_text: str) -> str:
+        """Execute COBOL with preprocessed input and return OUTPUT.TXT contents."""
+        return self._execute_cobol_with_input_text(input_text)
+
     def _build_result(
         self, test_name: str, expected_output: str, actual_output: str
     ) -> TestResult:
@@ -784,6 +788,132 @@ def preprocess_input_file(input_file: Path) -> Tuple[str, List[SeedUserMacro]]:
     return executable_input, seed_users
 
 
+def build_dump_output_path(dump_root: Path, test_root: Path, test_case: TestCase) -> Path:
+    """Build a deterministic output dump path for one test case."""
+    rel_input = test_case.input_file.relative_to(test_root)
+    rel_parts = list(rel_input.parts)
+
+    if "inputs" in rel_parts:
+        idx = rel_parts.index("inputs")
+        rel_parts[idx] = "actual"
+
+    input_name = rel_parts[-1]
+    if input_name.endswith(".in.txt"):
+        output_name = f"{input_name[:-7]}.actual.out.txt"
+    else:
+        output_name = f"{Path(input_name).stem}.actual.out.txt"
+
+    rel_parts[-1] = output_name
+    return dump_root / Path(*rel_parts)
+
+
+def derive_expected_output_path(input_file: Path) -> Path:
+    """Derive expected output path from an input fixture path."""
+    input_parts = list(input_file.parts)
+
+    if "inputs" not in input_parts:
+        raise ValueError(
+            "Could not derive expected output path: input file is not under an 'inputs' directory."
+        )
+
+    idx = input_parts.index("inputs")
+    input_parts[idx] = "expected"
+
+    input_name = input_parts[-1]
+    if input_name.endswith(".in.txt"):
+        output_name = f"{input_name[:-7]}.out.txt"
+    else:
+        output_name = f"{Path(input_name).stem}.out.txt"
+
+    input_parts[-1] = output_name
+    return Path(*input_parts)
+
+
+def run_single_fixture(
+    executable_path: Path,
+    input_file: Path,
+    timeout: int,
+    verbose: bool,
+    dump_output_dir: Optional[Path],
+    dump_only: bool,
+    expected_output_file: Optional[Path],
+) -> Tuple[List[TestResult], int, int, int]:
+    """Run exactly one fixture input file."""
+    runner = CobolTestRunner(executable_path, timeout=timeout)
+    runner.clear_persistence()
+
+    input_text, seed_users = preprocess_input_file(input_file)
+    if seed_users:
+        runner.seed_users(seed_users)
+
+    test_name = input_file.stem.replace(".in", "")
+
+    print(f"\n{'=' * 70}")
+    print("Running Single Fixture")
+    print(f"{'=' * 70}\n")
+    print(f"Executable: {executable_path}")
+    print(f"Input File: {input_file}")
+
+    if dump_output_dir:
+        dump_output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"Dump Output Dir: {dump_output_dir}")
+    if dump_only:
+        print("Mode: dump-only (output comparison disabled)")
+    print()
+
+    if dump_only:
+        try:
+            actual_output = runner.execute_with_input_text(input_text)
+            result = TestResult(
+                test_name=test_name,
+                status=TestStatus.PASSED,
+                expected_output="",
+                actual_output=actual_output,
+            )
+        except subprocess.TimeoutExpired:
+            result = TestResult(
+                test_name=test_name,
+                status=TestStatus.ERROR,
+                expected_output="",
+                actual_output="",
+                error_message=f"Test timed out after {timeout} seconds. "
+                "Program may be waiting for input or in an infinite loop.",
+            )
+        except Exception as e:
+            result = TestResult(
+                test_name=test_name,
+                status=TestStatus.ERROR,
+                expected_output="",
+                actual_output="",
+                error_message=str(e),
+            )
+    else:
+        if expected_output_file is None:
+            expected_output_file = derive_expected_output_path(input_file)
+
+        if not expected_output_file.exists():
+            raise FileNotFoundError(
+                "Expected output file not found for single fixture run: "
+                f"{expected_output_file}. Use --dump-only to run without expected output."
+            )
+
+        result = runner.run_single_test_with_input_text(
+            input_text, expected_output_file, test_name
+        )
+
+    if dump_output_dir and result.status != TestStatus.ERROR:
+        dump_file = dump_output_dir / f"{test_name}.actual.out.txt"
+        dump_file.write_text(result.actual_output)
+
+    print_test_result(result, verbose)
+
+    passed = 1 if result.status == TestStatus.PASSED else 0
+    failed = 1 if result.status == TestStatus.FAILED else 0
+    errors = 1 if result.status == TestStatus.ERROR else 0
+
+    return [result], passed, failed, errors
+
+
 def discover_tests(test_root: Path) -> List[List[TestCase]]:
     """
     Discover all test cases in the test directory.
@@ -917,7 +1047,12 @@ def print_test_result(result: TestResult, verbose: bool = False) -> None:
 
 
 def run_test_suite(
-    executable_path: Path, test_root: Path, verbose: bool = False, timeout: int = 10
+    executable_path: Path,
+    test_root: Path,
+    verbose: bool = False,
+    timeout: int = 10,
+    dump_output_dir: Optional[Path] = None,
+    dump_only: bool = False,
 ) -> Tuple[List[TestResult], int, int, int]:
     """
     Run all discovered tests.
@@ -927,6 +1062,8 @@ def run_test_suite(
         test_root: Root directory for tests
         verbose: If True, print detailed output
         timeout: Maximum execution time in seconds for each test
+        dump_output_dir: Optional directory where actual outputs are written
+        dump_only: If True, skip expected-output comparison and only dump outputs
 
     Returns:
         Tuple of (all_results, passed_count, failed_count, error_count)
@@ -946,6 +1083,14 @@ def run_test_suite(
     print(f"Test Root: {test_root}")
     print(f"Found {len(test_groups)} test groups\n")
 
+    if dump_output_dir:
+        dump_output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"Dump Output Dir: {dump_output_dir}")
+    if dump_only:
+        print("Mode: dump-only (output comparison disabled)")
+    if dump_output_dir or dump_only:
+        print()
+
     for group in test_groups:
         # Clear persistence before each test group
         runner.clear_persistence()
@@ -958,9 +1103,41 @@ def run_test_suite(
             if seed_users:
                 runner.seed_users(seed_users)
 
-            result = runner.run_single_test_with_input_text(
-                input_text, test_case.expected_output_file, test_case.name
-            )
+            if dump_only:
+                try:
+                    actual_output = runner.execute_with_input_text(input_text)
+                    result = TestResult(
+                        test_name=test_case.name,
+                        status=TestStatus.PASSED,
+                        expected_output="",
+                        actual_output=actual_output,
+                    )
+                except subprocess.TimeoutExpired:
+                    result = TestResult(
+                        test_name=test_case.name,
+                        status=TestStatus.ERROR,
+                        expected_output="",
+                        actual_output="",
+                        error_message=f"Test timed out after {timeout} seconds. "
+                        "Program may be waiting for input or in an infinite loop.",
+                    )
+                except Exception as e:
+                    result = TestResult(
+                        test_name=test_case.name,
+                        status=TestStatus.ERROR,
+                        expected_output="",
+                        actual_output="",
+                        error_message=str(e),
+                    )
+            else:
+                result = runner.run_single_test_with_input_text(
+                    input_text, test_case.expected_output_file, test_case.name
+                )
+
+            if dump_output_dir and result.status != TestStatus.ERROR:
+                dump_path = build_dump_output_path(dump_output_dir, test_root, test_case)
+                dump_path.parent.mkdir(parents=True, exist_ok=True)
+                dump_path.write_text(result.actual_output)
 
             all_results.append(result)
 
@@ -1078,6 +1255,18 @@ def main() -> int:
     )
 
     parser.add_argument(
+        "--input-file",
+        type=Path,
+        help="Run exactly one fixture input file (*.in.txt) instead of discovering a test root",
+    )
+
+    parser.add_argument(
+        "--expected-file",
+        type=Path,
+        help="Expected output file for --input-file mode (optional, auto-derived if omitted)",
+    )
+
+    parser.add_argument(
         "--verbose",
         "-v",
         action="store_true",
@@ -1095,6 +1284,18 @@ def main() -> int:
         help="Maximum execution time in seconds for each test (default: 10)",
     )
 
+    parser.add_argument(
+        "--dump-output",
+        type=Path,
+        help="Directory to write actual output dumps (*.actual.out.txt)",
+    )
+
+    parser.add_argument(
+        "--dump-only",
+        action="store_true",
+        help="Run tests and dump outputs without expected-output diff comparison",
+    )
+
     args = parser.parse_args()
 
     # Validate inputs
@@ -1102,16 +1303,40 @@ def main() -> int:
         print(f"Error: Executable not found: {args.executable}", file=sys.stderr)
         return 1
 
-    if not args.test_root.exists():
+    if args.input_file and not args.input_file.exists():
+        print(f"Error: Input fixture file not found: {args.input_file}", file=sys.stderr)
+        return 1
+
+    if not args.input_file and not args.test_root.exists():
         print(
             f"Error: Test root directory not found: {args.test_root}", file=sys.stderr
         )
         return 1
 
+    dump_output_dir: Optional[Path] = args.dump_output
+    if args.dump_only and dump_output_dir is None:
+        dump_output_dir = Path("test-dumps")
+
     try:
-        results, passed, failed, errors = run_test_suite(
-            args.executable, args.test_root, args.verbose, args.timeout
-        )
+        if args.input_file:
+            results, passed, failed, errors = run_single_fixture(
+                executable_path=args.executable,
+                input_file=args.input_file,
+                timeout=args.timeout,
+                verbose=args.verbose,
+                dump_output_dir=dump_output_dir,
+                dump_only=args.dump_only,
+                expected_output_file=args.expected_file,
+            )
+        else:
+            results, passed, failed, errors = run_test_suite(
+                args.executable,
+                args.test_root,
+                args.verbose,
+                args.timeout,
+                dump_output_dir,
+                args.dump_only,
+            )
 
         generate_report(results, passed, failed, errors, args.report)
 
