@@ -101,7 +101,7 @@ Profile saved successfully!
 7. View My Network
 8. Logout
 Enter choice (1-8):
-7
+8
 
 Please select an option:
 1. Login with existing account
@@ -160,7 +160,7 @@ Profile saved successfully!
 7. View My Network
 8. Logout
 Enter choice (1-8):
-7
+8
 
 Please select an option:
 1. Login with existing account
@@ -219,7 +219,7 @@ Profile saved successfully!
 7. View My Network
 8. Logout
 Enter choice (1-8):
-7
+8
 
 Please select an option:
 1. Login with existing account
@@ -276,7 +276,7 @@ Connection request sent!
 7. View My Network
 8. Logout
 Enter choice (1-8):
-7
+8
 
 Please select an option:
 1. Login with existing account

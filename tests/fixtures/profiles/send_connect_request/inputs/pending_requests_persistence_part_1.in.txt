@@ -16,7 +16,7 @@ Computer Science
 Software developer and team collaborator.
 DONE
 DONE
-7
+8
 1
 PReqUserB
 Pass123!
@@ -29,7 +29,7 @@ Data Science
 Data analytics and machine learning enthusiast.
 DONE
 DONE
-7
+8
 1
 PReqUserA
 Pass123!
