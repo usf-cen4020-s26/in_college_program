@@ -28,11 +28,11 @@ You have successfully logged in
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-1) Mason Russell
-2) Carol Martinez
-Enter request number to Accept/Reject (0 to go back):
-Enter A to accept or R to reject:
-You have accepted Mason Russell's connection request.
+Request from: UserB
+1. Accept
+2. Reject
+Enter your choice for UserB:
+Connection request from UserB accepted!
 -----------------------------------
 
 === MAIN MENU ===
@@ -47,10 +47,11 @@ You have accepted Mason Russell's connection request.
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-1) Carol Martinez
-Enter request number to Accept/Reject (0 to go back):
-Enter A to accept or R to reject:
-You have accepted Carol Martinez's connection request.
+Request from: UserC
+1. Accept
+2. Reject
+Enter your choice for UserC:
+Connection request from UserC accepted!
 -----------------------------------
 
 === MAIN MENU ===
@@ -64,12 +65,10 @@ You have accepted Carol Martinez's connection request.
 8. Logout
 Enter choice (1-8):
 7
-
 === MY NETWORK ===
-1) Mason Russell
-2) Carol Martinez
------------------------------------
-Press Enter to go back.
+Connected with: Mason Russell (University: UCF, Major: Computer Science)
+Connected with: Carol Martinez (University: UF, Major: Physics)
+--------------------
 
 === MAIN MENU ===
 1. Create/Edit My Profile
