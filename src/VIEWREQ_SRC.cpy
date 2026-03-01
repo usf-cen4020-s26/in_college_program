@@ -55,6 +55,8 @@
                MOVE 0 TO WS-PROGRAM-RUNNING
                EXIT PARAGRAPH
            END-IF
+           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
 
            *> basic numeric parse for 0-99
            MOVE 0 TO WS-VIEWREQ-SELECTION
@@ -87,26 +89,22 @@
                MOVE 0 TO WS-PROGRAM-RUNNING
                EXIT PARAGRAPH
            END-IF
+           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
 
            MOVE INPUT-RECORD(1:1) TO WS-VIEWREQ-ACTION
 
            EVALUATE WS-VIEWREQ-ACTION
            WHEN "A"
-               MOVE "A" TO WS-PEND-STATUS(WS-VIEWREQ-SELECTED-PEND-IDX)
-               PERFORM 9310-REWRITE-PENDING-FILE
-
-               *>  DEV: show accepted confirmation message (with sender name)
+               *> Save sender name before we remove the request (for confirmation)
                MOVE WS-PEND-SENDER-USERNAME(WS-VIEWREQ-SELECTED-PEND-IDX)
                     TO WS-VIEWREQ-SENDER-USERNAME
+               PERFORM 9305-REMOVE-PENDING-ENTRY
                PERFORM 9400-ADD-CONNECTION
-               
                PERFORM 7525-PRINT-ACCEPTED-CONFIRMATION
 
                WHEN "R"
-                   MOVE "R" TO WS-PEND-STATUS(WS-VIEWREQ-SELECTED-PEND-IDX)
-                   PERFORM 9310-REWRITE-PENDING-FILE
-
-                   *> ✅ DEV requirement: rejection confirmation message
+                   PERFORM 9305-REMOVE-PENDING-ENTRY
                    MOVE "Connection request rejected." TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
 
