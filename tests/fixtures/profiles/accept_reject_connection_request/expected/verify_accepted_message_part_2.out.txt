@@ -45,41 +45,6 @@ Connection request from UserB accepted!
 7. View My Network
 8. Logout
 Enter choice (1-8):
-5
---- Pending Connection Requests ---
-Request from: UserC
-1. Accept
-2. Reject
-Enter your choice for UserC:
-Connection request from UserC accepted!
------------------------------------
-
-=== MAIN MENU ===
-1. Create/Edit My Profile
-2. View My Profile
-3. Search for a job
-4. Find someone you know
-5. View Pending Connection Requests
-6. Learn a new skill
-7. View My Network
-8. Logout
-Enter choice (1-8):
-7
-=== MY NETWORK ===
-Connected with: Mason Russell (University: UCF, Major: Computer Science)
-Connected with: Carol Martinez (University: UF, Major: Physics)
---------------------
-
-=== MAIN MENU ===
-1. Create/Edit My Profile
-2. View My Profile
-3. Search for a job
-4. Find someone you know
-5. View Pending Connection Requests
-6. Learn a new skill
-7. View My Network
-8. Logout
-Enter choice (1-8):
 8
 
 Please select an option:

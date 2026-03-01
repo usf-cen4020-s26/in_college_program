@@ -32,7 +32,7 @@ Request from: UserB
 1. Accept
 2. Reject
 Enter your choice for UserB:
-Connection request from UserB accepted!
+Connection request rejected.
 -----------------------------------
 
 === MAIN MENU ===
@@ -47,11 +47,7 @@ Connection request from UserB accepted!
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-Request from: UserC
-1. Accept
-2. Reject
-Enter your choice for UserC:
-Connection request from UserC accepted!
+You have no pending connection requests at this time.
 -----------------------------------
 
 === MAIN MENU ===
@@ -66,9 +62,8 @@ Connection request from UserC accepted!
 Enter choice (1-8):
 7
 === MY NETWORK ===
-Connected with: Mason Russell (University: UCF, Major: Computer Science)
-Connected with: Carol Martinez (University: UF, Major: Physics)
---------------------
+You have no connections in your network yet.
+-----------------------------------
 
 === MAIN MENU ===
 1. Create/Edit My Profile
