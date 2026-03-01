@@ -33,6 +33,7 @@ htmlcov/
 test-report.json
 test_results/
 *.log
+test-dumps/
 
 # IDE
 .vscode/settings.json
