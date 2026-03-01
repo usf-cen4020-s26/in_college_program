@@ -53,6 +53,159 @@ Each test consists of two files:
 1. **Input file** (`inputs/test_name.in.txt`): Contains the user inputs
 2. **Expected output file** (`expected/test_name.out.txt`): Contains the expected program output
 
+## Seed Macros (Pre-Made Users)
+
+You can define test setup macros at the top of an input file to pre-create users before the test runs.
+This lets test inputs focus on the behavior being tested instead of repeating account/profile setup flows.
+
+### Macro Format
+
+Use one `@seed_user` directive per user at the top of `*.in.txt`:
+
+```text
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=bob password=BobPass1! first_name=Bob last_name=Jones university=UF major=Math grad_year=2026 about_me="Enjoys systems programming"
+
+1
+alice
+Alice1!
+8
+```
+
+You can also write directives as comments:
+
+```text
+# @seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+```
+
+### Supported Parameters
+
+- `username` (required, max 20 chars)
+- `password` (required, max 12 chars)
+- `with_profile` (optional, default `true`)
+- `first_name` (required when `with_profile=true`)
+- `last_name` (required when `with_profile=true`)
+- `university` (required when `with_profile=true`)
+- `major` (required when `with_profile=true`)
+- `grad_year` (required when `with_profile=true`, must be 4 digits)
+- `about_me` (optional)
+
+### Behavior Notes
+
+- Directives are only parsed at the **top of the input file**.
+- Macro lines are removed before the test input is sent to the COBOL executable.
+- Seeded users are persisted in `ACCOUNTS.DAT` and (if profile enabled) `PROFILES.DAT` before each test part runs.
+- Existing seeded usernames are updated (upsert behavior).
+- Seeding still respects the 5-account limit and will fail with a clear error if exceeded.
+
+### 10 Blank Template Users (Copy/Paste)
+
+Use these as blank templates. Replace placeholder values inside `<...>` with your test data.
+
+```text
+@seed_user username=<USER01> password=<PASS01> first_name=<FIRST01> last_name=<LAST01> university=<UNIV01> major=<MAJOR01> grad_year=<YEAR01> about_me="<ABOUT01>"
+@seed_user username=<USER02> password=<PASS02> first_name=<FIRST02> last_name=<LAST02> university=<UNIV02> major=<MAJOR02> grad_year=<YEAR02> about_me="<ABOUT02>"
+@seed_user username=<USER03> password=<PASS03> first_name=<FIRST03> last_name=<LAST03> university=<UNIV03> major=<MAJOR03> grad_year=<YEAR03> about_me="<ABOUT03>"
+@seed_user username=<USER04> password=<PASS04> first_name=<FIRST04> last_name=<LAST04> university=<UNIV04> major=<MAJOR04> grad_year=<YEAR04> about_me="<ABOUT04>"
+@seed_user username=<USER05> password=<PASS05> first_name=<FIRST05> last_name=<LAST05> university=<UNIV05> major=<MAJOR05> grad_year=<YEAR05> about_me="<ABOUT05>"
+@seed_user username=<USER06> password=<PASS06> first_name=<FIRST06> last_name=<LAST06> university=<UNIV06> major=<MAJOR06> grad_year=<YEAR06> about_me="<ABOUT06>"
+@seed_user username=<USER07> password=<PASS07> first_name=<FIRST07> last_name=<LAST07> university=<UNIV07> major=<MAJOR07> grad_year=<YEAR07> about_me="<ABOUT07>"
+@seed_user username=<USER08> password=<PASS08> first_name=<FIRST08> last_name=<LAST08> university=<UNIV08> major=<MAJOR08> grad_year=<YEAR08> about_me="<ABOUT08>"
+@seed_user username=<USER09> password=<PASS09> first_name=<FIRST09> last_name=<LAST09> university=<UNIV09> major=<MAJOR09> grad_year=<YEAR09> about_me="<ABOUT09>"
+@seed_user username=<USER10> password=<PASS10> first_name=<FIRST10> last_name=<LAST10> university=<UNIV10> major=<MAJOR10> grad_year=<YEAR10> about_me="<ABOUT10>"
+```
+
+Notes:
+- You can keep this template in a scratch file and copy only the users you need.
+- Because the app allows max 5 accounts, only seed up to 5 distinct usernames in one persistence context.
+- Keep `username` <= 20 chars and `password` <= 12 chars.
+
+### Macro Usage Examples in Real Tests
+
+#### Example A: Login test with pre-seeded account
+
+```text
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+
+1
+alice
+Alice1!
+8
+```
+
+#### Example B: Search test with two discoverable profiles
+
+```text
+@seed_user username=anna1 password=AnnaPass1! first_name=Anna last_name=Park university=USF major=IT grad_year=2026
+@seed_user username=brian1 password=Brian1! first_name=Brian last_name=Cook university=UF major=Math grad_year=2025
+
+1
+anna1
+AnnaPass1!
+4
+Brian Cook
+2
+8
+```
+
+#### Example C: User without profile (force "create profile first" flows)
+
+```text
+@seed_user username=justacct password=Acct1! with_profile=false
+
+1
+justacct
+Acct1!
+2
+8
+```
+
+#### Example D: Multi-part test where only part 1 seeds data
+
+`connection_flow_part_1.in.txt`
+```text
+@seed_user username=req1 password=ReqPass1! first_name=Request last_name=Sender university=USF major=CS grad_year=2027
+@seed_user username=rec1 password=RecPass1! first_name=Request last_name=Receiver university=USF major=CS grad_year=2027
+
+1
+req1
+ReqPass1!
+...
+8
+```
+
+`connection_flow_part_2.in.txt`
+```text
+1
+rec1
+RecPass1!
+...
+8
+```
+
+#### Example E: Upsert/update seeded user in a later part
+
+`profile_refresh_part_1.in.txt`
+```text
+@seed_user username=sam1 password=SamPass1! first_name=Sam last_name=Lee university=USF major=CS grad_year=2026 about_me="Initial bio"
+
+1
+sam1
+SamPass1!
+8
+```
+
+`profile_refresh_part_2.in.txt`
+```text
+@seed_user username=sam1 password=SamPass1! first_name=Sam last_name=Lee university=USF major=CS grad_year=2026 about_me="Updated bio"
+
+1
+sam1
+SamPass1!
+2
+8
+```
+
 ## Multi-Part Tests
 
 ### What Are Multi-Part Tests?
