@@ -1,18 +1,17 @@
       *>*****************************************************************
-      *> VIEWREQ_SRC - View Pending Connection Requests
-      *> All output must go through 8000-WRITE-OUTPUT
-      *> Uses WS-PENDING-TABLE / WS-PENDING-COUNT loaded at startup
+      *> VIEWREQ_SRC - View Pending Connection Requests (Epic 5)
+      *> Show ONE pending request at a time (no numbered list selection)
       *>*****************************************************************
 
-              7500-VIEW-PENDING-REQUESTS.
+       7500-VIEW-PENDING-REQUESTS.
            MOVE "--- Pending Connection Requests ---" TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
 
            MOVE "N" TO WS-VIEWREQ-FOUND-FLAG
-           MOVE 0   TO WS-VIEWREQ-DISP-COUNT
 
-           PERFORM VARYING WS-VIEWREQ-PEND-IDX FROM 1 BY 1
-               UNTIL WS-VIEWREQ-PEND-IDX > WS-PENDING-COUNT
+           *> Iterate through pending table; show requests one-by-one
+           MOVE 1 TO WS-VIEWREQ-PEND-IDX
+           PERFORM UNTIL WS-VIEWREQ-PEND-IDX > WS-PENDING-COUNT
 
                *> Match: recipient is current logged-in user, status pending
                IF FUNCTION TRIM(WS-PEND-RECIPIENT-USERNAME(WS-VIEWREQ-PEND-IDX))
@@ -22,18 +21,81 @@
 
                    MOVE "Y" TO WS-VIEWREQ-FOUND-FLAG
 
-                   ADD 1 TO WS-VIEWREQ-DISP-COUNT
-                   MOVE WS-VIEWREQ-PEND-IDX
-                       TO WS-VIEWREQ-MAP-IDX(WS-VIEWREQ-DISP-COUNT)
+                   *> Save selected pending index for accept/reject flow
+                   MOVE WS-VIEWREQ-PEND-IDX TO WS-VIEWREQ-SELECTED-PEND-IDX
 
-                   *> lookup sender name (prints it) but we want it on same line
-                   *> so we build one line: "1) First Last"
-                   MOVE WS-PEND-SENDER-USERNAME(WS-VIEWREQ-PEND-IDX)
+                   *> Sender username for prompts/confirmation
+                   MOVE WS-PEND-SENDER-USERNAME(WS-VIEWREQ-SELECTED-PEND-IDX)
                        TO WS-VIEWREQ-SENDER-USERNAME
 
-                   PERFORM 7515-PRINT-ONE-PENDING-LINE
+                   *> Print: Request from: <Sender>
+                   MOVE SPACES TO WS-OUTPUT-LINE
+                   STRING "Request from: "
+                          FUNCTION TRIM(WS-VIEWREQ-SENDER-USERNAME)
+                          DELIMITED BY SIZE
+                          INTO WS-OUTPUT-LINE
+                   END-STRING
+                   PERFORM 8000-WRITE-OUTPUT
 
+                   *> Options
+                   MOVE "1. Accept" TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE "2. Reject" TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+
+                   *> Prompt: Enter your choice for <Sender>:
+                   MOVE SPACES TO WS-OUTPUT-LINE
+                   STRING "Enter your choice for "
+                          FUNCTION TRIM(WS-VIEWREQ-SENDER-USERNAME)
+                          ":"
+                          DELIMITED BY SIZE
+                          INTO WS-OUTPUT-LINE
+                   END-STRING
+                   PERFORM 8000-WRITE-OUTPUT
+
+                   *> Read choice (must echo)
+                   PERFORM 8100-READ-INPUT
+                   IF WS-EOF-FLAG = 1
+                       MOVE 0 TO WS-PROGRAM-RUNNING
+                       EXIT PARAGRAPH
+                   END-IF
+                   MOVE INPUT-RECORD TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+
+                   MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-MENU-CHOICE
+
+                   EVALUATE WS-MENU-CHOICE
+                       WHEN "1"
+                           *> Accept: remove pending + add connection + confirmation
+                           PERFORM 9305-REMOVE-PENDING-ENTRY
+                           PERFORM 9400-ADD-CONNECTION
+                           PERFORM 7525-PRINT-ACCEPTED-CONFIRMATION
+
+                           *> IMPORTANT:
+                           *> Since we removed current entry, DO NOT increment index.
+                           *> Next request is now at the same WS-VIEWREQ-PEND-IDX.
+
+                       WHEN "2"
+                           *> Reject: remove pending + rejection confirmation
+                           PERFORM 9305-REMOVE-PENDING-ENTRY
+                           PERFORM 7526-PRINT-REJECTED-CONFIRMATION
+                           *> Same note: do not increment index after removal.
+
+                       WHEN OTHER
+                           MOVE "Invalid choice." TO WS-OUTPUT-LINE
+                           PERFORM 8000-WRITE-OUTPUT
+                           *> No removal -> move on to next request
+                           ADD 1 TO WS-VIEWREQ-PEND-IDX
+                   END-EVALUATE
+
+                   MOVE "-----------------------------------" TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+
+               ELSE
+                   *> Not a match -> next record
+                   ADD 1 TO WS-VIEWREQ-PEND-IDX
                END-IF
+
            END-PERFORM
 
            IF WS-VIEWREQ-FOUND-FLAG = "N"
@@ -42,79 +104,8 @@
                PERFORM 8000-WRITE-OUTPUT
                MOVE "-----------------------------------" TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
-               EXIT PARAGRAPH
            END-IF
 
-           *> Ask what to do
-           MOVE "Enter request number to Accept/Reject (0 to go back):"
-               TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-
-           PERFORM 8100-READ-INPUT
-           IF WS-EOF-FLAG = 1
-               MOVE 0 TO WS-PROGRAM-RUNNING
-               EXIT PARAGRAPH
-           END-IF
-           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-
-           *> basic numeric parse for 0-99
-           MOVE 0 TO WS-VIEWREQ-SELECTION
-           IF FUNCTION TRIM(INPUT-RECORD) = "0"
-               MOVE "-----------------------------------" TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-               EXIT PARAGRAPH
-           END-IF
-
-           MOVE FUNCTION NUMVAL(FUNCTION TRIM(INPUT-RECORD))
-               TO WS-VIEWREQ-SELECTION
-
-           IF WS-VIEWREQ-SELECTION < 1
-              OR WS-VIEWREQ-SELECTION > WS-VIEWREQ-DISP-COUNT
-               MOVE "Invalid selection." TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-               MOVE "-----------------------------------" TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-               EXIT PARAGRAPH
-           END-IF
-
-           MOVE WS-VIEWREQ-MAP-IDX(WS-VIEWREQ-SELECTION)
-               TO WS-VIEWREQ-SELECTED-PEND-IDX
-
-           MOVE "Enter A to accept or R to reject:" TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-
-           PERFORM 8100-READ-INPUT
-           IF WS-EOF-FLAG = 1
-               MOVE 0 TO WS-PROGRAM-RUNNING
-               EXIT PARAGRAPH
-           END-IF
-           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-
-           MOVE INPUT-RECORD(1:1) TO WS-VIEWREQ-ACTION
-
-           EVALUATE WS-VIEWREQ-ACTION
-           WHEN "A"
-               *> Save sender name before we remove the request (for confirmation)
-               MOVE WS-PEND-SENDER-USERNAME(WS-VIEWREQ-SELECTED-PEND-IDX)
-                    TO WS-VIEWREQ-SENDER-USERNAME
-               PERFORM 9305-REMOVE-PENDING-ENTRY
-               PERFORM 9400-ADD-CONNECTION
-               PERFORM 7525-PRINT-ACCEPTED-CONFIRMATION
-
-               WHEN "R"
-                   PERFORM 9305-REMOVE-PENDING-ENTRY
-                   MOVE "Connection request rejected." TO WS-OUTPUT-LINE
-                   PERFORM 8000-WRITE-OUTPUT
-
-               WHEN OTHER
-                   MOVE "Invalid choice." TO WS-OUTPUT-LINE
-                   PERFORM 8000-WRITE-OUTPUT
-           END-EVALUATE
-
-           MOVE "-----------------------------------" TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
            EXIT.
       *> Prints one pending request line like: "1) First Last"
        7515-PRINT-ONE-PENDING-LINE.
@@ -191,6 +182,18 @@
                END-STRING
            END-IF
 
+           PERFORM 8000-WRITE-OUTPUT
+           EXIT.
+      *> Prints rejected confirmation like:
+      *> "Connection request from OtherUser rejected!"
+       7526-PRINT-REJECTED-CONFIRMATION.
+           MOVE SPACES TO WS-OUTPUT-LINE
+           STRING "Connection request from "
+                  FUNCTION TRIM(WS-VIEWREQ-SENDER-USERNAME)
+                  " rejected!"
+                  DELIMITED BY SIZE
+                  INTO WS-OUTPUT-LINE
+           END-STRING
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
       *> Finds sender name in profiles by username and prints it
