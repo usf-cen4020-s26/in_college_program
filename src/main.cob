@@ -1882,6 +1882,32 @@ PROCEDURE DIVISION.
            CLOSE PENDING-FILE
            EXIT.
 
+      *>*****************************************************************
+      *> Remove one pending request from the table and rewrite the file.
+      *> Used after the user accepts or rejects a request so that
+      *> the processed request is no longer kept in the pending list.
+      *>*****************************************************************
+       9305-REMOVE-PENDING-ENTRY.
+           IF WS-VIEWREQ-SELECTED-PEND-IDX < 1
+              OR WS-VIEWREQ-SELECTED-PEND-IDX > WS-PENDING-COUNT
+               EXIT PARAGRAPH
+           END-IF
+           *> Shift entries above the removed one down by one
+           MOVE WS-VIEWREQ-SELECTED-PEND-IDX TO WS-PEND-IDX
+           ADD 1 TO WS-PEND-IDX
+           PERFORM UNTIL WS-PEND-IDX > WS-PENDING-COUNT
+               MOVE WS-PEND-SENDER-USERNAME(WS-PEND-IDX)
+                   TO WS-PEND-SENDER-USERNAME(WS-PEND-IDX - 1)
+               MOVE WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX)
+                   TO WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX - 1)
+               MOVE WS-PEND-STATUS(WS-PEND-IDX)
+                   TO WS-PEND-STATUS(WS-PEND-IDX - 1)
+               ADD 1 TO WS-PEND-IDX
+           END-PERFORM
+           SUBTRACT 1 FROM WS-PENDING-COUNT
+           PERFORM 9310-REWRITE-PENDING-FILE
+           EXIT.
+
                  *>*****************************************************************
       *> 9310-REWRITE-PENDING-FILE
       *>   - Rewrites entire PENDING.DAT from WS-PENDING-TABLE
@@ -1936,6 +1962,18 @@ PROCEDURE DIVISION.
            EXIT.
 
         COPY "src/SENDREQ_SRC.cpy".
+      *>*****************************************************************
+      *> Echo view-pending user input to OUTPUT.TXT so the request number
+      *> and Accept/Reject choice appear in the log (screen and file in sync).
+      *>*****************************************************************
+       7528-ECHO-REQUEST-INPUT.
+           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
+           EXIT.
+       7529-ECHO-ACCEPT-REJECT-INPUT.
+           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
+           EXIT.
         COPY "src/VIEWREQ_SRC.cpy".
 *>*****************************************************************
 *> 7700-VIEW-NETWORK-LIST
