@@ -36,7 +36,6 @@ test_results/
 test-dumps/
 
 # IDE
-.vscode/settings.json
 .idea/
 *.swp
 *.swo
