@@ -16,7 +16,7 @@ Biomedical Engineering
 I love biomed and am passionate about engineering research.
 DONE
 DONE
-7
+8
 1
 UserB
 Pass123!
@@ -29,5 +29,5 @@ Computer Science
 I'm CS but I love other majors, only if they're engineering related.
 DONE
 DONE
-7
+8
 3

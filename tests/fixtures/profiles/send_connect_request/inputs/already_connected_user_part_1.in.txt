@@ -13,7 +13,7 @@ Computer Science
 Coding enthusiast and aspiring software engineer.
 DONE
 DONE
-7
+8
 2
 UserD
 Pass123!
@@ -29,19 +29,19 @@ IT
 Vivid IT student with a passion for cybersecurity and network administration.
 DONE
 DONE
-7
+8
 1
 UserC
 Pass123!
 4
 Alice Smith
 1
-7
+8
 1
 UserD
 Pass123!
 5
-7
+8
 3
 
 

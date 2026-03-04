@@ -16,7 +16,7 @@ Psychology
 Studying human behavior and mental health.
 DONE
 DONE
-7
+8
 1
 UserH
 Pass123!
@@ -29,12 +29,12 @@ Economics
 Interested in markets and policy.
 DONE
 DONE
-7
+8
 1
 UserG
 Pass123!
 4
 Henry Moore
 1
-7
+8
 3

@@ -1,0 +1,11 @@
+# user1 logs in, accepts user2's request, rejects user3's, checks network
+1 # Log in
+user1
+User1!
+5 # View pending connection requests
+1 # Accept user2's request
+5 # View pending again
+2 # Reject user3's request
+7 # View network (only user2 should appear)
+8 # Log out
+3 # Exit
