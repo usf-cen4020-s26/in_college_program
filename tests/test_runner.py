@@ -753,11 +753,47 @@ def _parse_seed_user_macro(macro_line: str) -> SeedUserMacro:
     )
 
 
+def _strip_inline_comment(line: str) -> str:
+    """
+    Strip an inline ``#`` comment from a line, preserving the line ending.
+
+    Rules:
+    * ``#`` at column 0 or preceded by whitespace starts a comment.
+    * ``\\#`` is an escape sequence that produces a literal ``#``.
+    * Trailing whitespace between the content and the ``#`` is removed.
+    """
+    # Preserve the original line ending (e.g. '\n')
+    ending = ""
+    if line.endswith("\n"):
+        ending = "\n"
+        line = line[:-1]
+
+    result: list[str] = []
+    i = 0
+    while i < len(line):
+        if line[i] == "\\" and i + 1 < len(line) and line[i + 1] == "#":
+            result.append("#")
+            i += 2
+        elif line[i] == "#":
+            # Only treat as comment if at start or preceded by whitespace
+            if i == 0 or line[i - 1] in (" ", "\t"):
+                break
+            result.append(line[i])
+            i += 1
+        else:
+            result.append(line[i])
+            i += 1
+
+    return "".join(result).rstrip() + ending
+
+
 def preprocess_input_file(input_file: Path) -> Tuple[str, List[SeedUserMacro]]:
     """
     Parse seed macros from the top of a test input file and return executable input.
 
     Macros must appear at the top of the file and are removed from the final INPUT.TXT.
+    Inline ``#`` comments are stripped from body lines (use ``\\#`` for a literal ``#``).
+    Whole-line comments (lines where only a comment remains after stripping) are removed.
     """
     lines = input_file.read_text().splitlines(keepends=True)
     seed_users: List[SeedUserMacro] = []
@@ -784,7 +820,17 @@ def preprocess_input_file(input_file: Path) -> Tuple[str, List[SeedUserMacro]]:
 
         break
 
-    executable_input = "".join(lines[body_start:])
+    # Strip inline comments from body lines and remove whole-line comments
+    body_lines: list[str] = []
+    for line in lines[body_start:]:
+        processed = _strip_inline_comment(line)
+        # If the line is now empty (was a whole-line comment), skip it
+        content = processed.rstrip("\n")
+        if content == "" and line.strip().startswith("#"):
+            continue
+        body_lines.append(processed)
+
+    executable_input = "".join(body_lines)
     return executable_input, seed_users
 
 

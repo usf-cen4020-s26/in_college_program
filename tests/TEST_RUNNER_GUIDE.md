@@ -206,6 +206,31 @@ SamPass1!
 8
 ```
 
+## Inline Comments
+
+You can add `#` comments to input files to document what each line does. Comments are stripped before the input is fed to the program.
+
+### Syntax
+
+```text
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+
+1        # Log in
+alice    # Username
+Alice1!  # Password
+4        # Search for user
+Bob Jones # Search query
+8        # Log out
+```
+
+- `#` preceded by whitespace (or at column 0) starts a comment — everything after it is removed.
+- Whole-line comments (lines with only a comment) are removed entirely.
+- Use `\#` to produce a literal `#` in the input if needed.
+
+### VS Code Highlighting
+
+The `.vscode/settings.json` maps `*.in.txt` to `shellscript`, so `#` comments render with your theme's comment color automatically.
+
 ## Multi-Part Tests
 
 ### What Are Multi-Part Tests?
