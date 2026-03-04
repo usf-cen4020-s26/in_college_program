@@ -1,4 +1,5 @@
 # Test Runner Documentation
+<!-- connection management tests: ongoing, see test/connection_management branch -->
 
 ## Overview
 
