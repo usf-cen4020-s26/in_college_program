@@ -1,0 +1,15 @@
+# alice accepts bob's request, views her network, then bob logs in and views his
+1 # Log in as alice
+alice
+Alice1!
+5 # View pending requests
+1 # Accept bob's request
+7 # View network (bob should appear)
+8 # Log out
+# Now bob logs in and checks his network
+1 # Log in as bob
+bob
+Bob123!
+7 # View network (alice should appear)
+8 # Log out
+3 # Exit

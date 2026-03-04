@@ -103,3 +103,79 @@ Connected with: user1 (University: USF, Major: CS)
 Connected with: user2 (University: USF, Major: CS)
 --------------------
 
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. View Pending Connection Requests
+6. Learn a new skill
+7. View My Network
+8. Logout
+Enter choice (1-8):
+5
+--- Pending Connection Requests ---
+Request from: user3
+1. Accept
+2. Reject
+Enter your choice for user3:
+Connection request from user3 accepted!
+-----------------------------------
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. View Pending Connection Requests
+6. Learn a new skill
+7. View My Network
+8. Logout
+Enter choice (1-8):
+7
+
+=== MY NETWORK ===
+Connected with: user1 (University: USF, Major: CS)
+Connected with: user2 (University: USF, Major: CS)
+Connected with: user3 (University: USF, Major: CS)
+--------------------
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. View Pending Connection Requests
+6. Learn a new skill
+7. View My Network
+8. Logout
+Enter choice (1-8):
+5
+--- Pending Connection Requests ---
+Request from: user4
+1. Accept
+2. Reject
+Enter your choice for user4:
+Connection request from user4 accepted!
+-----------------------------------
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. View Pending Connection Requests
+6. Learn a new skill
+7. View My Network
+8. Logout
+Enter choice (1-8):
+7
+
+=== MY NETWORK ===
+Connected with: user1 (University: USF, Major: CS)
+Connected with: user2 (University: USF, Major: CS)
+Connected with: user3 (University: USF, Major: CS)
+Connected with: user4 (University: USF, Major: CS)
+--------------------
+
+Thank you for using InCollege!
