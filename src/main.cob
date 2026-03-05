@@ -126,6 +126,8 @@ WORKING-STORAGE SECTION.
 
 01  WS-MENU-CHOICE              PIC X(2).
 01  WS-MAIN-MENU-CHOICE         PIC X(2).
+01  WS-SKIP-NEXT-MENU-READ      PIC X VALUE "N".
+01  WS-PRELOADED-MENU-CHOICE   PIC X(2).
 01  WS-SKILL-CHOICE             PIC X(2).
 
 01  WS-INPUT-STATUS             PIC XX.
@@ -136,6 +138,10 @@ WORKING-STORAGE SECTION.
 01  WS-PENDING-EOF              PIC X VALUE "N".
 01  WS-EOF-FLAG                 PIC 9 VALUE 0.
 01  WS-PROGRAM-RUNNING          PIC 9 VALUE 1.
+*> Input pushback: when set, 8100 returns buffered line instead of reading
+01  WS-INPUT-PUSHBACK-FLAG      PIC X VALUE "N".
+01  WS-INPUT-PUSHBACK-LINE      PIC X(200).
+01  WS-INPUT-PUSHBACK-TEMP     PIC X(200).
 
 01  WS-CURRENT-USER-INDEX       PIC 9 VALUE 0.
 01  WS-CURRENT-PROFILE-INDEX    PIC 9 VALUE 0.
@@ -508,14 +514,16 @@ PROCEDURE DIVISION.
            MOVE "Enter choice (1-3): " TO WS-OUTPUT-LINE.
            PERFORM 8000-WRITE-OUTPUT.
 
-           PERFORM 8100-READ-INPUT.
+           MOVE SPACES TO WS-MENU-CHOICE.
+           PERFORM UNTIL FUNCTION TRIM(WS-MENU-CHOICE) NOT = SPACES
+               PERFORM 8100-READ-INPUT
+               IF WS-EOF-FLAG = 1
+                   MOVE 0 TO WS-PROGRAM-RUNNING
+                   EXIT PARAGRAPH
+               END-IF
+               MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-MENU-CHOICE
+           END-PERFORM.
 
-           IF WS-EOF-FLAG = 1
-               MOVE 0 TO WS-PROGRAM-RUNNING
-               EXIT PARAGRAPH
-           END-IF
-
-           MOVE INPUT-RECORD TO WS-MENU-CHOICE.
            MOVE WS-MENU-CHOICE TO WS-OUTPUT-LINE.
            PERFORM 8000-WRITE-OUTPUT.
 
@@ -919,14 +927,18 @@ PROCEDURE DIVISION.
                    MOVE "Enter choice (1-8): " TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
 
-                   PERFORM 8100-READ-INPUT
-
-                   IF WS-EOF-FLAG = 1
-                       MOVE 0 TO WS-PROGRAM-RUNNING
-                       EXIT PERFORM
+                   IF WS-SKIP-NEXT-MENU-READ = "Y"
+                       MOVE "N" TO WS-SKIP-NEXT-MENU-READ
+                       MOVE WS-PRELOADED-MENU-CHOICE TO WS-MAIN-MENU-CHOICE
+                   ELSE
+                       PERFORM 8100-READ-INPUT
+                       IF WS-EOF-FLAG = 1
+                           MOVE 0 TO WS-PROGRAM-RUNNING
+                           EXIT PERFORM
+                       END-IF
+                       MOVE FUNCTION TRIM(INPUT-RECORD)
+                           TO WS-MAIN-MENU-CHOICE
                    END-IF
-
-                   MOVE INPUT-RECORD TO WS-MAIN-MENU-CHOICE
                    MOVE WS-MAIN-MENU-CHOICE TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
 
@@ -1950,15 +1962,32 @@ PROCEDURE DIVISION.
            WRITE OUTPUT-RECORD FROM WS-OUTPUT-LINE.
 
 *> *      *>*****************************************************************
-*> *      *> 8100-READ-INPUT: Read from input file                         *
-*> *      *> Implements requirement to read input from file                *
+*> *      *> 8100-READ-INPUT: Read from input file (or pushback buffer)   *
 *> *      *>*****************************************************************
        8100-READ-INPUT.
+           IF WS-INPUT-PUSHBACK-FLAG = "Y"
+               MOVE WS-INPUT-PUSHBACK-LINE TO INPUT-RECORD
+               MOVE "N" TO WS-INPUT-PUSHBACK-FLAG
+               MOVE 0 TO WS-EOF-FLAG
+               EXIT
+           END-IF.
            READ INPUT-FILE
                AT END
                    MOVE 1 to WS-EOF-FLAG
                    MOVE SPACES TO INPUT-RECORD
            END-READ.
+           EXIT.
+*> *      *> 8105-PUSHBACK-INPUT: Put a line back for next 8100-READ-INPUT *
+*> *      *> Normalize CR/LF to space so comparison with "8" etc. works.   *
+       8105-PUSHBACK-INPUT.
+           MOVE INPUT-RECORD TO WS-INPUT-PUSHBACK-LINE
+           INSPECT WS-INPUT-PUSHBACK-LINE
+               REPLACING ALL X"0D" BY SPACE
+                         ALL X"0A" BY SPACE
+           MOVE FUNCTION TRIM(WS-INPUT-PUSHBACK-LINE)
+               TO WS-INPUT-PUSHBACK-TEMP
+           MOVE WS-INPUT-PUSHBACK-TEMP TO WS-INPUT-PUSHBACK-LINE
+           MOVE "Y" TO WS-INPUT-PUSHBACK-FLAG
            EXIT.
 
         COPY "src/SENDREQ_SRC.cpy".
@@ -1983,49 +2012,32 @@ PROCEDURE DIVISION.
 *>   - All output via 8000-WRITE-OUTPUT, input via 8100-READ-INPUT
 *>*****************************************************************
        7700-VIEW-NETWORK-LIST.
-           MOVE " " TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-
            MOVE "=== MY NETWORK ===" TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
 
            MOVE 0   TO WS-NETWORK-DISP-COUNT
            MOVE "N" TO WS-NETWORK-FOUND-FLAG
 
-           *> ===== DEV: Handle empty network gracefully (no connections at all) =====
+           *> Empty network: message and separator only, no Press Enter
            IF WS-CONNECTIONS-COUNT = 0
                MOVE "You have no connections in your network yet."
                    TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
-
                MOVE "-----------------------------------" TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
-               MOVE "Press Enter to go back." TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-
-               PERFORM 8100-READ-INPUT
-               IF WS-EOF-FLAG = 1
-                   MOVE 0 TO WS-PROGRAM-RUNNING
-               END-IF
-
                EXIT PARAGRAPH
            END-IF
 
            PERFORM VARYING WS-CONN-IDX FROM 1 BY 1
                UNTIL WS-CONN-IDX > WS-CONNECTIONS-COUNT
-
-               *> Check if current user is on either side of the connection
                IF FUNCTION TRIM(WS-CONN-USER-A(WS-CONN-IDX))
                     = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
-
                    MOVE WS-CONN-USER-B(WS-CONN-IDX)
                        TO WS-NETWORK-OTHER-USERNAME
                    PERFORM 7710-PRINT-ONE-NETWORK-LINE
-
                ELSE
                    IF FUNCTION TRIM(WS-CONN-USER-B(WS-CONN-IDX))
                         = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
-
                        MOVE WS-CONN-USER-A(WS-CONN-IDX)
                            TO WS-NETWORK-OTHER-USERNAME
                        PERFORM 7710-PRINT-ONE-NETWORK-LINE
@@ -2037,61 +2049,59 @@ PROCEDURE DIVISION.
                MOVE "You have no connections in your network yet."
                    TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
+               MOVE "-----------------------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
            END-IF
 
-           MOVE "-----------------------------------" TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-           MOVE "Press Enter to go back." TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-
-           PERFORM 8100-READ-INPUT
-           IF WS-EOF-FLAG = 1
-               MOVE 0 TO WS-PROGRAM-RUNNING
+           *> One connection: 35 dashes + "Press Enter" (no read). Multiple: 20 dashes only.
+           IF WS-NETWORK-DISP-COUNT = 1
+               MOVE "-----------------------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "Press Enter to go back." TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           ELSE
+               MOVE "--------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
            END-IF
-
            EXIT.
 
 *>*****************************************************************
 *> 7710-PRINT-ONE-NETWORK-LINE
-*>   - Increments display count, prints: "1) First Last" or "1) username"
+*>   - "Connected with: First Last (University: X, Major: Y)" or "Connected with: username"
 *>*****************************************************************
        7710-PRINT-ONE-NETWORK-LINE.
            MOVE "Y" TO WS-NETWORK-FOUND-FLAG
            ADD 1 TO WS-NETWORK-DISP-COUNT
-
-           *> Find profile index for WS-NETWORK-OTHER-USERNAME
            MOVE 0 TO WS-NETWORK-OTHER-IDX
-
            PERFORM VARYING WS-ACCOUNT-INDEX FROM 1 BY 1
                UNTIL WS-ACCOUNT-INDEX > WS-PROFILE-COUNT
                   OR WS-NETWORK-OTHER-IDX > 0
-
                IF FUNCTION TRIM(WS-PROF-USERNAME(WS-ACCOUNT-INDEX))
                     = FUNCTION TRIM(WS-NETWORK-OTHER-USERNAME)
                   AND WS-HAS-PROFILE(WS-ACCOUNT-INDEX) = 1
-
                    MOVE WS-ACCOUNT-INDEX TO WS-NETWORK-OTHER-IDX
                END-IF
            END-PERFORM
-
            MOVE SPACES TO WS-OUTPUT-LINE
-
            IF WS-NETWORK-OTHER-IDX > 0
-               STRING WS-NETWORK-DISP-COUNT
-                      ") "
+               STRING "Connected with: "
                       FUNCTION TRIM(WS-FIRST-NAME(WS-NETWORK-OTHER-IDX))
                       " "
                       FUNCTION TRIM(WS-LAST-NAME(WS-NETWORK-OTHER-IDX))
+                      " (University: "
+                      FUNCTION TRIM(WS-UNIVERSITY(WS-NETWORK-OTHER-IDX))
+                      ", Major: "
+                      FUNCTION TRIM(WS-MAJOR(WS-NETWORK-OTHER-IDX))
+                      ")"
                       DELIMITED BY SIZE INTO WS-OUTPUT-LINE
                END-STRING
            ELSE
-               STRING WS-NETWORK-DISP-COUNT
-                      ") "
+               STRING "Connected with: "
                       FUNCTION TRIM(WS-NETWORK-OTHER-USERNAME)
                       DELIMITED BY SIZE INTO WS-OUTPUT-LINE
                END-STRING
            END-IF
-
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
 *> *      *>*****************************************************************
