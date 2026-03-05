@@ -1958,7 +1958,7 @@ PROCEDURE DIVISION.
 *> *      *> Implements requirement to display AND preserve output         *
 *> *      *>*****************************************************************
        8000-WRITE-OUTPUT.
-           DISPLAY WS-OUTPUT-LINE.
+           DISPLAY FUNCTION TRIM(WS-OUTPUT-LINE TRAILING).
            WRITE OUTPUT-RECORD FROM WS-OUTPUT-LINE.
 
 *> *      *>*****************************************************************
