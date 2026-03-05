@@ -1,0 +1,11 @@
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=bob password=Bob123! with_profile=false
+
+# Alice searches for Bob who has no profile
+1       # Login
+alice
+Alice1!
+4       # Find someone you know
+Bob Jones   # Bob has no profile, search by name won't match
+8       # Logout
+3       # Exit

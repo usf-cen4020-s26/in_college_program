@@ -1,0 +1,13 @@
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=bob password=Bob123! first_name=Bob last_name=Jones university=UCF major=Math grad_year=2026
+
+# Alice finds Bob's profile but declines to send request
+1       # Login
+alice
+Alice1!
+4       # Find someone you know
+Bob Jones
+2       # Back to Main Menu (don't send request)
+5       # View pending requests (should be empty)
+8       # Logout
+3       # Exit

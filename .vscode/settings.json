@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.cob": "cobol",
+        "*.in.txt": "shellscript"
+    }
+}

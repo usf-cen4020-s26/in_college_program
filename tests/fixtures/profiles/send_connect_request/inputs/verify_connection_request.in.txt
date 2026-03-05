@@ -13,7 +13,7 @@ Computer Science
 I'm CS but I love other majors, only if they're engineering related.
 DONE
 DONE
-7
+8
 2
 UserA
 Pass123!
@@ -23,5 +23,5 @@ Pass123!
 4
 Mason Russell
 1
-7
+8
 3

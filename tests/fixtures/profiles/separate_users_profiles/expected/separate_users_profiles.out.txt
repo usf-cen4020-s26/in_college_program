@@ -37,8 +37,9 @@ You have successfully logged in
 4. Find someone you know
 5. View Pending Connection Requests
 6. Learn a new skill
-7. Logout
-Enter choice (1-7):
+7. View My Network
+8. Logout
+Enter choice (1-8):
 1
 
 === CREATE MY PROFILE ===
@@ -69,9 +70,10 @@ Profile saved successfully!
 4. Find someone you know
 5. View Pending Connection Requests
 6. Learn a new skill
-7. Logout
-Enter choice (1-7):
-7
+7. View My Network
+8. Logout
+Enter choice (1-8):
+8
 
 Please select an option:
 1. Login with existing account
@@ -108,8 +110,9 @@ You have successfully logged in
 4. Find someone you know
 5. View Pending Connection Requests
 6. Learn a new skill
-7. Logout
-Enter choice (1-7):
+7. View My Network
+8. Logout
+Enter choice (1-8):
 2
 
 You have not created a profile yet.
@@ -122,8 +125,9 @@ Please use 'Create/Edit My Profile' option first.
 4. Find someone you know
 5. View Pending Connection Requests
 6. Learn a new skill
-7. Logout
-Enter choice (1-7):
+7. View My Network
+8. Logout
+Enter choice (1-8):
 1
 
 === CREATE MY PROFILE ===
@@ -154,8 +158,9 @@ Profile saved successfully!
 4. Find someone you know
 5. View Pending Connection Requests
 6. Learn a new skill
-7. Logout
-Enter choice (1-7):
+7. View My Network
+8. Logout
+Enter choice (1-8):
 2
 
 === YOUR PROFILE ===
@@ -175,9 +180,10 @@ Education: None
 4. Find someone you know
 5. View Pending Connection Requests
 6. Learn a new skill
-7. Logout
-Enter choice (1-7):
-7
+7. View My Network
+8. Logout
+Enter choice (1-8):
+8
 
 Please select an option:
 1. Login with existing account

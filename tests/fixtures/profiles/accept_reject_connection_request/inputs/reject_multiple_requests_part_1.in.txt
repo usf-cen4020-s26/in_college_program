@@ -1,0 +1,55 @@
+2
+UserA
+Pass123!
+2
+UserB
+Pass123!
+2
+UserC
+Pass123!
+1
+UserA
+Pass123!
+1
+Victoria
+Kirkland
+USF
+Biomedical Engineering
+2027
+I love biomed and am passionate about engineering research.
+DONE
+DONE
+8
+1
+UserB
+Pass123!
+1
+Mason
+Russell
+UCF
+Computer Science
+2026
+I'm CS but I love other majors, only if they're engineering related.
+DONE
+DONE
+4
+Victoria Kirkland
+1
+8
+1
+UserC
+Pass123!
+1
+Carol
+Martinez
+UF
+Physics
+2027
+Quantum mechanics enthusiast.
+DONE
+DONE
+4
+Victoria Kirkland
+1
+8
+3

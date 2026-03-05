@@ -19,6 +19,9 @@ FILE-CONTROL.
      SELECT PENDING-FILE ASSIGN TO "PENDING.DAT"
          ORGANIZATION IS LINE SEQUENTIAL
          FILE STATUS IS WS-PENDING-STATUS.
+     SELECT CONNECTIONS-FILE ASSIGN TO "CONNECTIONS.DAT"
+         ORGANIZATION IS LINE SEQUENTIAL
+         FILE STATUS IS WS-CONNECTIONS-STATUS.
 DATA DIVISION.
 FILE SECTION.
 FD  INPUT-FILE.
@@ -58,6 +61,10 @@ FD  PENDING-FILE.
     05  PEND-SENDER-USERNAME     PIC X(20).
     05  PEND-RECIPIENT-USERNAME  PIC X(20).
     05  PEND-STATUS              PIC X(1).
+FD  CONNECTIONS-FILE.
+01  CONNECTION-REC.
+    05  CONN-USER-A            PIC X(20).
+    05  CONN-USER-B            PIC X(20).
 
 
 WORKING-STORAGE SECTION.
@@ -95,6 +102,8 @@ WORKING-STORAGE SECTION.
         10  WS-PEND-RECIPIENT-USERNAME  PIC X(20).
         10  WS-PEND-STATUS              PIC X(1).
 
+01  WS-CONNECTIONS-STATUS      PIC XX.
+
 01  WS-MAX-PENDING              PIC 99 VALUE 50.
 
 01  WS-ACCOUNT-COUNT            PIC 9 VALUE 0.
@@ -117,6 +126,8 @@ WORKING-STORAGE SECTION.
 
 01  WS-MENU-CHOICE              PIC X(2).
 01  WS-MAIN-MENU-CHOICE         PIC X(2).
+01  WS-SKIP-NEXT-MENU-READ      PIC X VALUE "N".
+01  WS-PRELOADED-MENU-CHOICE   PIC X(2).
 01  WS-SKILL-CHOICE             PIC X(2).
 
 01  WS-INPUT-STATUS             PIC XX.
@@ -127,6 +138,10 @@ WORKING-STORAGE SECTION.
 01  WS-PENDING-EOF              PIC X VALUE "N".
 01  WS-EOF-FLAG                 PIC 9 VALUE 0.
 01  WS-PROGRAM-RUNNING          PIC 9 VALUE 1.
+*> Input pushback: when set, 8100 returns buffered line instead of reading
+01  WS-INPUT-PUSHBACK-FLAG      PIC X VALUE "N".
+01  WS-INPUT-PUSHBACK-LINE      PIC X(200).
+01  WS-INPUT-PUSHBACK-TEMP     PIC X(200).
 
 01  WS-CURRENT-USER-INDEX       PIC 9 VALUE 0.
 01  WS-CURRENT-PROFILE-INDEX    PIC 9 VALUE 0.
@@ -193,6 +208,28 @@ WORKING-STORAGE SECTION.
 01  WS-VIEWREQ-SENDER-USERNAME   PIC x(20).
 01  WS-VIEWREQ-SENDER-IDX        PIC 9 VALUE 0.
 
+*> ===== View Pending Requests (VIEWREQ_SRC) working-storage =====
+01  WS-VIEWREQ-DISP-COUNT           PIC 99 VALUE 0.
+01  WS-VIEWREQ-MAP-TABLE.
+    05 WS-VIEWREQ-MAP-IDX           OCCURS 50 TIMES PIC 99 VALUE 0.
+01  WS-VIEWREQ-SELECTION            PIC 99 VALUE 0.
+01  WS-VIEWREQ-SELECTED-PEND-IDX    PIC 99 VALUE 0.
+01  WS-VIEWREQ-ACTION               PIC X VALUE SPACE.
+
+01  WS-CONNECTIONS-COUNT       PIC 99 VALUE 0.
+01  WS-CONNECTIONS-TABLE.
+    05  WS-CONNECTION-ENTRY OCCURS 50 TIMES.
+        10  WS-CONN-USER-A     PIC X(20).
+        10  WS-CONN-USER-B     PIC X(20).
+01  WS-MAX-CONNECTIONS         PIC 99 VALUE 50.
+01  WS-CONNECTIONS-EOF         PIC X VALUE "N".
+01  WS-CONN-IDX                PIC 99 VALUE 0.
+
+*> ===== Network List (VIEW NETWORK) working-storage =====
+01  WS-NETWORK-DISP-COUNT       PIC 99 VALUE 0.
+01  WS-NETWORK-FOUND-FLAG       PIC X VALUE "N".
+01  WS-NETWORK-OTHER-USERNAME   PIC X(20).
+01  WS-NETWORK-OTHER-IDX        PIC 9 VALUE 0.
 
 
 PROCEDURE DIVISION.
@@ -225,6 +262,7 @@ PROCEDURE DIVISION.
            PERFORM 1100-LOAD-ACCOUNTS.
            PERFORM 1150-LOAD-PROFILES.
            PERFORM 9200-LOAD-PENDING-REQUESTS.
+           PERFORM 9250-LOAD-CONNECTIONS.
 
            MOVE "========================================"
            TO WS-OUTPUT-LINE.
@@ -313,6 +351,54 @@ PROCEDURE DIVISION.
            *>    INTO WS-OUTPUT-LINE
            *> END-STRING
            *> PERFORM 8000-WRITE-OUTPUT.
+           EXIT.
+*>*****************************************************************
+*> 9250-LOAD-CONNECTIONS: Load established connections at startup
+*>*****************************************************************
+       9250-LOAD-CONNECTIONS.
+           MOVE 0 TO WS-CONNECTIONS-COUNT.
+           MOVE "N" TO WS-CONNECTIONS-EOF.
+
+           OPEN INPUT CONNECTIONS-FILE.
+
+           EVALUATE WS-CONNECTIONS-STATUS
+               WHEN "00"
+                   PERFORM 9260-READ-CONNECTIONS-LOOP
+                   CLOSE CONNECTIONS-FILE
+               WHEN "35"
+                   *> file not found: ok (no connections yet)
+                   MOVE 0 TO WS-CONNECTIONS-COUNT
+               WHEN OTHER
+                   MOVE SPACES TO WS-OUTPUT-LINE
+                   STRING "WARNING: Could not open CONNECTIONS.DAT. FILE STATUS = "
+                       WS-CONNECTIONS-STATUS
+                       DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+                   END-STRING
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE 0 TO WS-CONNECTIONS-COUNT
+           END-EVALUATE.
+           EXIT.
+
+*>*****************************************************************
+*> 9260-READ-CONNECTIONS-LOOP: Read CONNECTIONS.DAT into WS table
+*>*****************************************************************
+       9260-READ-CONNECTIONS-LOOP.
+           READ CONNECTIONS-FILE
+               AT END
+                   MOVE "Y" TO WS-CONNECTIONS-EOF
+               NOT AT END
+                   IF WS-CONNECTIONS-COUNT < WS-MAX-CONNECTIONS
+                       ADD 1 TO WS-CONNECTIONS-COUNT
+                       MOVE CONN-USER-A TO
+                           WS-CONN-USER-A(WS-CONNECTIONS-COUNT)
+                       MOVE CONN-USER-B TO
+                           WS-CONN-USER-B(WS-CONNECTIONS-COUNT)
+                   END-IF
+           END-READ.
+
+           IF WS-CONNECTIONS-EOF = "N"
+               PERFORM 9260-READ-CONNECTIONS-LOOP
+           END-IF.
            EXIT.
 
 *> *      *>*****************************************************************
@@ -428,14 +514,16 @@ PROCEDURE DIVISION.
            MOVE "Enter choice (1-3): " TO WS-OUTPUT-LINE.
            PERFORM 8000-WRITE-OUTPUT.
 
-           PERFORM 8100-READ-INPUT.
+           MOVE SPACES TO WS-MENU-CHOICE.
+           PERFORM UNTIL FUNCTION TRIM(WS-MENU-CHOICE) NOT = SPACES
+               PERFORM 8100-READ-INPUT
+               IF WS-EOF-FLAG = 1
+                   MOVE 0 TO WS-PROGRAM-RUNNING
+                   EXIT PARAGRAPH
+               END-IF
+               MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-MENU-CHOICE
+           END-PERFORM.
 
-           IF WS-EOF-FLAG = 1
-               MOVE 0 TO WS-PROGRAM-RUNNING
-               EXIT PARAGRAPH
-           END-IF
-
-           MOVE INPUT-RECORD TO WS-MENU-CHOICE.
            MOVE WS-MENU-CHOICE TO WS-OUTPUT-LINE.
            PERFORM 8000-WRITE-OUTPUT.
 
@@ -814,7 +902,7 @@ PROCEDURE DIVISION.
        5000-POST-LOGIN-MENU.
            MOVE "1" TO WS-MAIN-MENU-CHOICE.
 
-           PERFORM UNTIL WS-MAIN-MENU-CHOICE = "7"
+           PERFORM UNTIL WS-MAIN-MENU-CHOICE = "8"
            OR WS-PROGRAM-RUNNING = 0
                    MOVE " " TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
@@ -832,19 +920,25 @@ PROCEDURE DIVISION.
                    PERFORM 8000-WRITE-OUTPUT
                    MOVE "6. Learn a new skill" TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
-                   MOVE "7. Logout" TO WS-OUTPUT-LINE
+                   MOVE "7. View My Network" TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
-                   MOVE "Enter choice (1-7): " TO WS-OUTPUT-LINE
+                   MOVE "8. Logout" TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE "Enter choice (1-8): " TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
 
-                   PERFORM 8100-READ-INPUT
-
-                   IF WS-EOF-FLAG = 1
-                       MOVE 0 TO WS-PROGRAM-RUNNING
-                       EXIT PERFORM
+                   IF WS-SKIP-NEXT-MENU-READ = "Y"
+                       MOVE "N" TO WS-SKIP-NEXT-MENU-READ
+                       MOVE WS-PRELOADED-MENU-CHOICE TO WS-MAIN-MENU-CHOICE
+                   ELSE
+                       PERFORM 8100-READ-INPUT
+                       IF WS-EOF-FLAG = 1
+                           MOVE 0 TO WS-PROGRAM-RUNNING
+                           EXIT PERFORM
+                       END-IF
+                       MOVE FUNCTION TRIM(INPUT-RECORD)
+                           TO WS-MAIN-MENU-CHOICE
                    END-IF
-
-                   MOVE INPUT-RECORD TO WS-MAIN-MENU-CHOICE
                    MOVE WS-MAIN-MENU-CHOICE TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
 
@@ -863,6 +957,8 @@ PROCEDURE DIVISION.
                        WHEN "6"
                            PERFORM 6000-SKILLS-MENU
                        WHEN "7"
+                           PERFORM 7700-VIEW-NETWORK-LIST
+                       WHEN "8"
                            EXIT PERFORM
                        WHEN OTHER
                           MOVE "Invalid choice. Please try again."
@@ -1672,6 +1768,65 @@ PROCEDURE DIVISION.
                MOVE WS-TEMP-EDU-YEARS(WS-SAVE-INDEX) TO
                    WS-EDU-YEARS(WS-CURRENT-PROFILE-INDEX, WS-SAVE-INDEX)
            END-PERFORM.
+*>*****************************************************************
+*> 9400-ADD-CONNECTION
+*>   - Adds a new connection to memory + appends to CONNECTIONS.DAT
+*>   - Expects:
+*>       WS-USERNAME(WS-CURRENT-USER-INDEX)  = one side
+*>       WS-VIEWREQ-SENDER-USERNAME          = other side (from VIEWREQ flow)
+*>*****************************************************************
+       9400-ADD-CONNECTION.
+           IF WS-CONNECTIONS-COUNT >= WS-MAX-CONNECTIONS
+               MOVE "ERROR: Connections table is full." TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
+           END-IF
+
+           *> Increment and save to memory
+           ADD 1 TO WS-CONNECTIONS-COUNT
+
+           MOVE WS-USERNAME(WS-CURRENT-USER-INDEX)
+               TO WS-CONN-USER-A(WS-CONNECTIONS-COUNT)
+           MOVE WS-VIEWREQ-SENDER-USERNAME
+               TO WS-CONN-USER-B(WS-CONNECTIONS-COUNT)
+
+           *> Prepare file record
+           MOVE WS-CONN-USER-A(WS-CONNECTIONS-COUNT) TO CONN-USER-A
+           MOVE WS-CONN-USER-B(WS-CONNECTIONS-COUNT) TO CONN-USER-B
+
+           *> Append to file (create if missing)
+           OPEN EXTEND CONNECTIONS-FILE
+           IF WS-CONNECTIONS-STATUS = "35"
+               OPEN OUTPUT CONNECTIONS-FILE
+               CLOSE CONNECTIONS-FILE
+               OPEN EXTEND CONNECTIONS-FILE
+           END-IF
+
+           IF WS-CONNECTIONS-STATUS NOT = "00"
+               MOVE SPACES TO WS-OUTPUT-LINE
+               STRING "ERROR: Could not open CONNECTIONS.DAT for append. STATUS="
+                   WS-CONNECTIONS-STATUS
+                   DELIMITED BY SIZE
+                   INTO WS-OUTPUT-LINE
+               END-STRING
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
+           END-IF
+
+           WRITE CONNECTION-REC
+
+           IF WS-CONNECTIONS-STATUS NOT = "00"
+               MOVE SPACES TO WS-OUTPUT-LINE
+               STRING "ERROR: Could not write to CONNECTIONS.DAT. STATUS="
+                   WS-CONNECTIONS-STATUS
+                   DELIMITED BY SIZE
+                   INTO WS-OUTPUT-LINE
+               END-STRING
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF
+
+           CLOSE CONNECTIONS-FILE
+           EXIT.
         *>*****************************************************************
       *> 9300-WRITE-PENDING-REQUEST
       *>   - Adds a new pending request to memory + appends to PENDING.DAT
@@ -1738,29 +1893,214 @@ PROCEDURE DIVISION.
 
            CLOSE PENDING-FILE
            EXIT.
+
+      *>*****************************************************************
+      *> Remove one pending request from the table and rewrite the file.
+      *> Used after the user accepts or rejects a request so that
+      *> the processed request is no longer kept in the pending list.
+      *>*****************************************************************
+       9305-REMOVE-PENDING-ENTRY.
+           IF WS-VIEWREQ-SELECTED-PEND-IDX < 1
+              OR WS-VIEWREQ-SELECTED-PEND-IDX > WS-PENDING-COUNT
+               EXIT PARAGRAPH
+           END-IF
+           *> Shift entries above the removed one down by one
+           MOVE WS-VIEWREQ-SELECTED-PEND-IDX TO WS-PEND-IDX
+           ADD 1 TO WS-PEND-IDX
+           PERFORM UNTIL WS-PEND-IDX > WS-PENDING-COUNT
+               MOVE WS-PEND-SENDER-USERNAME(WS-PEND-IDX)
+                   TO WS-PEND-SENDER-USERNAME(WS-PEND-IDX - 1)
+               MOVE WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX)
+                   TO WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX - 1)
+               MOVE WS-PEND-STATUS(WS-PEND-IDX)
+                   TO WS-PEND-STATUS(WS-PEND-IDX - 1)
+               ADD 1 TO WS-PEND-IDX
+           END-PERFORM
+           SUBTRACT 1 FROM WS-PENDING-COUNT
+           PERFORM 9310-REWRITE-PENDING-FILE
+           EXIT.
+
+                 *>*****************************************************************
+      *> 9310-REWRITE-PENDING-FILE
+      *>   - Rewrites entire PENDING.DAT from WS-PENDING-TABLE
+      *>*****************************************************************
+       9310-REWRITE-PENDING-FILE.
+           OPEN OUTPUT PENDING-FILE
+
+           IF WS-PENDING-STATUS NOT = "00"
+               MOVE SPACES TO WS-OUTPUT-LINE
+               STRING "ERROR: Could not open PENDING.DAT for rewrite. STATUS="
+                   WS-PENDING-STATUS
+                   DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+               END-STRING
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
+           END-IF
+
+           PERFORM VARYING WS-PEND-IDX FROM 1 BY 1
+               UNTIL WS-PEND-IDX > WS-PENDING-COUNT
+
+               *> write all requests (P/A/R) as-is
+               MOVE WS-PEND-SENDER-USERNAME(WS-PEND-IDX)
+                   TO PEND-SENDER-USERNAME
+               MOVE WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX)
+                   TO PEND-RECIPIENT-USERNAME
+               MOVE WS-PEND-STATUS(WS-PEND-IDX)
+                   TO PEND-STATUS
+
+               WRITE PENDING-REC
+           END-PERFORM
+
+           CLOSE PENDING-FILE
+           EXIT.
 *> *      *>*****************************************************************
 *> *      *> 8000-WRITE-OUTPUT: Output to both screen and file             *
 *> *      *> Implements requirement to display AND preserve output         *
 *> *      *>*****************************************************************
        8000-WRITE-OUTPUT.
-           DISPLAY WS-OUTPUT-LINE.
+           DISPLAY FUNCTION TRIM(WS-OUTPUT-LINE TRAILING).
            WRITE OUTPUT-RECORD FROM WS-OUTPUT-LINE.
 
 *> *      *>*****************************************************************
-*> *      *> 8100-READ-INPUT: Read from input file                         *
-*> *      *> Implements requirement to read input from file                *
+*> *      *> 8100-READ-INPUT: Read from input file (or pushback buffer)   *
 *> *      *>*****************************************************************
        8100-READ-INPUT.
+           IF WS-INPUT-PUSHBACK-FLAG = "Y"
+               MOVE WS-INPUT-PUSHBACK-LINE TO INPUT-RECORD
+               MOVE "N" TO WS-INPUT-PUSHBACK-FLAG
+               MOVE 0 TO WS-EOF-FLAG
+               EXIT
+           END-IF.
            READ INPUT-FILE
                AT END
                    MOVE 1 to WS-EOF-FLAG
                    MOVE SPACES TO INPUT-RECORD
            END-READ.
            EXIT.
+*> *      *> 8105-PUSHBACK-INPUT: Put a line back for next 8100-READ-INPUT *
+*> *      *> Normalize CR/LF to space so comparison with "8" etc. works.   *
+       8105-PUSHBACK-INPUT.
+           MOVE INPUT-RECORD TO WS-INPUT-PUSHBACK-LINE
+           INSPECT WS-INPUT-PUSHBACK-LINE
+               REPLACING ALL X"0D" BY SPACE
+                         ALL X"0A" BY SPACE
+           MOVE FUNCTION TRIM(WS-INPUT-PUSHBACK-LINE)
+               TO WS-INPUT-PUSHBACK-TEMP
+           MOVE WS-INPUT-PUSHBACK-TEMP TO WS-INPUT-PUSHBACK-LINE
+           MOVE "Y" TO WS-INPUT-PUSHBACK-FLAG
+           EXIT.
 
         COPY "src/SENDREQ_SRC.cpy".
+      *>*****************************************************************
+      *> Echo view-pending user input to OUTPUT.TXT so the request number
+      *> and Accept/Reject choice appear in the log (screen and file in sync).
+      *>*****************************************************************
+       7528-ECHO-REQUEST-INPUT.
+           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
+           EXIT.
+       7529-ECHO-ACCEPT-REJECT-INPUT.
+           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
+           EXIT.
         COPY "src/VIEWREQ_SRC.cpy".
+*>*****************************************************************
+*> 7700-VIEW-NETWORK-LIST
+*>   - Displays all accepted connections for the current user
+*>   - Uses WS-CONNECTIONS-TABLE loaded at startup (9250)
+*>   - Prints First/Last if profile exists, otherwise prints username
+*>   - All output via 8000-WRITE-OUTPUT, input via 8100-READ-INPUT
+*>*****************************************************************
+       7700-VIEW-NETWORK-LIST.
+           MOVE "=== MY NETWORK ===" TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
 
+           MOVE 0   TO WS-NETWORK-DISP-COUNT
+           MOVE "N" TO WS-NETWORK-FOUND-FLAG
+
+           IF WS-CONNECTIONS-COUNT = 0
+               MOVE "You have no connections in your network yet."
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "-----------------------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
+           END-IF
+
+           PERFORM VARYING WS-CONN-IDX FROM 1 BY 1
+               UNTIL WS-CONN-IDX > WS-CONNECTIONS-COUNT
+               IF FUNCTION TRIM(WS-CONN-USER-A(WS-CONN-IDX))
+                    = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
+                   MOVE WS-CONN-USER-B(WS-CONN-IDX)
+                       TO WS-NETWORK-OTHER-USERNAME
+                   PERFORM 7710-PRINT-ONE-NETWORK-LINE
+               ELSE
+                   IF FUNCTION TRIM(WS-CONN-USER-B(WS-CONN-IDX))
+                        = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
+                       MOVE WS-CONN-USER-A(WS-CONN-IDX)
+                           TO WS-NETWORK-OTHER-USERNAME
+                       PERFORM 7710-PRINT-ONE-NETWORK-LINE
+                   END-IF
+               END-IF
+           END-PERFORM
+
+           IF WS-NETWORK-FOUND-FLAG = "N"
+               MOVE "You have no connections in your network yet."
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "-----------------------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
+           END-IF
+
+           *> One connection: 35 dashes. Multiple: 20 dashes.
+           IF WS-NETWORK-DISP-COUNT = 1
+               MOVE "-----------------------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           ELSE
+               MOVE "--------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF
+           EXIT.
+
+*>*****************************************************************
+*> 7710-PRINT-ONE-NETWORK-LINE
+*>   - "Connected with: First Last (University: X, Major: Y)" or "Connected with: username"
+*>*****************************************************************
+       7710-PRINT-ONE-NETWORK-LINE.
+           MOVE "Y" TO WS-NETWORK-FOUND-FLAG
+           ADD 1 TO WS-NETWORK-DISP-COUNT
+           MOVE 0 TO WS-NETWORK-OTHER-IDX
+           PERFORM VARYING WS-ACCOUNT-INDEX FROM 1 BY 1
+               UNTIL WS-ACCOUNT-INDEX > WS-PROFILE-COUNT
+                  OR WS-NETWORK-OTHER-IDX > 0
+               IF FUNCTION TRIM(WS-PROF-USERNAME(WS-ACCOUNT-INDEX))
+                    = FUNCTION TRIM(WS-NETWORK-OTHER-USERNAME)
+                  AND WS-HAS-PROFILE(WS-ACCOUNT-INDEX) = 1
+                   MOVE WS-ACCOUNT-INDEX TO WS-NETWORK-OTHER-IDX
+               END-IF
+           END-PERFORM
+           MOVE SPACES TO WS-OUTPUT-LINE
+           IF WS-NETWORK-OTHER-IDX > 0
+               STRING "Connected with: "
+                      FUNCTION TRIM(WS-FIRST-NAME(WS-NETWORK-OTHER-IDX))
+                      " "
+                      FUNCTION TRIM(WS-LAST-NAME(WS-NETWORK-OTHER-IDX))
+                      " (University: "
+                      FUNCTION TRIM(WS-UNIVERSITY(WS-NETWORK-OTHER-IDX))
+                      ", Major: "
+                      FUNCTION TRIM(WS-MAJOR(WS-NETWORK-OTHER-IDX))
+                      ")"
+                      DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+               END-STRING
+           ELSE
+               STRING "Connected with: "
+                      FUNCTION TRIM(WS-NETWORK-OTHER-USERNAME)
+                      DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+               END-STRING
+           END-IF
+           PERFORM 8000-WRITE-OUTPUT
+           EXIT.
 *> *      *>*****************************************************************
 *> *      *> 9000-TERMINATE: Cleanup and close files                       *
 *> *      *>*****************************************************************

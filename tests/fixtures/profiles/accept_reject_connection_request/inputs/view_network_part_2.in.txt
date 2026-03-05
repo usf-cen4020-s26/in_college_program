@@ -1,0 +1,17 @@
+# Login to user 5 and then accept all network requests (users 1-4)
+1
+user5
+User5!
+7 # View network (empty)
+5
+1 # Accept user 1's request
+7 # View network (user 1 should be in network)
+5
+1 # Accept user 2's request
+7 # View network (users 1 and 2 should be in network)
+5
+1 # Accept user 3's request
+7 # View network (users 1-3 should be in network)
+5
+1 # Accept user 4's request
+7 # View network (users 1-4 should be in network)

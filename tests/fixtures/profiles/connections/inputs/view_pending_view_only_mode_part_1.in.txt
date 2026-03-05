@@ -1,0 +1,12 @@
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=bob password=Bob123! first_name=Bob last_name=Jones university=UCF major=Math grad_year=2026
+
+# Bob sends request to Alice
+1       # Login
+bob
+Bob123!
+4       # Find someone you know
+Alice Smith
+1       # Send connection request
+8       # Logout
+3       # Exit

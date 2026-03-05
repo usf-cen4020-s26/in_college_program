@@ -3,6 +3,7 @@
 ## Overview
 
 The InCollege test infrastructure provides automated testing for the COBOL application with support for:
+
 - Single-part tests (one execution)
 - Multi-part tests (multiple executions with persistent state)
 - Detailed diff reporting
@@ -26,6 +27,7 @@ The easiest way to run all tests is using the provided shell script:
 ```
 
 The script will:
+
 1. Compile the COBOL program if needed
 2. Discover and run all test categories in `tests/fixtures/`
 3. Display results for each category separately
@@ -53,6 +55,189 @@ Each test consists of two files:
 1. **Input file** (`inputs/test_name.in.txt`): Contains the user inputs
 2. **Expected output file** (`expected/test_name.out.txt`): Contains the expected program output
 
+## Seed Macros (Pre-Made Users)
+
+You can define test setup macros at the top of an input file to pre-create users before the test runs.
+This lets test inputs focus on the behavior being tested instead of repeating account/profile setup flows.
+
+### Macro Format
+
+Use one `@seed_user` directive per user at the top of `*.in.txt`:
+
+```text
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=bob password=BobPass1! first_name=Bob last_name=Jones university=UF major=Math grad_year=2026 about_me="Enjoys systems programming"
+
+1
+alice
+Alice1!
+8
+```
+
+You can also write directives as comments:
+
+```text
+# @seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+```
+
+### Supported Parameters
+
+- `username` (required, max 20 chars)
+- `password` (required, max 12 chars)
+- `with_profile` (optional, default `true`)
+- `first_name` (required when `with_profile=true`)
+- `last_name` (required when `with_profile=true`)
+- `university` (required when `with_profile=true`)
+- `major` (required when `with_profile=true`)
+- `grad_year` (required when `with_profile=true`, must be 4 digits)
+- `about_me` (optional)
+
+### Behavior Notes
+
+- Directives are only parsed at the **top of the input file**.
+- Macro lines are removed before the test input is sent to the COBOL executable.
+- Seeded users are persisted in `ACCOUNTS.DAT` and (if profile enabled) `PROFILES.DAT` before each test part runs.
+- Existing seeded usernames are updated (upsert behavior).
+- Seeding still respects the 5-account limit and will fail with a clear error if exceeded.
+
+### 10 Blank Template Users (Copy/Paste)
+
+Use these as blank templates. Replace placeholder values inside `<...>` with your test data.
+
+```text
+@seed_user username=<USER01> password=<PASS01> first_name=<FIRST01> last_name=<LAST01> university=<UNIV01> major=<MAJOR01> grad_year=<YEAR01> about_me="<ABOUT01>"
+@seed_user username=<USER02> password=<PASS02> first_name=<FIRST02> last_name=<LAST02> university=<UNIV02> major=<MAJOR02> grad_year=<YEAR02> about_me="<ABOUT02>"
+@seed_user username=<USER03> password=<PASS03> first_name=<FIRST03> last_name=<LAST03> university=<UNIV03> major=<MAJOR03> grad_year=<YEAR03> about_me="<ABOUT03>"
+@seed_user username=<USER04> password=<PASS04> first_name=<FIRST04> last_name=<LAST04> university=<UNIV04> major=<MAJOR04> grad_year=<YEAR04> about_me="<ABOUT04>"
+@seed_user username=<USER05> password=<PASS05> first_name=<FIRST05> last_name=<LAST05> university=<UNIV05> major=<MAJOR05> grad_year=<YEAR05> about_me="<ABOUT05>"
+@seed_user username=<USER06> password=<PASS06> first_name=<FIRST06> last_name=<LAST06> university=<UNIV06> major=<MAJOR06> grad_year=<YEAR06> about_me="<ABOUT06>"
+@seed_user username=<USER07> password=<PASS07> first_name=<FIRST07> last_name=<LAST07> university=<UNIV07> major=<MAJOR07> grad_year=<YEAR07> about_me="<ABOUT07>"
+@seed_user username=<USER08> password=<PASS08> first_name=<FIRST08> last_name=<LAST08> university=<UNIV08> major=<MAJOR08> grad_year=<YEAR08> about_me="<ABOUT08>"
+@seed_user username=<USER09> password=<PASS09> first_name=<FIRST09> last_name=<LAST09> university=<UNIV09> major=<MAJOR09> grad_year=<YEAR09> about_me="<ABOUT09>"
+@seed_user username=<USER10> password=<PASS10> first_name=<FIRST10> last_name=<LAST10> university=<UNIV10> major=<MAJOR10> grad_year=<YEAR10> about_me="<ABOUT10>"
+```
+
+Notes:
+
+- You can keep this template in a scratch file and copy only the users you need.
+- Because the app allows max 5 accounts, only seed up to 5 distinct usernames in one persistence context.
+- Keep `username` <= 20 chars and `password` <= 12 chars.
+
+### Macro Usage Examples in Real Tests
+
+#### Example A: Login test with pre-seeded account
+
+```text
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+
+1
+alice
+Alice1!
+8
+```
+
+#### Example B: Search test with two discoverable profiles
+
+```text
+@seed_user username=anna1 password=AnnaPass1! first_name=Anna last_name=Park university=USF major=IT grad_year=2026
+@seed_user username=brian1 password=Brian1! first_name=Brian last_name=Cook university=UF major=Math grad_year=2025
+
+1
+anna1
+AnnaPass1!
+4
+Brian Cook
+2
+8
+```
+
+#### Example C: User without profile (force "create profile first" flows)
+
+```text
+@seed_user username=justacct password=Acct1! with_profile=false
+
+1
+justacct
+Acct1!
+2
+8
+```
+
+#### Example D: Multi-part test where only part 1 seeds data
+
+`connection_flow_part_1.in.txt`
+
+```text
+@seed_user username=req1 password=ReqPass1! first_name=Request last_name=Sender university=USF major=CS grad_year=2027
+@seed_user username=rec1 password=RecPass1! first_name=Request last_name=Receiver university=USF major=CS grad_year=2027
+
+1
+req1
+ReqPass1!
+...
+8
+```
+
+`connection_flow_part_2.in.txt`
+
+```text
+1
+rec1
+RecPass1!
+...
+8
+```
+
+#### Example E: Upsert/update seeded user in a later part
+
+`profile_refresh_part_1.in.txt`
+
+```text
+@seed_user username=sam1 password=SamPass1! first_name=Sam last_name=Lee university=USF major=CS grad_year=2026 about_me="Initial bio"
+
+1
+sam1
+SamPass1!
+8
+```
+
+`profile_refresh_part_2.in.txt`
+
+```text
+@seed_user username=sam1 password=SamPass1! first_name=Sam last_name=Lee university=USF major=CS grad_year=2026 about_me="Updated bio"
+
+1
+sam1
+SamPass1!
+2
+8
+```
+
+## Inline Comments
+
+You can add `#` comments to input files to document what each line does. Comments are stripped before the input is fed to the program.
+
+### Syntax
+
+```text
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+
+1        # Log in
+alice    # Username
+Alice1!  # Password
+4        # Search for user
+Bob Jones # Search query
+8        # Log out
+```
+
+- `#` preceded by whitespace (or at column 0) starts a comment — everything after it is removed.
+- Whole-line comments (lines with only a comment) are removed entirely.
+- Use `\#` to produce a literal `#` in the input if needed.
+
+### VS Code Highlighting
+
+The `.vscode/settings.json` maps `*.in.txt` to `shellscript`, so `#` comments render with your theme's comment color automatically.
+
 ## Multi-Part Tests
 
 ### What Are Multi-Part Tests?
@@ -62,6 +247,7 @@ Multi-part tests verify persistence across multiple program executions. They tes
 ### Naming Convention
 
 Multi-part test files end with `_part_N` where N is the part number:
+
 - `test_name_part_1.in.txt` → First execution
 - `test_name_part_2.in.txt` → Second execution
 - `test_name_part_3.in.txt` → Third execution (if needed)
@@ -81,6 +267,7 @@ Multi-part test files end with `_part_N` where N is the part number:
 ### Example: Persistence Test
 
 **Part 1** (`persistence_input_part_1.in.txt`):
+
 ```
 1          # Create new account
 PersistUser1
@@ -89,6 +276,7 @@ Persist1!
 ```
 
 **Part 2** (`persistence_input_part_2.in.txt`):
+
 ```
 2          # Log in (account should exist from Part 1)
 PersistUser1
@@ -107,6 +295,7 @@ Persist1!
 ```
 
 **Options:**
+
 - `--verbose`, `-v`: Print detailed output including full expected/actual outputs
 - `--report`, `-r`: Generate JSON report at `test-report.json`
 
@@ -117,13 +306,19 @@ python3 tests/test_runner.py <executable> [options]
 ```
 
 **Arguments:**
+
 - `executable`: Path to compiled COBOL program (e.g., `bin/main`)
 
 **Options:**
+
 - `--test-root PATH`: Root directory for tests. Can be `tests/fixtures` for all tests or a specific category like `tests/fixtures/login`
+- `--input-file PATH`: Run exactly one input fixture file (`*.in.txt`)
+- `--expected-file PATH`: Expected output for `--input-file` mode (optional, auto-derived if omitted)
 - `--verbose`, `-v`: Print detailed output including full expected/actual outputs
 - `--report PATH`: Generate JSON report at specified path
 - `--timeout SECONDS`: Maximum execution time per test (default: 10)
+- `--dump-output PATH`: Write actual outputs to PATH as `*.actual.out.txt`
+- `--dump-only`: Skip expected-output diff checks and only execute + dump outputs
 
 ### Examples
 
@@ -145,7 +340,30 @@ python3 tests/test_runner.py bin/main --test-root tests/fixtures/main_menu --ver
 
 # Generate JSON report
 python3 tests/test_runner.py bin/main --report results.json
+
+# Dump actual outputs while still comparing diffs
+python3 tests/test_runner.py bin/main --test-root tests/fixtures/profiles --dump-output test-dumps
+
+# Dump-only mode (no diff checking), useful when creating new expected outputs
+python3 tests/test_runner.py bin/main --test-root tests/fixtures/seeding --dump-only --dump-output test-dumps
+
+# Run exactly one fixture (auto-derive expected path)
+python3 tests/test_runner.py bin/main --input-file tests/fixtures/login/1_existing_account/inputs/successful_login.in.txt
+
+# Run exactly one fixture without expected file and dump actual output
+python3 tests/test_runner.py bin/main --input-file tests/fixtures/profiles/accept_reject_connection_request/inputs/reject_multiple_requests_part_1.in.txt --dump-only --dump-output test-dumps
 ```
+
+### Dump Output Behavior
+
+- Dump files preserve fixture structure relative to `--test-root`.
+- Input path segment `inputs/` is replaced with `actual/` in the dump folder.
+- Output names use `.actual.out.txt` suffix.
+
+Example:
+
+- Input: `tests/fixtures/profiles/search/inputs/find_user.in.txt`
+- Dump: `test-dumps/profiles/search/actual/find_user.actual.out.txt`
 
 ### Exit Codes
 
@@ -176,6 +394,7 @@ python3 tests/test_runner.py bin/main --report results.json
 ```
 
 **Color Coding:**
+
 - **Green lines** (starting with `+`): Present in actual but not expected
 - **Red lines** (starting with `-`): Present in expected but not actual
 - **Blue lines** (starting with `@@`): Line number context
@@ -214,6 +433,7 @@ nano tests/fixtures/login/2_new_account/inputs/my_new_test.in.txt
 ```
 
 Add the test inputs:
+
 ```
 2
 TestUser
@@ -284,6 +504,7 @@ The test runner integrates with GitHub Actions for automated testing.
 ### Viewing Results
 
 After workflow execution:
+
 1. Go to **Actions** tab in GitHub
 2. Click on the workflow run
 3. View **Summary** for quick results
@@ -373,6 +594,7 @@ pip install -r requirements.txt
 ### Persistence Management
 
 The test runner manages persistence by:
+
 - Creating a temporary directory for each test run
 - Setting `INCOLLEGE_DATA_DIR` environment variable
 - Running COBOL program in this directory
@@ -382,6 +604,7 @@ The test runner manages persistence by:
 ### Diff Algorithm
 
 Uses Python's `difflib.unified_diff` to generate diffs:
+
 - Shows line-by-line differences
 - Provides context around changes
 - Uses unified diff format (same as `diff -u`)
@@ -390,6 +613,7 @@ Uses Python's `difflib.unified_diff` to generate diffs:
 ### Test Discovery
 
 The test runner automatically:
+
 1. Scans the test root directory recursively
 2. Finds all `*.in.txt` files in `inputs/` directories
 3. Matches them with corresponding files in `expected/`
@@ -399,6 +623,7 @@ The test runner automatically:
 ### Type Safety
 
 The test runner uses Python type hints throughout:
+
 - All functions have type annotations
 - Uses `dataclass` for structured data
 - Employs `Enum` for status values
@@ -407,6 +632,7 @@ The test runner uses Python type hints throughout:
 ## Support
 
 For issues or questions:
+
 1. Check this documentation
 2. Review the test runner source code (`tests/test_runner.py`)
 3. Check GitHub Actions logs for CI failures
