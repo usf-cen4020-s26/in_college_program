@@ -79,6 +79,34 @@
        7640-CHECK-EXISTING-REQUEST.
            MOVE 1 TO WS-VALID
 
+           *> Check if already connected via CONNECTIONS table
+           PERFORM VARYING WS-CONN-IDX FROM 1 BY 1
+               UNTIL WS-CONN-IDX > WS-CONNECTIONS-COUNT
+
+               IF (FUNCTION TRIM(WS-CONN-USER-A(WS-CONN-IDX))
+                    = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
+                   AND FUNCTION TRIM(WS-CONN-USER-B(WS-CONN-IDX))
+                    = FUNCTION TRIM(
+                        WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX)))
+                  OR
+                  (FUNCTION TRIM(WS-CONN-USER-A(WS-CONN-IDX))
+                    = FUNCTION TRIM(
+                        WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX))
+                   AND FUNCTION TRIM(WS-CONN-USER-B(WS-CONN-IDX))
+                    = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX)))
+
+                   MOVE "You are already connected with this user."
+                       TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE 0 TO WS-VALID
+                   EXIT PERFORM
+               END-IF
+           END-PERFORM
+
+           IF WS-VALID = 0
+               EXIT PARAGRAPH
+           END-IF
+
            PERFORM VARYING WS-PEND-IDX FROM 1 BY 1
                UNTIL WS-PEND-IDX > WS-PENDING-COUNT
 
@@ -110,25 +138,9 @@
                    EXIT PERFORM
                END-IF
 
-               *> Check if already connected (bidirectional with status "A")
-               IF (FUNCTION TRIM(WS-PEND-SENDER-USERNAME(WS-PEND-IDX))
-                    = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
-                   AND FUNCTION TRIM(WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX))
-                    = FUNCTION TRIM(WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX))
-                   AND WS-PEND-STATUS(WS-PEND-IDX) = "A")
-                  OR
-                  (FUNCTION TRIM(WS-PEND-SENDER-USERNAME(WS-PEND-IDX))
-                    = FUNCTION TRIM(WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX))
-                   AND FUNCTION TRIM(WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX))
-                    = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
-                   AND WS-PEND-STATUS(WS-PEND-IDX) = "A")
-
-                   MOVE "You are already connected with this user."
-                       TO WS-OUTPUT-LINE
-                   PERFORM 8000-WRITE-OUTPUT
-                   MOVE 0 TO WS-VALID
-                   EXIT PERFORM
-               END-IF
+               *> (Connection check now handled above via
+               *>  WS-CONNECTIONS-TABLE instead of pending "A" status)
+               CONTINUE
            END-PERFORM
            EXIT.
 

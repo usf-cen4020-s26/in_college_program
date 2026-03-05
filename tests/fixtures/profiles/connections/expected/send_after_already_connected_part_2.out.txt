@@ -45,7 +45,7 @@ Education: None
 2. Back to Main Menu
 Enter your choice:
 1
-Connection request sent!
+You are already connected with this user.
 
 === MAIN MENU ===
 1. Create/Edit My Profile
