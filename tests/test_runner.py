@@ -17,7 +17,6 @@ from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-
 ACCOUNT_USERNAME_WIDTH = 20
 ACCOUNT_PASSWORD_WIDTH = 12
 ACCOUNT_RECORD_WIDTH = ACCOUNT_USERNAME_WIDTH + ACCOUNT_PASSWORD_WIDTH
@@ -409,7 +408,8 @@ class CobolTestRunner:
                 )
 
         updated_accounts = [
-            (username, account_password_by_username[username]) for username in account_order
+            (username, account_password_by_username[username])
+            for username in account_order
         ]
 
         updated_profiles = [
@@ -804,9 +804,11 @@ def preprocess_input_file(input_file: Path) -> Tuple[str, List[SeedUserMacro]]:
     for index, line in enumerate(lines):
         stripped = line.strip()
 
-        is_seed_directive = stripped.startswith("@seed_user") or stripped.startswith(
-            "# @seed_user"
-        ) or stripped.startswith("#@seed_user")
+        is_seed_directive = (
+            stripped.startswith("@seed_user")
+            or stripped.startswith("# @seed_user")
+            or stripped.startswith("#@seed_user")
+        )
 
         if is_seed_directive:
             seed_users.append(_parse_seed_user_macro(stripped))
@@ -834,7 +836,9 @@ def preprocess_input_file(input_file: Path) -> Tuple[str, List[SeedUserMacro]]:
     return executable_input, seed_users
 
 
-def build_dump_output_path(dump_root: Path, test_root: Path, test_case: TestCase) -> Path:
+def build_dump_output_path(
+    dump_root: Path, test_root: Path, test_case: TestCase
+) -> Path:
     """Build a deterministic output dump path for one test case."""
     rel_input = test_case.input_file.relative_to(test_root)
     rel_parts = list(rel_input.parts)
@@ -1181,7 +1185,9 @@ def run_test_suite(
                 )
 
             if dump_output_dir and result.status != TestStatus.ERROR:
-                dump_path = build_dump_output_path(dump_output_dir, test_root, test_case)
+                dump_path = build_dump_output_path(
+                    dump_output_dir, test_root, test_case
+                )
                 dump_path.parent.mkdir(parents=True, exist_ok=True)
                 dump_path.write_text(result.actual_output)
 
@@ -1350,7 +1356,9 @@ def main() -> int:
         return 1
 
     if args.input_file and not args.input_file.exists():
-        print(f"Error: Input fixture file not found: {args.input_file}", file=sys.stderr)
+        print(
+            f"Error: Input fixture file not found: {args.input_file}", file=sys.stderr
+        )
         return 1
 
     if not args.input_file and not args.test_root.exists():
