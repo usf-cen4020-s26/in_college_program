@@ -339,7 +339,7 @@ python3 tests/test_runner.py bin/main --test-root tests/fixtures/seeding --dump-
 python3 tests/test_runner.py bin/main --input-file tests/fixtures/login/1_existing_account/inputs/successful_login.in.txt
 
 # Run exactly one fixture without expected file and dump actual output
-python3 tests/test_runner.py bin/main --input-file tests/fixtures/profiles/accept_reject_connection_request/inputs/deny_multiple_requests_part_1.in.txt --dump-only --dump-output test-dumps
+python3 tests/test_runner.py bin/main --input-file tests/fixtures/profiles/accept_reject_connection_request/inputs/reject_multiple_requests_part_1.in.txt --dump-only --dump-output test-dumps
 ```
 
 ### Dump Output Behavior
