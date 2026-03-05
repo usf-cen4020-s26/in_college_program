@@ -204,12 +204,21 @@
       *> "Connection request from X rejected!"
        7526-PRINT-REJECTED-CONFIRMATION.
            MOVE SPACES TO WS-OUTPUT-LINE
-           STRING "Connection request from "
-                  FUNCTION TRIM(WS-VIEWREQ-SENDER-USERNAME)
-                  " rejected!"
-                  DELIMITED BY SIZE
-                  INTO WS-OUTPUT-LINE
-           END-STRING
+           IF WS-VIEWREQ-SENDER-IDX > 0
+               STRING "Connection request from "
+                   FUNCTION TRIM(WS-FIRST-NAME(WS-VIEWREQ-SENDER-IDX))
+                   " "
+                   FUNCTION TRIM(WS-LAST-NAME(WS-VIEWREQ-SENDER-IDX))
+                   " rejected!"
+                   DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+               END-STRING
+           ELSE
+               STRING "Connection request from "
+                   FUNCTION TRIM(WS-VIEWREQ-SENDER-USERNAME)
+                   " rejected!"
+                   DELIMITED BY SIZE INTO WS-OUTPUT-LINE
+               END-STRING
+           END-IF
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
       *> Finds sender name in profiles by username and prints it (one line: "First Last" or "(Unknown user: X)")

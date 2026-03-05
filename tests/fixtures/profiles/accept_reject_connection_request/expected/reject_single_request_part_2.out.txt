@@ -28,11 +28,11 @@ You have successfully logged in
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-Request from: UserB
+Request from: Mason Russell
 1. Accept
 2. Reject
-Enter your choice for UserB:
-Connection request rejected.
+Enter your choice for Mason Russell:
+Connection request from Mason Russell rejected!
 -----------------------------------
 
 === MAIN MENU ===

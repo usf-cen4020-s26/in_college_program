@@ -28,11 +28,11 @@ You have successfully logged in
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-Request from: user2
+Request from: Bob Jones
 1. Accept
 2. Reject
-Enter your choice for user2:
-Connection request from user2 accepted!
+Enter your choice for Bob Jones:
+Connection request from Bob Jones accepted!
 -----------------------------------
 
 === MAIN MENU ===
@@ -47,11 +47,11 @@ Connection request from user2 accepted!
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-Request from: user3
+Request from: Carol Davis
 1. Accept
 2. Reject
-Enter your choice for user3:
-Connection request from user3 rejected!
+Enter your choice for Carol Davis:
+Connection request from Carol Davis rejected!
 -----------------------------------
 
 === MAIN MENU ===
@@ -65,10 +65,10 @@ Connection request from user3 rejected!
 8. Logout
 Enter choice (1-8):
 7
-
 === MY NETWORK ===
 Connected with: Bob Jones (University: UCF, Major: Math)
---------------------
+-----------------------------------
+Press Enter to go back.
 
 === MAIN MENU ===
 1. Create/Edit My Profile
