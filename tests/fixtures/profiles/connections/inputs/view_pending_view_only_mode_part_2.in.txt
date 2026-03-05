@@ -1,0 +1,8 @@
+# Alice views pending requests but the next input (8) triggers view-only mode
+# The 8 gets consumed as logout after displaying the pending list
+1       # Login as alice
+alice
+Alice1!
+5       # View pending requests
+8       # This is peeked: not 1 or 2, so view-only mode; then used as menu choice = logout
+3       # Exit

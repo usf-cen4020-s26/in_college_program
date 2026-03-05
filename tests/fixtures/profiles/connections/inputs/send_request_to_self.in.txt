@@ -1,0 +1,10 @@
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+
+1       # Login as alice
+alice
+Alice1!
+4       # Find someone you know
+Alice Smith   # Search for herself
+1       # Send connection request to self
+8       # Logout
+3       # Exit

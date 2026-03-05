@@ -1,0 +1,9 @@
+# After rejection, Bob sends a new request to Alice (should succeed)
+1       # Login as bob
+bob
+Bob123!
+4       # Find someone you know
+Alice Smith
+1       # Send connection request again
+8       # Logout
+3       # Exit

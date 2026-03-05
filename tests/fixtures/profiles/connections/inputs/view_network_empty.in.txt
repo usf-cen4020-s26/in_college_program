@@ -1,0 +1,9 @@
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+
+# Alice views her network with no connections
+1       # Login
+alice
+Alice1!
+7       # View My Network (empty)
+8       # Logout
+3       # Exit

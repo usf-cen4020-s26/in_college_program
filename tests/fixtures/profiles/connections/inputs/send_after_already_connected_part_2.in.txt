@@ -1,0 +1,9 @@
+# Bob tries to send another request to Alice after already connected
+1       # Login
+bob
+Bob123!
+4       # Find someone you know
+Alice Smith
+1       # Try to send connection request again
+8       # Logout
+3       # Exit
