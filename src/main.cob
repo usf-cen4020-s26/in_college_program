@@ -2018,7 +2018,6 @@ PROCEDURE DIVISION.
            MOVE 0   TO WS-NETWORK-DISP-COUNT
            MOVE "N" TO WS-NETWORK-FOUND-FLAG
 
-           *> Empty network: message and separator only, no Press Enter
            IF WS-CONNECTIONS-COUNT = 0
                MOVE "You have no connections in your network yet."
                    TO WS-OUTPUT-LINE
@@ -2054,11 +2053,9 @@ PROCEDURE DIVISION.
                EXIT PARAGRAPH
            END-IF
 
-           *> One connection: 35 dashes + "Press Enter" (no read). Multiple: 20 dashes only.
+           *> One connection: 35 dashes. Multiple: 20 dashes.
            IF WS-NETWORK-DISP-COUNT = 1
                MOVE "-----------------------------------" TO WS-OUTPUT-LINE
-               PERFORM 8000-WRITE-OUTPUT
-               MOVE "Press Enter to go back." TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
            ELSE
                MOVE "--------------------" TO WS-OUTPUT-LINE

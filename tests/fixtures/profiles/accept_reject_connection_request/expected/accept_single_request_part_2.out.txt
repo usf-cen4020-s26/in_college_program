@@ -49,7 +49,6 @@ Enter choice (1-8):
 === MY NETWORK ===
 Connected with: Mason Russell (University: UCF, Major: Computer Science)
 -----------------------------------
-Press Enter to go back.
 
 === MAIN MENU ===
 1. Create/Edit My Profile

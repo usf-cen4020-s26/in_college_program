@@ -68,7 +68,6 @@ Enter choice (1-8):
 === MY NETWORK ===
 Connected with: Bob Jones (University: UCF, Major: Math)
 -----------------------------------
-Press Enter to go back.
 
 === MAIN MENU ===
 1. Create/Edit My Profile

@@ -27,7 +27,6 @@ You have successfully logged in
 8. Logout
 Enter choice (1-8):
 7
-
 === MY NETWORK ===
 You have no connections in your network yet.
 -----------------------------------
@@ -44,11 +43,11 @@ You have no connections in your network yet.
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-Request from: user1
+Request from: User1 FirstUser
 1. Accept
 2. Reject
-Enter your choice for user1:
-Connection request from user1 accepted!
+Enter your choice for User1 FirstUser:
+Connection request from User1 FirstUser accepted!
 -----------------------------------
 
 === MAIN MENU ===
@@ -62,9 +61,43 @@ Connection request from user1 accepted!
 8. Logout
 Enter choice (1-8):
 7
-
 === MY NETWORK ===
-Connected with: user1 (University: USF, Major: CS)
+Connected with: User1 FirstUser (University: USF, Major: CS)
+-----------------------------------
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. View Pending Connection Requests
+6. Learn a new skill
+7. View My Network
+8. Logout
+Enter choice (1-8):
+5
+--- Pending Connection Requests ---
+Request from: User2 SecondUser
+1. Accept
+2. Reject
+Enter your choice for User2 SecondUser:
+Connection request from User2 SecondUser accepted!
+-----------------------------------
+
+=== MAIN MENU ===
+1. Create/Edit My Profile
+2. View My Profile
+3. Search for a job
+4. Find someone you know
+5. View Pending Connection Requests
+6. Learn a new skill
+7. View My Network
+8. Logout
+Enter choice (1-8):
+7
+=== MY NETWORK ===
+Connected with: User1 FirstUser (University: USF, Major: CS)
+Connected with: User2 SecondUser (University: USF, Major: CS)
 --------------------
 
 === MAIN MENU ===
@@ -79,11 +112,11 @@ Connected with: user1 (University: USF, Major: CS)
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-Request from: user2
+Request from: User3 ThirdUser
 1. Accept
 2. Reject
-Enter your choice for user2:
-Connection request from user2 accepted!
+Enter your choice for User3 ThirdUser:
+Connection request from User3 ThirdUser accepted!
 -----------------------------------
 
 === MAIN MENU ===
@@ -97,10 +130,10 @@ Connection request from user2 accepted!
 8. Logout
 Enter choice (1-8):
 7
-
 === MY NETWORK ===
-Connected with: user1 (University: USF, Major: CS)
-Connected with: user2 (University: USF, Major: CS)
+Connected with: User1 FirstUser (University: USF, Major: CS)
+Connected with: User2 SecondUser (University: USF, Major: CS)
+Connected with: User3 ThirdUser (University: USF, Major: CS)
 --------------------
 
 === MAIN MENU ===
@@ -115,11 +148,11 @@ Connected with: user2 (University: USF, Major: CS)
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-Request from: user3
+Request from: User4 FourthUser
 1. Accept
 2. Reject
-Enter your choice for user3:
-Connection request from user3 accepted!
+Enter your choice for User4 FourthUser:
+Connection request from User4 FourthUser accepted!
 -----------------------------------
 
 === MAIN MENU ===
@@ -133,11 +166,11 @@ Connection request from user3 accepted!
 8. Logout
 Enter choice (1-8):
 7
-
 === MY NETWORK ===
-Connected with: user1 (University: USF, Major: CS)
-Connected with: user2 (University: USF, Major: CS)
-Connected with: user3 (University: USF, Major: CS)
+Connected with: User1 FirstUser (University: USF, Major: CS)
+Connected with: User2 SecondUser (University: USF, Major: CS)
+Connected with: User3 ThirdUser (University: USF, Major: CS)
+Connected with: User4 FourthUser (University: USF, Major: CS)
 --------------------
 
 === MAIN MENU ===
@@ -150,32 +183,5 @@ Connected with: user3 (University: USF, Major: CS)
 7. View My Network
 8. Logout
 Enter choice (1-8):
-5
---- Pending Connection Requests ---
-Request from: user4
-1. Accept
-2. Reject
-Enter your choice for user4:
-Connection request from user4 accepted!
------------------------------------
-
-=== MAIN MENU ===
-1. Create/Edit My Profile
-2. View My Profile
-3. Search for a job
-4. Find someone you know
-5. View Pending Connection Requests
-6. Learn a new skill
-7. View My Network
-8. Logout
-Enter choice (1-8):
-7
-
-=== MY NETWORK ===
-Connected with: user1 (University: USF, Major: CS)
-Connected with: user2 (University: USF, Major: CS)
-Connected with: user3 (University: USF, Major: CS)
-Connected with: user4 (University: USF, Major: CS)
---------------------
 
 Thank you for using InCollege!

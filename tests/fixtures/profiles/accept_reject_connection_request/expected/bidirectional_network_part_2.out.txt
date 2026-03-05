@@ -28,11 +28,11 @@ You have successfully logged in
 Enter choice (1-8):
 5
 --- Pending Connection Requests ---
-Request from: bob
+Request from: Bob Jones
 1. Accept
 2. Reject
-Enter your choice for bob:
-Connection request from bob accepted!
+Enter your choice for Bob Jones:
+Connection request from Bob Jones accepted!
 -----------------------------------
 
 === MAIN MENU ===
@@ -46,10 +46,9 @@ Connection request from bob accepted!
 8. Logout
 Enter choice (1-8):
 7
-
 === MY NETWORK ===
 Connected with: Bob Jones (University: UCF, Major: Math)
---------------------
+-----------------------------------
 
 === MAIN MENU ===
 1. Create/Edit My Profile
@@ -88,10 +87,9 @@ You have successfully logged in
 8. Logout
 Enter choice (1-8):
 7
-
 === MY NETWORK ===
 Connected with: Alice Smith (University: USF, Major: CS)
---------------------
+-----------------------------------
 
 === MAIN MENU ===
 1. Create/Edit My Profile
