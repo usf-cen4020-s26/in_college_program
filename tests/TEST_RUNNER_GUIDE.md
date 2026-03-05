@@ -1,9 +1,9 @@
 # Test Runner Documentation
-<!-- connection management tests: ongoing, see test/connection_management branch -->
 
 ## Overview
 
 The InCollege test infrastructure provides automated testing for the COBOL application with support for:
+
 - Single-part tests (one execution)
 - Multi-part tests (multiple executions with persistent state)
 - Detailed diff reporting
@@ -27,6 +27,7 @@ The easiest way to run all tests is using the provided shell script:
 ```
 
 The script will:
+
 1. Compile the COBOL program if needed
 2. Discover and run all test categories in `tests/fixtures/`
 3. Display results for each category separately
@@ -117,6 +118,7 @@ Use these as blank templates. Replace placeholder values inside `<...>` with you
 ```
 
 Notes:
+
 - You can keep this template in a scratch file and copy only the users you need.
 - Because the app allows max 5 accounts, only seed up to 5 distinct usernames in one persistence context.
 - Keep `username` <= 20 chars and `password` <= 12 chars.
@@ -164,6 +166,7 @@ Acct1!
 #### Example D: Multi-part test where only part 1 seeds data
 
 `connection_flow_part_1.in.txt`
+
 ```text
 @seed_user username=req1 password=ReqPass1! first_name=Request last_name=Sender university=USF major=CS grad_year=2027
 @seed_user username=rec1 password=RecPass1! first_name=Request last_name=Receiver university=USF major=CS grad_year=2027
@@ -176,6 +179,7 @@ ReqPass1!
 ```
 
 `connection_flow_part_2.in.txt`
+
 ```text
 1
 rec1
@@ -187,6 +191,7 @@ RecPass1!
 #### Example E: Upsert/update seeded user in a later part
 
 `profile_refresh_part_1.in.txt`
+
 ```text
 @seed_user username=sam1 password=SamPass1! first_name=Sam last_name=Lee university=USF major=CS grad_year=2026 about_me="Initial bio"
 
@@ -197,6 +202,7 @@ SamPass1!
 ```
 
 `profile_refresh_part_2.in.txt`
+
 ```text
 @seed_user username=sam1 password=SamPass1! first_name=Sam last_name=Lee university=USF major=CS grad_year=2026 about_me="Updated bio"
 
@@ -241,6 +247,7 @@ Multi-part tests verify persistence across multiple program executions. They tes
 ### Naming Convention
 
 Multi-part test files end with `_part_N` where N is the part number:
+
 - `test_name_part_1.in.txt` → First execution
 - `test_name_part_2.in.txt` → Second execution
 - `test_name_part_3.in.txt` → Third execution (if needed)
@@ -260,6 +267,7 @@ Multi-part test files end with `_part_N` where N is the part number:
 ### Example: Persistence Test
 
 **Part 1** (`persistence_input_part_1.in.txt`):
+
 ```
 1          # Create new account
 PersistUser1
@@ -268,6 +276,7 @@ Persist1!
 ```
 
 **Part 2** (`persistence_input_part_2.in.txt`):
+
 ```
 2          # Log in (account should exist from Part 1)
 PersistUser1
@@ -286,6 +295,7 @@ Persist1!
 ```
 
 **Options:**
+
 - `--verbose`, `-v`: Print detailed output including full expected/actual outputs
 - `--report`, `-r`: Generate JSON report at `test-report.json`
 
@@ -296,9 +306,11 @@ python3 tests/test_runner.py <executable> [options]
 ```
 
 **Arguments:**
+
 - `executable`: Path to compiled COBOL program (e.g., `bin/main`)
 
 **Options:**
+
 - `--test-root PATH`: Root directory for tests. Can be `tests/fixtures` for all tests or a specific category like `tests/fixtures/login`
 - `--input-file PATH`: Run exactly one input fixture file (`*.in.txt`)
 - `--expected-file PATH`: Expected output for `--input-file` mode (optional, auto-derived if omitted)
@@ -349,6 +361,7 @@ python3 tests/test_runner.py bin/main --input-file tests/fixtures/profiles/accep
 - Output names use `.actual.out.txt` suffix.
 
 Example:
+
 - Input: `tests/fixtures/profiles/search/inputs/find_user.in.txt`
 - Dump: `test-dumps/profiles/search/actual/find_user.actual.out.txt`
 
@@ -381,6 +394,7 @@ Example:
 ```
 
 **Color Coding:**
+
 - **Green lines** (starting with `+`): Present in actual but not expected
 - **Red lines** (starting with `-`): Present in expected but not actual
 - **Blue lines** (starting with `@@`): Line number context
@@ -419,6 +433,7 @@ nano tests/fixtures/login/2_new_account/inputs/my_new_test.in.txt
 ```
 
 Add the test inputs:
+
 ```
 2
 TestUser
@@ -489,6 +504,7 @@ The test runner integrates with GitHub Actions for automated testing.
 ### Viewing Results
 
 After workflow execution:
+
 1. Go to **Actions** tab in GitHub
 2. Click on the workflow run
 3. View **Summary** for quick results
@@ -578,6 +594,7 @@ pip install -r requirements.txt
 ### Persistence Management
 
 The test runner manages persistence by:
+
 - Creating a temporary directory for each test run
 - Setting `INCOLLEGE_DATA_DIR` environment variable
 - Running COBOL program in this directory
@@ -587,6 +604,7 @@ The test runner manages persistence by:
 ### Diff Algorithm
 
 Uses Python's `difflib.unified_diff` to generate diffs:
+
 - Shows line-by-line differences
 - Provides context around changes
 - Uses unified diff format (same as `diff -u`)
@@ -595,6 +613,7 @@ Uses Python's `difflib.unified_diff` to generate diffs:
 ### Test Discovery
 
 The test runner automatically:
+
 1. Scans the test root directory recursively
 2. Finds all `*.in.txt` files in `inputs/` directories
 3. Matches them with corresponding files in `expected/`
@@ -604,6 +623,7 @@ The test runner automatically:
 ### Type Safety
 
 The test runner uses Python type hints throughout:
+
 - All functions have type annotations
 - Uses `dataclass` for structured data
 - Employs `Enum` for status values
@@ -612,6 +632,7 @@ The test runner uses Python type hints throughout:
 ## Support
 
 For issues or questions:
+
 1. Check this documentation
 2. Review the test runner source code (`tests/test_runner.py`)
 3. Check GitHub Actions logs for CI failures
