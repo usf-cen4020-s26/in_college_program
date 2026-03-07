@@ -129,6 +129,7 @@ WORKING-STORAGE SECTION.
 01  WS-SKIP-NEXT-MENU-READ      PIC X VALUE "N".
 01  WS-PRELOADED-MENU-CHOICE   PIC X(2).
 01  WS-SKILL-CHOICE             PIC X(2).
+01  WS-JOB-MENU-CHOICE          PIC X(2).
 
 01  WS-INPUT-STATUS             PIC XX.
 01  WS-OUTPUT-STATUS            PIC XX.
@@ -948,8 +949,7 @@ PROCEDURE DIVISION.
                        WHEN "2"
                            PERFORM 7100-VIEW-PROFILE
                        WHEN "3"
-                           MOVE "Search for a job is under construction." TO WS-OUTPUT-LINE
-                           PERFORM 8000-WRITE-OUTPUT
+                           PERFORM 5300-JOB-SEARCH-MENU
                        WHEN "4"
                            PERFORM 7500-FIND-SOMEONE-YOU-KNOW
                        WHEN "5"
@@ -966,6 +966,17 @@ PROCEDURE DIVISION.
                           PERFORM 8000-WRITE-OUTPUT
                    END-EVALUATE
            END-PERFORM.
+
+*> *      *>*****************************************************************
+*> *      *> 5300-JOB-SEARCH-MENU: Job Search/Internship entry point stub        *
+*> *      *> MSW-279 - Routes post-login menu option 3 to job submenu
+*> *      *>*****************************************************************
+         5300-JOB-SEARCH-MENU.
+              MOVE " " TO WS-OUTPUT-LINE
+              PERFORM 8000-WRITE-OUTPUT
+              MOVE "--- Job Search/Internship Menu ---" TO WS-OUTPUT-LINE
+              PERFORM 8000-WRITE-OUTPUT
+              EXIT.
 
 *> *      *>*****************************************************************
 *> *      *> 6000-SKILLS-MENU: Learn a new skill submenu                   *
