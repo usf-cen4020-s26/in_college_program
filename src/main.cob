@@ -969,14 +969,40 @@ PROCEDURE DIVISION.
 
 *> *      *>*****************************************************************
 *> *      *> 5300-JOB-SEARCH-MENU: Job Search/Internship entry point stub        *
-*> *      *> MSW-279 - Routes post-login menu option 3 to job submenu
+*> *      *> MSW-280 - Show user options for job search and internship features
 *> *      *>*****************************************************************
-         5300-JOB-SEARCH-MENU.
-              MOVE " " TO WS-OUTPUT-LINE
-              PERFORM 8000-WRITE-OUTPUT
-              MOVE "--- Job Search/Internship Menu ---" TO WS-OUTPUT-LINE
-              PERFORM 8000-WRITE-OUTPUT
-              EXIT.
+       5300-JOB-SEARCH-MENU.
+           MOVE "1" TO WS-JOB-MENU-CHOICE
+
+           PERFORM UNTIL WS-JOB-MENU-CHOICE = "3"
+               OR WS-PROGRAM-RUNNING = 0
+
+               MOVE " " TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "--- Job Search/Internship Menu ---"
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "1. Post a Job/Internship" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "2. Browse Jobs/Internships" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "3. Back to Main Menu" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "Enter your choice (1-3): " TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+
+               PERFORM 8100-READ-INPUT
+               IF WS-EOF-FLAG = 1
+                   MOVE 0 TO WS-PROGRAM-RUNNING
+                   EXIT PERFORM
+               END-IF
+
+               MOVE FUNCTION TRIM(INPUT-RECORD) TO WS-JOB-MENU-CHOICE
+               MOVE WS-JOB-MENU-CHOICE TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+
+           END-PERFORM.
+           EXIT.
 
 *> *      *>*****************************************************************
 *> *      *> 6000-SKILLS-MENU: Learn a new skill submenu                   *
