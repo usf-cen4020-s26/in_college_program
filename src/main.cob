@@ -22,6 +22,9 @@ FILE-CONTROL.
      SELECT CONNECTIONS-FILE ASSIGN TO "CONNECTIONS.DAT"
          ORGANIZATION IS LINE SEQUENTIAL
          FILE STATUS IS WS-CONNECTIONS-STATUS.
+     SELECT JOBS-FILE ASSIGN TO "JOBS.DAT"
+         ORGANIZATION IS LINE SEQUENTIAL
+         FILE STATUS IS WS-JOBS-STATUS.
 DATA DIVISION.
 FILE SECTION.
 FD  INPUT-FILE.
@@ -65,6 +68,15 @@ FD  CONNECTIONS-FILE.
 01  CONNECTION-REC.
     05  CONN-USER-A            PIC X(20).
     05  CONN-USER-B            PIC X(20).
+FD  JOBS-FILE.
+01  JOB-RECORD.
+    05  JOB-ID                 PIC 9(5).
+    05  JOB-POSTER             PIC X(20).
+    05  JOB-TITLE              PIC X(50).
+    05  JOB-DESCRIPTION        PIC X(200).
+    05  JOB-EMPLOYER           PIC X(50).
+    05  JOB-LOCATION           PIC X(50).
+    05  JOB-SALARY             PIC X(20).
 
 
 WORKING-STORAGE SECTION.
@@ -231,6 +243,18 @@ WORKING-STORAGE SECTION.
 01  WS-NETWORK-FOUND-FLAG       PIC X VALUE "N".
 01  WS-NETWORK-OTHER-USERNAME   PIC X(20).
 01  WS-NETWORK-OTHER-IDX        PIC 9 VALUE 0.
+
+*> ===== Job Postings working-storage =====
+01  WS-JOBS-STATUS              PIC XX.
+01  WS-JOBS-EOF                 PIC X VALUE "N".
+01  WS-JOB-COUNT                PIC 999 VALUE 0.
+01  WS-MAX-JOBS                 PIC 999 VALUE 25.
+01  WS-JOB-ID-COUNTER           PIC 9(5) VALUE 0.
+01  WS-TEMP-JOB-TITLE           PIC X(50).
+01  WS-TEMP-JOB-DESC            PIC X(200).
+01  WS-TEMP-JOB-EMPLOYER        PIC X(50).
+01  WS-TEMP-JOB-LOCATION        PIC X(50).
+01  WS-TEMP-JOB-SALARY          PIC X(20).
 
 
 PROCEDURE DIVISION.
@@ -966,7 +990,7 @@ PROCEDURE DIVISION.
                           PERFORM 8000-WRITE-OUTPUT
                    END-EVALUATE
            END-PERFORM.
-           
+
 *> *      *>*****************************************************************
 *> *      *> 6000-SKILLS-MENU: Learn a new skill submenu                   *
 *> *      *>*****************************************************************
