@@ -34,7 +34,7 @@
 
                EVALUATE WS-JOB-MENU-CHOICE
                    WHEN "1"
-                       PERFORM 5310-POST-JOB-STUB
+                       PERFORM 5310-POST-JOB
                    WHEN "2"
                        PERFORM 5320-BROWSE-JOBS-STUB
                    WHEN "3"
@@ -48,17 +48,152 @@
            END-PERFORM.
            EXIT.
 
-*> *      *>*****************************************************************
-*> *      *> 5310-POST-JOB-STUB: Post a Job/Internship placeholder                   *
-*> *      *> Submenu is empty (will be implemented soon)                             *
-*> *      *>*****************************************************************
-       5310-POST-JOB-STUB.
+      *>*****************************************************************
+      *> 5310-POST-JOB: Full job posting input and save flow
+      *> 1) Prompts for Title, Description, Employer, Location
+      *> 2) Validates required fields, re-prompts on blank input
+      *> 3) Optional salary via NONE convention
+      *> 4) Prints confirmation and separator after save
+      *>*****************************************************************
+       5310-POST-JOB.
            MOVE " " TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
            MOVE "--- Post a New Job/Internship ---" TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
-           MOVE "Post a Job/Internship is under construction."
+
+      *> --- Title (required! - please enforce user to enter) ---
+           MOVE 0 TO WS-INPUT-VALID
+           PERFORM UNTIL WS-INPUT-VALID = 1
+               MOVE "Enter Job Title: " TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               PERFORM 8100-READ-INPUT
+               IF WS-EOF-FLAG = 1
+                   MOVE 0 TO WS-PROGRAM-RUNNING
+                   EXIT PERFORM
+               END-IF
+               MOVE INPUT-RECORD TO WS-TEMP-JOB-TITLE
+               IF FUNCTION TRIM(WS-TEMP-JOB-TITLE) = SPACES
+                   MOVE "Job Title is required. Please try again."
+                       TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+               ELSE
+                   MOVE WS-TEMP-JOB-TITLE TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE 1 TO WS-INPUT-VALID
+               END-IF
+           END-PERFORM
+           IF WS-EOF-FLAG = 1
+               EXIT PARAGRAPH
+           END-IF
+
+      *> --- Description (required info) ---
+           MOVE 0 TO WS-INPUT-VALID
+           PERFORM UNTIL WS-INPUT-VALID = 1
+               MOVE "Enter Description (max 200 chars): "
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               PERFORM 8100-READ-INPUT
+               IF WS-EOF-FLAG = 1
+                   MOVE 0 TO WS-PROGRAM-RUNNING
+                   EXIT PERFORM
+               END-IF
+               MOVE INPUT-RECORD TO WS-TEMP-JOB-DESC
+               IF FUNCTION TRIM(WS-TEMP-JOB-DESC) = SPACES
+                   MOVE "Description is required. Please try again."
+                       TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+               ELSE
+                   MOVE WS-TEMP-JOB-DESC TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE 1 TO WS-INPUT-VALID
+               END-IF
+           END-PERFORM
+           IF WS-EOF-FLAG = 1
+               EXIT PARAGRAPH
+           END-IF
+
+      *> --- Employer (required info) ---
+           MOVE 0 TO WS-INPUT-VALID
+           PERFORM UNTIL WS-INPUT-VALID = 1
+               MOVE "Enter Employer Name: " TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               PERFORM 8100-READ-INPUT
+               IF WS-EOF-FLAG = 1
+                   MOVE 0 TO WS-PROGRAM-RUNNING
+                   EXIT PERFORM
+               END-IF
+               MOVE INPUT-RECORD TO WS-TEMP-JOB-EMPLOYER
+               IF FUNCTION TRIM(WS-TEMP-JOB-EMPLOYER) = SPACES
+                   MOVE "Employer Name is required. Please try again."
+                       TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+               ELSE
+                   MOVE WS-TEMP-JOB-EMPLOYER TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE 1 TO WS-INPUT-VALID
+               END-IF
+           END-PERFORM
+           IF WS-EOF-FLAG = 1
+               EXIT PARAGRAPH
+           END-IF
+
+      *> --- Location (required field) ---
+           MOVE 0 TO WS-INPUT-VALID
+           PERFORM UNTIL WS-INPUT-VALID = 1
+               MOVE "Enter Location: " TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               PERFORM 8100-READ-INPUT
+               IF WS-EOF-FLAG = 1
+                   MOVE 0 TO WS-PROGRAM-RUNNING
+                   EXIT PERFORM
+               END-IF
+               MOVE INPUT-RECORD TO WS-TEMP-JOB-LOCATION
+               IF FUNCTION TRIM(WS-TEMP-JOB-LOCATION) = SPACES
+                   MOVE "Location is required. Please try again."
+                       TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+               ELSE
+                   MOVE WS-TEMP-JOB-LOCATION TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE 1 TO WS-INPUT-VALID
+               END-IF
+           END-PERFORM
+           IF WS-EOF-FLAG = 1
+               EXIT PARAGRAPH
+           END-IF
+
+      *> --- Salary (optional, up to user) ---
+           MOVE "Enter Salary (optional, enter 'NONE' to skip): "
                TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
+           PERFORM 8100-READ-INPUT
+           IF WS-EOF-FLAG = 1
+               MOVE 0 TO WS-PROGRAM-RUNNING
+               EXIT PARAGRAPH
+           END-IF
+           MOVE INPUT-RECORD TO WS-TEMP-JOB-SALARY
+           MOVE WS-TEMP-JOB-SALARY TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
+           IF FUNCTION TRIM(WS-TEMP-JOB-SALARY) = "NONE"
+               MOVE SPACES TO WS-TEMP-JOB-SALARY
+           END-IF
+
+      *> --- Assign ID, then populate record ---
+           ADD 1 TO WS-JOB-ID-COUNTER
+           MOVE WS-JOB-ID-COUNTER                TO JOB-ID
+           MOVE WS-USERNAME(WS-CURRENT-USER-INDEX) TO JOB-POSTER
+           MOVE WS-TEMP-JOB-TITLE               TO JOB-TITLE
+           MOVE WS-TEMP-JOB-DESC                TO JOB-DESCRIPTION
+           MOVE WS-TEMP-JOB-EMPLOYER            TO JOB-EMPLOYER
+           MOVE WS-TEMP-JOB-LOCATION            TO JOB-LOCATION
+           MOVE WS-TEMP-JOB-SALARY              TO JOB-SALARY
+           PERFORM 5330-WRITE-JOB-TO-FILE
+           ADD 1 TO WS-JOB-COUNT
+
+      *> --- Confirmation ---
+           MOVE "Job posted successfully!" TO WS-OUTPUT-LINE
+           PERFORM 8000-WRITE-OUTPUT
+           MOVE "----------------------------------" TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
 
