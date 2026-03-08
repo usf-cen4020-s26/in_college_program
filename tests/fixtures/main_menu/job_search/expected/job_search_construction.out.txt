@@ -41,7 +41,13 @@ You have successfully logged in
 8. Logout
 Enter choice (1-8):
 3
-Search for a job is under construction.
+
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. Back to Main Menu
+Enter your choice (1-3):
+3
 
 === MAIN MENU ===
 1. Create/Edit My Profile
