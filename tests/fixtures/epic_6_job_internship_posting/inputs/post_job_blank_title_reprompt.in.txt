@@ -1,0 +1,17 @@
+2   # Create account
+carol
+Carol12!
+1           # Log in
+carol
+Carol12!
+3           # Search for a job
+1           # Post a Job/Internship
+
+
+UX Designer
+Design user flows and wireframes
+DesignStudio
+Tampa, FL
+$45/hour
+3           # Back to Main Menu
+8           # Logout
