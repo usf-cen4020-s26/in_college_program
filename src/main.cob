@@ -288,6 +288,7 @@ PROCEDURE DIVISION.
            PERFORM 1150-LOAD-PROFILES.
            PERFORM 9200-LOAD-PENDING-REQUESTS.
            PERFORM 9250-LOAD-CONNECTIONS.
+           PERFORM 5350-LOAD-JOBS.
 
            MOVE "========================================"
            TO WS-OUTPUT-LINE.
