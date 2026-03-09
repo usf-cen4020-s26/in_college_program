@@ -1,0 +1,11 @@
+2       # Create Account
+hank01
+Hank1234!
+1           # Log in
+hank01
+Hank1234!
+3           # Search for a job
+9           # Invalid menu choice
+X           # Invalid menu choice
+3           # Back to Main Menu
+8           # Logout

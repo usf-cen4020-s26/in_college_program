@@ -197,17 +197,8 @@
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
 
-*> *      *>*****************************************************************
-*> *      *> 5320-BROWSE-JOBS-STUB: Browse Jobs/Internships placeholder                   *
-*> *      *> Remains under construction per Epic 6 spec.                                  *
-*> *      *>*****************************************************************
-       5320-BROWSE-JOBS-STUB.
-           MOVE " " TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-           MOVE "Browse Jobs/Internships is under construction."
-               TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-           EXIT.
+      *> Browse flow in dedicated copybook (Week 6 implementation guidance)
+       COPY BROWSEJOBS_SRC.
 
                  *>*****************************************************************
       *> 5350-LOAD-JOBS: Load existing jobs from JOBS.DAT at startup

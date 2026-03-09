@@ -366,7 +366,7 @@ Each test directory contains:
 ```bash
 # Step 1: Compile the COBOL program
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src -o bin/main src/main.cob
 
 # Step 2: Run tests
 ./run_tests.sh
@@ -436,7 +436,7 @@ python3 tests/test_runner.py bin/main
 ```bash
 # 1. Ensure current code compiles
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src -o bin/main src/main.cob
 
 # 2. Run existing tests to establish baseline
 ./run_tests.sh
@@ -453,7 +453,7 @@ cobc -x -free -o bin/main src/main.cob
 
 ```bash
 # 1. Compile
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src -o bin/main src/main.cob
 
 # 2. Test manually (optional)
 echo "3" > INPUT.TXT
@@ -569,8 +569,10 @@ cat OUTPUT.TXT
 
 ### Compile Command
 ```bash
-mkdir -p bin && cobc -x -free -o bin/main src/main.cob
+mkdir -p bin && cobc -x -free -I src -o bin/main src/main.cob
 ```
+
+The `-I src` option specifies the copybook search directory; `COPY` statements use simple names (e.g., `COPY SENDREQ_SRC`) without paths.
 
 ### Run Tests
 ```bash
@@ -599,7 +601,7 @@ cat OUTPUT.TXT
 ```bash
 rm -f bin/main ACCOUNTS.DAT PROFILES.DAT INPUT.TXT OUTPUT.TXT
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src -o bin/main src/main.cob
 ```
 
 ---

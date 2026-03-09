@@ -33,7 +33,7 @@ jobs:
       id: compile
       run: |
         echo "Compiling src/main.cob..."
-        cobc -x -free -o bin/main src/main.cob
+        cobc -x -free -I src -o bin/main src/main.cob
         echo "Compilation successful!"
         ls -lh bin/main
       continue-on-error: false

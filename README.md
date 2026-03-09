@@ -77,8 +77,10 @@ From the project root, run:
 
 ```sh
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src -o bin/main src/main.cob
 ```
+
+Copybooks are resolved via the `-I src` option, so `COPY` statements use simple names (e.g., `COPY SENDREQ_SRC`) instead of paths.
 
 ### Running the Program
 
@@ -129,8 +131,10 @@ Always compile the COBOL program before running tests. The test runner executes 
 
 ```sh
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src -o bin/main src/main.cob
 ```
+
+Copybooks are resolved via the `-I src` option, so `COPY` statements use simple names (e.g., `COPY SENDREQ_SRC`) instead of paths.
 
 ### Test Organization
 
@@ -236,7 +240,7 @@ To add a new test:
 
 4. Recompile and run tests to validate:
    ```sh
-   cobc -x -free -o bin/main src/main.cob
+   cobc -x -free -I src -o bin/main src/main.cob
    python3 tests/test_runner.py bin/main
    ```
 

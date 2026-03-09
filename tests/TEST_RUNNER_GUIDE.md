@@ -555,7 +555,7 @@ python3 tests/test_runner.py bin/main
 ```bash
 # Compile the program first
 mkdir -p bin
-cobc -x -free -o bin/main src/main.cob
+cobc -x -free -I src -o bin/main src/main.cob
 ```
 
 ### All Tests Failing
