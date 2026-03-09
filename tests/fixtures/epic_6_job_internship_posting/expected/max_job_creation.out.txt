@@ -1,0 +1,6 @@
+Current program
+limits WS-MAX-JOBS = 25
+but the code allows greater than 25 jobs to be created
+What should be the limit?
+What should happen when we reach it?
+Epic 6 is unclear...
