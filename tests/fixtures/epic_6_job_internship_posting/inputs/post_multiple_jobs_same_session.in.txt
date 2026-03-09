@@ -1,0 +1,21 @@
+2
+lisa01
+Lisa1234!
+1           # Log in
+lisa01
+Lisa1234!
+3           # Search for a job
+1           # Post job #1
+Frontend Developer
+Build responsive React components and UI features
+WebDev Inc
+Remote
+$75000/year
+1           # Post job #2
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+3           # Back to Main Menu
+8           # Logout
