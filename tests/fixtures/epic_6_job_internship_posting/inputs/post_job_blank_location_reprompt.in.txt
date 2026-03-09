@@ -1,0 +1,16 @@
+2
+frank1
+Frank12!
+1           # Log in
+frank1
+Frank12!
+3           # Search for a job
+1           # Post a Job/Internship
+DevOps Engineer
+Manage CI/CD pipelines and cloud infrastructure
+CloudOps LLC
+
+Remote
+NONE
+3           # Back to Main Menu
+8           # Logout

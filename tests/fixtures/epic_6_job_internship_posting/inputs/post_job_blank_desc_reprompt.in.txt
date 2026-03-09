@@ -1,0 +1,16 @@
+2
+dave1
+Dave1234!
+1           # Log in
+dave1
+Dave1234!
+3           # Search for a job
+1           # Post a Job/Internship
+Marketing Intern
+
+Create social media content and run ad campaigns
+BrandCo
+Chicago, IL
+NONE
+3           # Back to Main Menu
+8           # Logout
