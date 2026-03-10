@@ -121,6 +121,42 @@ This input would:
 **Data Persistence:**
 User accounts are stored in `ACCOUNTS.DAT` and profiles in `PROFILES.DAT`. These files persist between program executions, allowing users to log in across multiple runs.
 
+### Live Replay CLI (Interactive Simulation)
+
+If you want a real-time, terminal-driven workflow while still using file-based COBOL I/O, use the live replay CLI:
+
+```sh
+python3 tests/live_cli.py bin/main
+```
+
+How it works:
+- Every line you type is appended to a transcript file (default: `.live_session.input.txt`).
+- After each input line, the tool rewrites `INPUT.TXT`, runs the COBOL binary, and re-renders `OUTPUT.TXT`.
+- This gives an interactive "live" feel while staying compatible with the project’s file-based architecture.
+
+Useful options:
+
+```sh
+python3 tests/live_cli.py bin/main --fresh
+python3 tests/live_cli.py bin/main --transcript /tmp/my_session.in.txt
+python3 tests/live_cli.py bin/main --work-dir /tmp/incollege_live
+```
+
+Interactive commands inside the session:
+- `:help` show available commands
+- `:dump` save current inputs + latest output to a local text file
+- `:show` list current logged input lines
+- `:undo` remove the most recent line
+- `:clear` clear all logged input lines
+- `:rerun` rerun without adding new input
+- `:quit` exit the session
+
+Customize dump file path:
+
+```sh
+python3 tests/live_cli.py bin/main --dump-file ./live_session_dump.txt
+```
+
 ## Testing
 
 The project includes an automated testing system written in Python that validates program behavior against expected outputs. Tests are comprehensive, covering login flows, profile management, user search, error handling, and edge cases.
