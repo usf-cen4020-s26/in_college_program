@@ -113,6 +113,8 @@ WORKING-STORAGE SECTION.
         10  WS-PEND-SENDER-USERNAME     PIC X(20).
         10  WS-PEND-RECIPIENT-USERNAME  PIC X(20).
         10  WS-PEND-STATUS              PIC X(1).
+           88  PEND-STATUS-PENDING      VALUE "P".
+           88  PEND-STATUS-PENDING-OR-EMPTY VALUES "P", " ".
 
 01  WS-CONNECTIONS-STATUS      PIC XX.
 
@@ -148,7 +150,7 @@ WORKING-STORAGE SECTION.
 01  WS-ACCOUNTS-STATUS          PIC XX.
 01  WS-PROFILES-STATUS          PIC XX.
 01  WS-PENDING-STATUS           PIC XX.
-01  WS-PENDING-EOF              PIC X VALUE "N".
+01  WS-PENDING-EOF              PIC 9 VALUE 0.
 01  WS-EOF-FLAG                 PIC 9 VALUE 0.
 01  WS-PROGRAM-RUNNING          PIC 9 VALUE 1.
 *> Input pushback: when set, 8100 returns buffered line instead of reading
@@ -346,7 +348,7 @@ PROCEDURE DIVISION.
 *> *      *>*****************************************************************
        9200-LOAD-PENDING-REQUESTS.
            MOVE 0 TO WS-PENDING-COUNT.
-           MOVE "N" TO WS-PENDING-EOF.
+           MOVE 0 TO WS-PENDING-EOF.
 
            OPEN INPUT PENDING-FILE.
 
@@ -433,7 +435,7 @@ PROCEDURE DIVISION.
        9210-READ-PENDING-LOOP.
            READ PENDING-FILE
                AT END
-                   MOVE "Y" TO WS-PENDING-EOF
+                   MOVE 1 TO WS-PENDING-EOF
                NOT AT END
                    IF WS-PENDING-COUNT < WS-MAX-PENDING
                        ADD 1 TO WS-PENDING-COUNT
@@ -446,7 +448,7 @@ PROCEDURE DIVISION.
                    END-IF
            END-READ.
 
-           IF WS-PENDING-EOF = "N"
+           IF WS-PENDING-EOF = 0
                PERFORM 9210-READ-PENDING-LOOP
            END-IF.
            EXIT.
@@ -1873,7 +1875,7 @@ PROCEDURE DIVISION.
            MOVE WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX)
                TO WS-PEND-RECIPIENT-USERNAME(WS-PENDING-COUNT)
 
-           MOVE "P" TO WS-PEND-STATUS(WS-PENDING-COUNT)
+           SET PEND-STATUS-PENDING(WS-PENDING-COUNT) TO TRUE
 
            *> Prepare file record
            MOVE WS-PEND-SENDER-USERNAME(WS-PENDING-COUNT)
@@ -2015,8 +2017,8 @@ PROCEDURE DIVISION.
            MOVE "Y" TO WS-INPUT-PUSHBACK-FLAG
            EXIT.
 
-        COPY "src/SENDREQ_SRC.cpy".
-        COPY "src/JOBS_SRC.cpy".
+        COPY SENDREQ_SRC.
+        COPY JOBS_SRC.
       *>*****************************************************************
       *> Echo view-pending user input to OUTPUT.TXT so the request number
       *> and Accept/Reject choice appear in the log (screen and file in sync).
@@ -2029,7 +2031,7 @@ PROCEDURE DIVISION.
            MOVE INPUT-RECORD TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
-        COPY "src/VIEWREQ_SRC.cpy".
+        COPY VIEWREQ_SRC.
 *>*****************************************************************
 *> 7700-VIEW-NETWORK-LIST
 *>   - Displays all accepted connections for the current user
