@@ -1,0 +1,126 @@
+# =============================================================
+# InCollege Test Output Macros
+# =============================================================
+# Each key becomes a {{KEY}} macro usable in .out.txt files.
+# Use YAML literal block (|) to preserve exact whitespace.
+# The trailing newline from | is stripped during expansion.
+# Leading blank lines ARE significant — they're part of output.
+# =============================================================
+
+WELCOME_BANNER: |
+  ========================================
+       WELCOME TO INCOLLEGE
+  ========================================
+
+LOGIN_SCREEN: |
+
+  Please select an option:
+  1. Login with existing account
+  2. Create new account
+  3. Exit
+  Enter choice (1-3):
+
+CREATE_ACCOUNT_HEADER: |
+
+  === CREATE NEW ACCOUNT ===
+  Enter username:
+
+PASSWORD_PROMPT: "Enter password (8-12 chars, 1 uppercase, 1 digit, 1 special character):"
+
+ACCOUNT_CREATED: "Account created successfully!"
+
+LOGIN_HEADER: |
+
+  === LOGIN ===
+  Enter username:
+
+LOGIN_SUCCESS: "You have successfully logged in"
+
+MAIN_MENU: |
+
+  === MAIN MENU ===
+  1. Create/Edit My Profile
+  2. View My Profile
+  3. Search for a job
+  4. Find someone you know
+  5. View Pending Connection Requests
+  6. Learn a new skill
+  7. View My Network
+  8. Logout
+  Enter choice (1-8):
+
+SKILLS_MENU: |
+
+  === LEARN A NEW SKILL ===
+  1. Skill 1
+  2. Skill 2
+  3. Skill 3
+  4. Skill 4
+  5. Skill 5
+  6. Go Back
+  Enter choice (1-6):
+
+SKILL_UNDER_CONSTRUCTION: "This skill is under construction."
+
+JOB_MENU: |
+
+  --- Job Search/Internship Menu ---
+  1. Post a Job/Internship
+  2. Browse Jobs/Internships
+  3. Back to Main Menu
+  Enter your choice (1-3):
+
+JOB_POST_HEADER: |
+
+  --- Post a New Job/Internship ---
+
+JOB_POST_SUCCESS: |
+  Job posted successfully!
+  ----------------------------------
+
+BROWSE_UNDER_CONSTRUCTION: "Browse Jobs/Internships is under construction."
+
+INVALID_CHOICE: "Invalid choice. Please try again."
+
+EXIT_MESSAGE: |
+
+  Thank you for using InCollege!
+
+ACCOUNT_LIMIT_REACHED: |
+
+  All permitted accounts have been created,
+  please come back later
+
+PROFILE_CREATE_HEADER: |
+
+  === CREATE MY PROFILE ===
+
+PROFILE_EDIT_HEADER: |
+
+  === EDIT MY PROFILE ===
+
+PROFILE_VIEW_HEADER: "=== YOUR PROFILE ==="
+
+NO_PROFILE_MESSAGE: |
+  You have not created a profile yet.
+  Please use 'Create/Edit My Profile' option first.
+
+PROFILE_SAVED: "Profile saved successfully!"
+
+SEARCH_PROMPT: "Enter the full name of the person you are looking for:"
+
+USER_NOT_FOUND: "No one by that name could be found."
+
+PENDING_REQUESTS_HEADER: "--- Pending Connection Requests ---"
+
+NO_PENDING_REQUESTS: |
+  You have no pending connection requests at this time.
+  -----------------------------------
+
+MY_NETWORK_HEADER: "=== MY NETWORK ==="
+
+NO_CONNECTIONS: "You have no connections in your network yet."
+
+PASSWORD_VALIDATION_ERROR: |
+  Password does not meet requirements.
+  Please try again.

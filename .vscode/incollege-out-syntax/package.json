@@ -1,0 +1,28 @@
+{
+    "name": "incollege-out-syntax",
+    "displayName": "InCollege Expected Output Syntax",
+    "description": "Syntax highlighting for .out.txt test fixtures with {{MACRO}} tags",
+    "version": "0.1.0",
+    "publisher": "incollege-team",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "categories": ["Programming Languages"],
+    "contributes": {
+        "languages": [
+            {
+                "id": "incollege-out",
+                "aliases": ["InCollege Expected Output", "incollege-out"],
+                "extensions": [".out.txt"],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "incollege-out",
+                "scopeName": "source.incollege-out",
+                "path": "./syntaxes/incollege-out.tmLanguage.json"
+            }
+        ]
+    }
+}
