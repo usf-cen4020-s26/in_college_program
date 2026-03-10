@@ -1,0 +1,15 @@
+@seed_user username=maxdesc1 password=MaxDesc1! first_name=Seed last_name=User university=USF major=CS grad_year=2027
+
+1
+maxdesc1
+MaxDesc1!
+3
+1
+QA Engineer
+Develops and maintains enterprise web applications using modern technology stacks. Collaborates with cross-functional teams to design, implement, and deploy scalable cloud-based solutions for clients.
+TestCorp
+San Francisco, CA
+NONE
+3
+8
+3
