@@ -54,7 +54,9 @@ def build_zip_with_expansion(
 
             if expand and f.name.endswith(".out.txt"):
                 content = f.read_text()
-                assert macros is not None
+                if macros is None:
+                    raise RuntimeError("Macros should have been loaded by this point")
+
                 expanded = expand_macros(content, macros)
                 validate_no_unexpanded(expanded)
                 zf.writestr(arcname, expanded)
