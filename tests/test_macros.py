@@ -24,7 +24,7 @@ MACRO_DEFS_PATH: Path = Path(__file__).resolve().parent / "macro_defs" / "menus.
 # Fixtures
 # ------------------------------------------------------------------
 
-@pytest.fixture()
+@pytest.fixture(scope='session')
 def macros() -> dict[str, str]:
     """Load macro definitions once for the test session."""
     return load_macros(MACRO_DEFS_PATH)
