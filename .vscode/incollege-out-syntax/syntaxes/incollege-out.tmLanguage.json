@@ -1,0 +1,55 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "InCollege Expected Output",
+    "scopeName": "source.incollege-out",
+    "patterns": [
+        { "include": "#macro-line" },
+        { "include": "#menu-header" },
+        { "include": "#divider" },
+        { "include": "#prompt-colon" },
+        { "include": "#choice-number" },
+        { "include": "#password-mask" }
+    ],
+    "repository": {
+        "macro-line": {
+            "comment": "{{MACRO_NAME}} tags — the key feature",
+            "match": "^\\s*(\\{\\{)([A-Z_][A-Z0-9_]*)(\\}\\})\\s*$",
+            "captures": {
+                "1": { "name": "punctuation.definition.macro.begin.incollege-out" },
+                "2": { "name": "entity.name.tag.macro.incollege-out" },
+                "3": { "name": "punctuation.definition.macro.end.incollege-out" }
+            }
+        },
+        "menu-header": {
+            "comment": "=== SECTION HEADERS === and --- section headers ---",
+            "match": "^\\s*(={3,}|\\-{3,})\\s+.*\\s+(={3,}|\\-{3,})\\s*$",
+            "name": "markup.heading.incollege-out"
+        },
+        "divider": {
+            "comment": "Horizontal divider lines (====, ----)",
+            "match": "^\\s*[-=]{10,}\\s*$",
+            "name": "comment.line.divider.incollege-out"
+        },
+        "prompt-colon": {
+            "comment": "Lines ending with a colon are prompts",
+            "match": "^\\s*(?!\\{\\{)(.+:)\\s*$",
+            "captures": {
+                "1": { "name": "string.unquoted.prompt.incollege-out" }
+            }
+        },
+        "choice-number": {
+            "comment": "Menu choice lines like '1. Option name'",
+            "match": "^\\s*(\\d+)(\\.\\s+)(.*)$",
+            "captures": {
+                "1": { "name": "constant.numeric.choice.incollege-out" },
+                "2": { "name": "punctuation.separator.incollege-out" },
+                "3": { "name": "string.unquoted.option.incollege-out" }
+            }
+        },
+        "password-mask": {
+            "comment": "Password masking (********)",
+            "match": "^\\*{8}$",
+            "name": "constant.other.password-mask.incollege-out"
+        }
+    }
+}
