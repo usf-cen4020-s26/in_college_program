@@ -1,0 +1,8 @@
+@seed_user username=testeof1 password=TestEof1! first_name=Seed last_name=User university=USF major=CS grad_year=2027
+
+1
+testeof1
+TestEof1!
+3
+1
+My Job Title
