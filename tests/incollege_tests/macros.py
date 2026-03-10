@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Final
+from typing import Any, Final, cast
 
 import yaml
 
@@ -49,8 +49,9 @@ def load_macros(path: Path | None = None) -> dict[str, str]:
     if not isinstance(raw, dict):
         raise ValueError(f"Expected a YAML mapping in {path}, got {type(raw).__name__}")
 
+    raw_map = cast(dict[object, Any], raw)
     macros: dict[str, str] = {}
-    for key, value in raw.items():
+    for key, value in raw_map.items():
         if not isinstance(key, str):
             raise ValueError(f"Macro key must be a string, got {type(key).__name__}: {key}")
         if not isinstance(value, str):
