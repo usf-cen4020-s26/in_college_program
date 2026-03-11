@@ -1,4 +1,4 @@
-2
+2       # Note WS-MAX-JOBS is set to 25 - Possible TODO to fix later and limit number of job postings
 lisa01
 Lisa1234!
 1           # Log in
