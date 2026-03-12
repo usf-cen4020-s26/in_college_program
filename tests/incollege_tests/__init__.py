@@ -4,6 +4,7 @@ Re-exports the public API so that consumers can do::
 
     from incollege_tests import CobolTestRunner, expand_macros, discover_tests
 """
+
 from __future__ import annotations
 
 from incollege_tests.cli import main as cli_main
@@ -13,7 +14,12 @@ from incollege_tests.discovery import (
     derive_expected_output_path,
     discover_tests,
 )
-from incollege_tests.macros import expand_macros, has_macros, load_macros, validate_no_unexpanded
+from incollege_tests.macros import (
+    expand_macros,
+    has_macros,
+    load_macros,
+    validate_no_unexpanded,
+)
 from incollege_tests.models import (
     ProfileRecordData,
     SeedUserMacro,

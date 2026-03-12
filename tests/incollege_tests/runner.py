@@ -4,6 +4,7 @@ Provides :class:`CobolTestRunner` which executes the InCollege COBOL
 executable with test inputs and compares actual output against expected output.
 Uses :class:`~incollege_tests.persistence.PersistenceManager` via composition.
 """
+
 from __future__ import annotations
 
 import difflib

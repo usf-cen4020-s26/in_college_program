@@ -4,6 +4,7 @@ Absorbs the functionality of ``package_tests.py`` and adds automatic macro
 expansion so that submitted zip files contain **no** ``{{MACRO}}`` tags —
 only fully-expanded expected output.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -74,27 +75,33 @@ def main() -> int:
         description="Package test inputs and expected outputs into zip files for submission."
     )
     parser.add_argument(
-        "--epic", default="EpicX",
+        "--epic",
+        default="EpicX",
         help="Epic label used in zip filenames (default: EpicX)",
     )
     parser.add_argument(
-        "--story", default="StoryX",
+        "--story",
+        default="StoryX",
         help="Story label used in zip filenames (default: StoryX)",
     )
     parser.add_argument(
-        "--fixtures", default="./fixtures",
+        "--fixtures",
+        default="./fixtures",
         help="Path to the fixtures directory (default: ./fixtures)",
     )
     parser.add_argument(
-        "--outdir", default=".",
+        "--outdir",
+        default=".",
         help="Directory to place the output zip files (default: .)",
     )
     parser.add_argument(
-        "--flat", action="store_true",
+        "--flat",
+        action="store_true",
         help="Flatten directory structure inside the zip (just filenames, no subdirs)",
     )
     parser.add_argument(
-        "--no-expand", action="store_true",
+        "--no-expand",
+        action="store_true",
         help="Do NOT expand macros in .out.txt files (for debugging)",
     )
 
@@ -123,13 +130,21 @@ def main() -> int:
     expand = not args.no_expand
 
     # Input files never need macro expansion
-    build_zip_with_expansion(input_files, input_zip, fixtures_dir, args.flat, expand=False)
-    build_zip_with_expansion(output_files, output_zip, fixtures_dir, args.flat, expand=expand)
+    build_zip_with_expansion(
+        input_files, input_zip, fixtures_dir, args.flat, expand=False
+    )
+    build_zip_with_expansion(
+        output_files, output_zip, fixtures_dir, args.flat, expand=expand
+    )
 
     print(f"Created {input_zip.name}")
-    print(f"  \u2192 {len(input_files)} input file(s)  [{input_zip.stat().st_size / 1024:.1f} KB]")
+    print(
+        f"  \u2192 {len(input_files)} input file(s)  [{input_zip.stat().st_size / 1024:.1f} KB]"
+    )
     print(f"Created {output_zip.name}")
-    print(f"  \u2192 {len(output_files)} output file(s) [{output_zip.stat().st_size / 1024:.1f} KB]")
+    print(
+        f"  \u2192 {len(output_files)} output file(s) [{output_zip.stat().st_size / 1024:.1f} KB]"
+    )
 
     print()
     print("\u2500\u2500 Input files \u2500\u2500")

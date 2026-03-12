@@ -4,6 +4,7 @@ This tool simulates a live interactive program by maintaining a transcript of
 line-based inputs. After every new input, it replays the full transcript into
 ``INPUT.TXT``, runs the COBOL executable, and displays ``OUTPUT.TXT``.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -34,7 +35,7 @@ class LiveCobolSession:
     transcript_path: Path
     work_dir: Path
     timeout_seconds: int = 10
-    inputs: list[str] = field(default_factory=list) # type: ignore
+    inputs: list[str] = field(default_factory=list)  # type: ignore
 
     def load_transcript(self) -> None:
         """Load existing transcript lines, if present."""
@@ -153,7 +154,11 @@ def _render_replay_result(
 
     console.print(f"[bold green]InCollege Live Replay[/bold green]\\n{subtitle}")
     panel_title = "OUTPUT.TXT Replay"
-    console.print(Panel(result.output_text or "(no output)", title=panel_title, border_style="blue"))
+    console.print(
+        Panel(
+            result.output_text or "(no output)", title=panel_title, border_style="blue"
+        )
+    )
 
     if result.return_code != 0:
         console.print(
@@ -265,7 +270,9 @@ def main(
     resolved_dump_file = dump_file.resolve()
 
     _render_replay_result(console, session, result)
-    console.print("Type :help for commands. Enter any other text to log one input line.")
+    console.print(
+        "Type :help for commands. Enter any other text to log one input line."
+    )
 
     while True:
         raw = typer.prompt("input")

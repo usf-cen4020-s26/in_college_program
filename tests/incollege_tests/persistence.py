@@ -4,6 +4,7 @@ Provides :class:`PersistenceManager` which reads and writes the fixed-width
 record files (``ACCOUNTS.DAT``, ``PROFILES.DAT``, ``PENDING.DAT``,
 ``CONNECTIONS.DAT``) that the InCollege COBOL program uses for persistence.
 """
+
 from __future__ import annotations
 
 from pathlib import Path

@@ -10,6 +10,7 @@ Usage::
 
     expanded = expand_macros(raw_expected_text)
 """
+
 from __future__ import annotations
 
 import re
@@ -20,7 +21,9 @@ import yaml
 
 _MACRO_RE: Final[re.Pattern[str]] = re.compile(r"^\{\{([A-Z_][A-Z0-9_]*)\}\}$")
 
-_DEFAULT_MACRO_PATH: Final[Path] = Path(__file__).resolve().parent.parent / "macro_defs" / "menus.yml"
+_DEFAULT_MACRO_PATH: Final[Path] = (
+    Path(__file__).resolve().parent.parent / "macro_defs" / "menus.yml"
+)
 
 
 def load_macros(path: Path | None = None) -> dict[str, str]:
@@ -53,7 +56,9 @@ def load_macros(path: Path | None = None) -> dict[str, str]:
     macros: dict[str, str] = {}
     for key, value in raw_map.items():
         if not isinstance(key, str):
-            raise ValueError(f"Macro key must be a string, got {type(key).__name__}: {key}")
+            raise ValueError(
+                f"Macro key must be a string, got {type(key).__name__}: {key}"
+            )
         if not isinstance(value, str):
             raise ValueError(
                 f"Macro value for '{key}' must be a string, got {type(value).__name__}"

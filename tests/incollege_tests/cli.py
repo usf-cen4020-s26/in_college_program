@@ -3,6 +3,7 @@
 Provides :func:`main` which parses command-line arguments and delegates to
 either :func:`run_single_fixture` or :func:`run_test_suite`.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -258,22 +259,28 @@ def main() -> int:
         help="Expected output file for --input-file mode (optional, auto-derived if omitted)",
     )
     parser.add_argument(
-        "--verbose", "-v", action="store_true",
+        "--verbose",
+        "-v",
+        action="store_true",
         help="Print verbose output including actual and expected outputs",
     )
     parser.add_argument(
         "--report", type=Path, help="Generate JSON report at specified path"
     )
     parser.add_argument(
-        "--timeout", type=int, default=10,
+        "--timeout",
+        type=int,
+        default=10,
         help="Maximum execution time in seconds for each test (default: 10)",
     )
     parser.add_argument(
-        "--dump-output", type=Path,
+        "--dump-output",
+        type=Path,
         help="Directory to write actual output dumps (*.actual.out.txt)",
     )
     parser.add_argument(
-        "--dump-only", action="store_true",
+        "--dump-only",
+        action="store_true",
         help="Run tests and dump outputs without expected-output diff comparison",
     )
 

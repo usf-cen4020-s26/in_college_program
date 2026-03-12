@@ -2,6 +2,7 @@
 
 Handles coloured test-result printing and optional JSON report files.
 """
+
 from __future__ import annotations
 
 import json

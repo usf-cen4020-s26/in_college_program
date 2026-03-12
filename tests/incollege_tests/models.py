@@ -3,6 +3,7 @@
 Provides dataclasses for seed-user macros, COBOL persistence records,
 test cases, and test results.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

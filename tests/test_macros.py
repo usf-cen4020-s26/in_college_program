@@ -4,6 +4,7 @@ Run with::
 
     python3 -m pytest tests/test_macros.py -v
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -24,7 +25,8 @@ MACRO_DEFS_PATH: Path = Path(__file__).resolve().parent / "macro_defs" / "menus.
 # Fixtures
 # ------------------------------------------------------------------
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def macros() -> dict[str, str]:
     """Load macro definitions once for the test session."""
     return load_macros(MACRO_DEFS_PATH)
@@ -33,6 +35,7 @@ def macros() -> dict[str, str]:
 # ------------------------------------------------------------------
 # Tests
 # ------------------------------------------------------------------
+
 
 def test_load_macros_returns_all_keys(macros: dict[str, str]) -> None:
     """All expected macro keys are present after loading YAML."""

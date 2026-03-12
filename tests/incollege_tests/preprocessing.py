@@ -4,6 +4,7 @@ Before a test input file is fed to the COBOL executable its header macros
 (``@seed_user``) are parsed and removed, and inline ``#`` comments are
 stripped from body lines.
 """
+
 from __future__ import annotations
 
 import shlex

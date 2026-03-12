@@ -3,6 +3,7 @@
 Scans a test root directory for ``inputs/`` and ``expected/`` sub-directories
 and builds :class:`~incollege_tests.models.TestCase` groups.
 """
+
 from __future__ import annotations
 
 import sys
@@ -137,6 +138,7 @@ def build_dump_output_path(
 # ------------------------------------------------------------------
 # Internal helpers
 # ------------------------------------------------------------------
+
 
 def _find_test_dirs(root: Path) -> list[Path]:
     """Find all directories that contain both ``inputs`` and ``expected`` sub-directories."""

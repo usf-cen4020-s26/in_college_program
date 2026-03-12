@@ -3,6 +3,7 @@
 All constants correspond to the COBOL record layouts used by the InCollege
 program for ACCOUNTS.DAT and PROFILES.DAT persistence files.
 """
+
 from __future__ import annotations
 
 from typing import Final
