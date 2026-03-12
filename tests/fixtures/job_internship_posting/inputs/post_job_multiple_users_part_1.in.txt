@@ -1,0 +1,28 @@
+@seed_user username=multiA password=MultiA1! first_name=Multi last_name=A university=USF major=CS grad_year=2027
+@seed_user username=multiB password=MultiB1! first_name=Multi last_name=B university=USF major=CS grad_year=2027
+
+1
+multiA
+MultiA1!
+3 # Select option to post job
+1 # Select option to post new job
+Frontend Dev
+Build responsive UI components with React
+TechStartup
+Remote
+$70000/year
+3
+8
+1
+multiB
+MultiB1!
+3
+1
+Backend Dev
+Design RESTful APIs and database schemas
+TechStartup
+New York, NY
+$75000/year
+3
+8
+3

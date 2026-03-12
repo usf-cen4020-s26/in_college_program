@@ -1,0 +1,31 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+relogin1
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+First Job
+Enter Description (max 200 chars):
+Initial job posting for persistence test
+Enter Employer Name:
+PersistCo
+Enter Location:
+Chicago, IL
+Enter Salary (optional, enter 'NONE' to skip):
+NONE
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+3
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

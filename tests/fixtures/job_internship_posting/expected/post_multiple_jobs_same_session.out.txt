@@ -1,0 +1,51 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+2
+{{CREATE_ACCOUNT_HEADER}}
+lisa01
+{{PASSWORD_PROMPT}}
+********
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+lisa01
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Frontend Developer
+Enter Description (max 200 chars):
+Build responsive React components and UI features
+Enter Employer Name:
+WebDev Inc
+Enter Location:
+Remote
+Enter Salary (optional, enter 'NONE' to skip):
+$75000/year
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Backend Developer
+Enter Description (max 200 chars):
+Design and implement REST APIs and microservices
+Enter Employer Name:
+WebDev Inc
+Enter Location:
+Remote
+Enter Salary (optional, enter 'NONE' to skip):
+$80000/year
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+3
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+{{EXIT_MESSAGE}}

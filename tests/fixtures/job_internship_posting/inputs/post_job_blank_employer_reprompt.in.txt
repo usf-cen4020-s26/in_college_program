@@ -1,0 +1,16 @@
+2   # Create account
+eve01
+Eve1Pass!
+1           # Log in
+eve01
+Eve1Pass!
+3           # Search for a job
+1           # Post a Job/Internship
+Finance Analyst
+Prepare quarterly financial reports and forecasts
+
+Global Finance Inc
+Austin, TX
+$60000/year
+3           # Back to Main Menu
+8           # Logout

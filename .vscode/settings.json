@@ -1,6 +1,67 @@
 {
     "files.associations": {
         "*.cob": "cobol",
-        "*.in.txt": "shellscript"
-    }
+        "*.in.txt": "shellscript",
+        "*.out.txt": "incollege-out"
+    },
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "entity.name.tag.macro.incollege-out",
+                "settings": {
+                    "foreground": "#C586C0",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": [
+                    "punctuation.definition.macro.begin.incollege-out",
+                    "punctuation.definition.macro.end.incollege-out"
+                ],
+                "settings": {
+                    "foreground": "#808080"
+                }
+            },
+            {
+                "scope": "markup.heading.incollege-out",
+                "settings": {
+                    "foreground": "#4EC9B0",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": "comment.line.divider.incollege-out",
+                "settings": {
+                    "foreground": "#6A9955"
+                }
+            },
+            {
+                "scope": "string.unquoted.prompt.incollege-out",
+                "settings": {
+                    "foreground": "#CE9178"
+                }
+            },
+            {
+                "scope": "constant.numeric.choice.incollege-out",
+                "settings": {
+                    "foreground": "#B5CEA8",
+                    "fontStyle": "bold"
+                }
+            },
+            {
+                "scope": "string.unquoted.option.incollege-out",
+                "settings": {
+                    "foreground": "#9CDCFE"
+                }
+            },
+            {
+                "scope": "constant.other.password-mask.incollege-out",
+                "settings": {
+                    "foreground": "#D4D4D4",
+                    "fontStyle": "italic"
+                }
+            }
+        ]
+    },
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }

@@ -1,0 +1,16 @@
+2
+UserA
+Pass123!
+1
+UserA
+Pass123!
+3
+1
+Data Analyst
+Analyzes business data and produces reports for stakeholders.
+DataCo Inc
+New York, NY
+$50,000/year
+3
+8
+3

@@ -1,0 +1,31 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+maxdesc1
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+QA Engineer
+Enter Description (max 200 chars):
+Develops and maintains enterprise web applications using modern technology stacks. Collaborates with cross-functional teams to design, implement, and deploy scalable cloud-based solutions for clients.
+Enter Employer Name:
+TestCorp
+Enter Location:
+San Francisco, CA
+Enter Salary (optional, enter 'NONE' to skip):
+NONE
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+3
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

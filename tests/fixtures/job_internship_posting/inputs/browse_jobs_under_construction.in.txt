@@ -1,0 +1,10 @@
+2           # Create account
+grace1
+Grace12!
+1           # Log in
+grace1
+Grace12!
+3           # Search for a job
+2           # Browse Jobs/Internships - should say under construction
+3           # Back to Main Menu
+8           # Logout

@@ -22,6 +22,9 @@ FILE-CONTROL.
      SELECT CONNECTIONS-FILE ASSIGN TO "CONNECTIONS.DAT"
          ORGANIZATION IS LINE SEQUENTIAL
          FILE STATUS IS WS-CONNECTIONS-STATUS.
+     SELECT JOBS-FILE ASSIGN TO "JOBS.DAT"
+         ORGANIZATION IS LINE SEQUENTIAL
+         FILE STATUS IS WS-JOBS-STATUS.
 DATA DIVISION.
 FILE SECTION.
 FD  INPUT-FILE.
@@ -65,6 +68,15 @@ FD  CONNECTIONS-FILE.
 01  CONNECTION-REC.
     05  CONN-USER-A            PIC X(20).
     05  CONN-USER-B            PIC X(20).
+FD  JOBS-FILE.
+01  JOB-RECORD.
+    05  JOB-ID                 PIC 9(5).
+    05  JOB-POSTER             PIC X(20).
+    05  JOB-TITLE              PIC X(50).
+    05  JOB-DESCRIPTION        PIC X(200).
+    05  JOB-EMPLOYER           PIC X(50).
+    05  JOB-LOCATION           PIC X(50).
+    05  JOB-SALARY             PIC X(20).
 
 
 WORKING-STORAGE SECTION.
@@ -101,6 +113,8 @@ WORKING-STORAGE SECTION.
         10  WS-PEND-SENDER-USERNAME     PIC X(20).
         10  WS-PEND-RECIPIENT-USERNAME  PIC X(20).
         10  WS-PEND-STATUS              PIC X(1).
+           88  PEND-STATUS-PENDING      VALUE "P".
+           88  PEND-STATUS-PENDING-OR-EMPTY VALUES "P", " ".
 
 01  WS-CONNECTIONS-STATUS      PIC XX.
 
@@ -129,13 +143,14 @@ WORKING-STORAGE SECTION.
 01  WS-SKIP-NEXT-MENU-READ      PIC X VALUE "N".
 01  WS-PRELOADED-MENU-CHOICE   PIC X(2).
 01  WS-SKILL-CHOICE             PIC X(2).
+01  WS-JOB-MENU-CHOICE          PIC X(2).
 
 01  WS-INPUT-STATUS             PIC XX.
 01  WS-OUTPUT-STATUS            PIC XX.
 01  WS-ACCOUNTS-STATUS          PIC XX.
 01  WS-PROFILES-STATUS          PIC XX.
 01  WS-PENDING-STATUS           PIC XX.
-01  WS-PENDING-EOF              PIC X VALUE "N".
+01  WS-PENDING-EOF              PIC 9 VALUE 0.
 01  WS-EOF-FLAG                 PIC 9 VALUE 0.
 01  WS-PROGRAM-RUNNING          PIC 9 VALUE 1.
 *> Input pushback: when set, 8100 returns buffered line instead of reading
@@ -231,6 +246,19 @@ WORKING-STORAGE SECTION.
 01  WS-NETWORK-OTHER-USERNAME   PIC X(20).
 01  WS-NETWORK-OTHER-IDX        PIC 9 VALUE 0.
 
+*> ===== Job Postings working-storage =====
+01  WS-JOBS-STATUS              PIC XX.
+01  WS-JOBS-EOF                 PIC X VALUE "N".
+01  WS-JOB-COUNT                PIC 999 VALUE 0.
+01  WS-MAX-JOBS                 PIC 999 VALUE 25.
+01  WS-JOB-ID-COUNTER           PIC 9(5) VALUE 0.
+01  WS-JOB-WRITE-SUCCESS        PIC 9 VALUE 0.
+01  WS-TEMP-JOB-TITLE           PIC X(50).
+01  WS-TEMP-JOB-DESC            PIC X(200).
+01  WS-TEMP-JOB-EMPLOYER        PIC X(50).
+01  WS-TEMP-JOB-LOCATION        PIC X(50).
+01  WS-TEMP-JOB-SALARY          PIC X(20).
+
 
 PROCEDURE DIVISION.
        0000-MAIN-PROGRAM.
@@ -263,6 +291,7 @@ PROCEDURE DIVISION.
            PERFORM 1150-LOAD-PROFILES.
            PERFORM 9200-LOAD-PENDING-REQUESTS.
            PERFORM 9250-LOAD-CONNECTIONS.
+           PERFORM 5350-LOAD-JOBS.
 
            MOVE "========================================"
            TO WS-OUTPUT-LINE.
@@ -320,7 +349,7 @@ PROCEDURE DIVISION.
 *> *      *>*****************************************************************
        9200-LOAD-PENDING-REQUESTS.
            MOVE 0 TO WS-PENDING-COUNT.
-           MOVE "N" TO WS-PENDING-EOF.
+           MOVE 0 TO WS-PENDING-EOF.
 
            OPEN INPUT PENDING-FILE.
 
@@ -407,7 +436,7 @@ PROCEDURE DIVISION.
        9210-READ-PENDING-LOOP.
            READ PENDING-FILE
                AT END
-                   MOVE "Y" TO WS-PENDING-EOF
+                   MOVE 1 TO WS-PENDING-EOF
                NOT AT END
                    IF WS-PENDING-COUNT < WS-MAX-PENDING
                        ADD 1 TO WS-PENDING-COUNT
@@ -420,7 +449,7 @@ PROCEDURE DIVISION.
                    END-IF
            END-READ.
 
-           IF WS-PENDING-EOF = "N"
+           IF WS-PENDING-EOF = 0
                PERFORM 9210-READ-PENDING-LOOP
            END-IF.
            EXIT.
@@ -948,8 +977,7 @@ PROCEDURE DIVISION.
                        WHEN "2"
                            PERFORM 7100-VIEW-PROFILE
                        WHEN "3"
-                           MOVE "Search for a job is under construction." TO WS-OUTPUT-LINE
-                           PERFORM 8000-WRITE-OUTPUT
+                           PERFORM 5300-JOB-SEARCH-MENU
                        WHEN "4"
                            PERFORM 7500-FIND-SOMEONE-YOU-KNOW
                        WHEN "5"
@@ -1848,7 +1876,7 @@ PROCEDURE DIVISION.
            MOVE WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX)
                TO WS-PEND-RECIPIENT-USERNAME(WS-PENDING-COUNT)
 
-           MOVE "P" TO WS-PEND-STATUS(WS-PENDING-COUNT)
+           SET PEND-STATUS-PENDING(WS-PENDING-COUNT) TO TRUE
 
            *> Prepare file record
            MOVE WS-PEND-SENDER-USERNAME(WS-PENDING-COUNT)
@@ -1990,7 +2018,8 @@ PROCEDURE DIVISION.
            MOVE "Y" TO WS-INPUT-PUSHBACK-FLAG
            EXIT.
 
-        COPY "src/SENDREQ_SRC.cpy".
+        COPY SENDREQ_SRC.
+        COPY JOBS_SRC.
       *>*****************************************************************
       *> Echo view-pending user input to OUTPUT.TXT so the request number
       *> and Accept/Reject choice appear in the log (screen and file in sync).
@@ -2003,7 +2032,7 @@ PROCEDURE DIVISION.
            MOVE INPUT-RECORD TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
-        COPY "src/VIEWREQ_SRC.cpy".
+        COPY VIEWREQ_SRC.
 *>*****************************************************************
 *> 7700-VIEW-NETWORK-LIST
 *>   - Displays all accepted connections for the current user

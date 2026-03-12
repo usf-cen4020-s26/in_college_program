@@ -115,7 +115,7 @@
                     = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
                   AND FUNCTION TRIM(WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX))
                     = FUNCTION TRIM(WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX))
-                  AND WS-PEND-STATUS(WS-PEND-IDX) = "P"
+                  AND PEND-STATUS-PENDING(WS-PEND-IDX)
 
                    MOVE "You have already sent a connection request to this user."
                        TO WS-OUTPUT-LINE
@@ -129,7 +129,7 @@
                     = FUNCTION TRIM(WS-PROF-USERNAME(WS-SENDREQ-TARGET-INDEX))
                   AND FUNCTION TRIM(WS-PEND-RECIPIENT-USERNAME(WS-PEND-IDX))
                     = FUNCTION TRIM(WS-USERNAME(WS-CURRENT-USER-INDEX))
-                  AND WS-PEND-STATUS(WS-PEND-IDX) = "P"
+                  AND PEND-STATUS-PENDING(WS-PEND-IDX)
 
                    MOVE "This user has already sent you a connection request."
                        TO WS-OUTPUT-LINE

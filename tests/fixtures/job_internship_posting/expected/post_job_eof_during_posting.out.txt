@@ -1,0 +1,17 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+testeof1
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+My Job Title
+Enter Description (max 200 chars):
+{{EXIT_MESSAGE}}

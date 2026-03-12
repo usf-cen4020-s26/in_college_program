@@ -35,6 +35,10 @@ test_results/
 *.log
 test-dumps/
 
+# Migration backups
+*.out.txt.bak
+migrate_to_macros.py
+
 # IDE
 .idea/
 *.swp
@@ -52,3 +56,4 @@ test-dumps/
 /*.TXT
 /tmp/**/*.DAT
 /tmp/**/*.TXT
+

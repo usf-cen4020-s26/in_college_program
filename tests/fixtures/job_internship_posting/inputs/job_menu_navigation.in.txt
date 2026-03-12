@@ -1,0 +1,26 @@
+2       # Create account
+alice
+Alice15!
+1       # Log in
+alice
+Alice15!
+1       # Create basic profile
+Alice
+Smith
+University of South Florida
+Computer Science
+2026
+
+DONE
+DONE
+3           # Enter Job Search/Internship submenu
+1           # Select Post a Job/Internship
+Nav Test Job
+Testing navigation flow for job posting submenu
+NavCorp
+Remote
+NONE
+2           # Select Browse Jobs/Internships - should show under construction
+3           # Return to Main Menu
+8           # Logout
+3
