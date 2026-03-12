@@ -8,7 +8,6 @@ record files (``ACCOUNTS.DAT``, ``PROFILES.DAT``, ``PENDING.DAT``,
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 from incollege_tests.constants import (
     ACCOUNT_PASSWORD_WIDTH,
@@ -51,6 +50,7 @@ class PersistenceManager:
         self.profiles_dat: Path = work_dir / "PROFILES.DAT"
         self.pending_dat: Path = work_dir / "PENDING.DAT"
         self.connections_dat: Path = work_dir / "CONNECTIONS.DAT"
+        self.jobs_dat: Path = work_dir / "JOBS.DAT"
 
     # ------------------------------------------------------------------
     # Public API
@@ -131,6 +131,7 @@ class PersistenceManager:
             self.profiles_dat,
             self.pending_dat,
             self.connections_dat,
+            self.jobs_dat
         ):
             if dat.exists():
                 dat.unlink()
