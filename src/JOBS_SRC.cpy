@@ -178,9 +178,9 @@
                MOVE SPACES TO WS-TEMP-JOB-SALARY
            END-IF
 
-      *> --- Assign ID, then populate record ---
-           ADD 1 TO WS-JOB-ID-COUNTER
+      *> --- Assign tentative ID, then populate record ---
            MOVE WS-JOB-ID-COUNTER                TO JOB-ID
+           ADD 1 TO JOB-ID
            MOVE WS-USERNAME(WS-CURRENT-USER-INDEX) TO JOB-POSTER
            MOVE WS-TEMP-JOB-TITLE               TO JOB-TITLE
            MOVE WS-TEMP-JOB-DESC                TO JOB-DESCRIPTION
@@ -188,13 +188,20 @@
            MOVE WS-TEMP-JOB-LOCATION            TO JOB-LOCATION
            MOVE WS-TEMP-JOB-SALARY              TO JOB-SALARY
            PERFORM 5330-WRITE-JOB-TO-FILE
-           ADD 1 TO WS-JOB-COUNT
+           IF WS-JOB-WRITE-SUCCESS = 1
+               MOVE JOB-ID TO WS-JOB-ID-COUNTER
+               ADD 1 TO WS-JOB-COUNT
 
       *> --- Confirmation ---
-           MOVE "Job posted successfully!" TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-           MOVE "----------------------------------" TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
+               MOVE "Job posted successfully!" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "----------------------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           ELSE
+               MOVE "Job could not be posted. Please try again."
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF
            EXIT.
 
       *> Browse flow in dedicated copybook (Week 6 implementation guidance)
@@ -253,6 +260,7 @@
       *> Called after user completes posting flow
       *>*****************************************************************
        5330-WRITE-JOB-TO-FILE.
+           MOVE 0 TO WS-JOB-WRITE-SUCCESS
            OPEN EXTEND JOBS-FILE
 
            IF WS-JOBS-STATUS = "35"
@@ -280,6 +288,8 @@
                    DELIMITED BY SIZE INTO WS-OUTPUT-LINE
                END-STRING
                PERFORM 8000-WRITE-OUTPUT
+           ELSE
+               MOVE 1 TO WS-JOB-WRITE-SUCCESS
            END-IF
 
            CLOSE JOBS-FILE
