@@ -23,7 +23,8 @@ from incollege_tests import TestResult as TestResult
 from incollege_tests import TestStatus as TestStatus
 from incollege_tests import build_dump_output_path as build_dump_output_path
 from incollege_tests import cli_main as cli_main
-from incollege_tests import derive_expected_output_path as derive_expected_output_path
+from incollege_tests import \
+    derive_expected_output_path as derive_expected_output_path
 from incollege_tests import discover_tests as discover_tests
 from incollege_tests import expand_macros as expand_macros
 from incollege_tests import generate_report as generate_report
