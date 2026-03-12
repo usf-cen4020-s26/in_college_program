@@ -28,6 +28,36 @@ def collect_files(fixtures_dir: Path, extension: str) -> list[Path]:
     return sorted(fixtures_dir.rglob(f"*{extension}"))
 
 
+def strip_comments(content: str) -> str:
+    """Remove comments from an input file's content.
+
+    Handles two comment styles:
+    - Full-line comments: lines whose first non-whitespace character is ``#``
+      are dropped entirely.
+    - Inline comments: everything from ``#`` to end-of-line is removed; the
+      remaining text is right-stripped of whitespace.
+
+    Args:
+        content: Raw text of an ``.in.txt`` file.
+
+    Returns:
+        Text with all comment annotations removed.
+    """
+    result: list[str] = []
+    for line in content.splitlines(keepends=True):
+        stripped = line.lstrip()
+        if stripped.startswith("#"):
+            # Drop full-line comment
+            continue
+        # Remove inline comment and trailing whitespace, preserve line ending
+        eol = "\n" if line.endswith("\n") else ""
+        bare = line.rstrip("\n").rstrip("\r")
+        if "#" in bare:
+            bare = bare[: bare.index("#")].rstrip()
+        result.append(bare + eol)
+    return "".join(result)
+
+
 def build_zip_with_expansion(
     files: list[Path],
     zip_path: Path,
@@ -61,6 +91,8 @@ def build_zip_with_expansion(
                 expanded = expand_macros(content, macros)
                 validate_no_unexpanded(expanded)
                 zf.writestr(arcname, expanded)
+            elif f.name.endswith(".in.txt"):
+                zf.writestr(arcname, strip_comments(f.read_text()))
             else:
                 zf.write(f, arcname)
 
