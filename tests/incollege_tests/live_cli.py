@@ -7,10 +7,10 @@ line-based inputs. After every new input, it replays the full transcript into
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from pathlib import Path
 import subprocess
+from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
 
 import typer
 from rich.console import Console

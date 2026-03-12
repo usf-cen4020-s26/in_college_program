@@ -12,7 +12,8 @@ import sys
 import zipfile
 from pathlib import Path
 
-from incollege_tests.macros import expand_macros, load_macros, validate_no_unexpanded
+from incollege_tests.macros import (expand_macros, load_macros,
+                                    validate_no_unexpanded)
 
 
 def collect_files(fixtures_dir: Path, extension: str) -> list[Path]:

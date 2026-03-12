@@ -10,6 +10,5 @@ import sys
 
 from incollege_tests.packaging import main
 
-
 if __name__ == "__main__":
     sys.exit(main())
