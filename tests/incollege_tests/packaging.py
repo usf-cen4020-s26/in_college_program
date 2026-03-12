@@ -86,7 +86,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--fixtures",
-        default="./fixtures",
+        default="./tests/fixtures",
         help="Path to the fixtures directory (default: ./fixtures)",
     )
     parser.add_argument(
