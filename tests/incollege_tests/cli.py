@@ -12,9 +12,11 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from incollege_tests.discovery import (build_dump_output_path,
-                                       derive_expected_output_path,
-                                       discover_tests)
+from incollege_tests.discovery import (
+    build_dump_output_path,
+    derive_expected_output_path,
+    discover_tests,
+)
 from incollege_tests.models import TestResult, TestStatus
 from incollege_tests.preprocessing import preprocess_input_file
 from incollege_tests.reporting import generate_report, print_test_result

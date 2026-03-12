@@ -10,27 +10,30 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 
-from incollege_tests.constants import (ACCOUNT_PASSWORD_WIDTH,
-                                       ACCOUNT_RECORD_WIDTH,
-                                       ACCOUNT_USERNAME_WIDTH,
-                                       PROFILE_ABOUT_ME_WIDTH,
-                                       PROFILE_COUNT_WIDTH,
-                                       PROFILE_EDU_DEGREE_WIDTH,
-                                       PROFILE_EDU_MAX,
-                                       PROFILE_EDU_UNIVERSITY_WIDTH,
-                                       PROFILE_EDU_YEARS_WIDTH,
-                                       PROFILE_EXP_COMPANY_WIDTH,
-                                       PROFILE_EXP_DATES_WIDTH,
-                                       PROFILE_EXP_DESC_WIDTH, PROFILE_EXP_MAX,
-                                       PROFILE_EXP_TITLE_WIDTH,
-                                       PROFILE_FIRST_NAME_WIDTH,
-                                       PROFILE_GRAD_YEAR_WIDTH,
-                                       PROFILE_HAS_PROFILE_WIDTH,
-                                       PROFILE_LAST_NAME_WIDTH,
-                                       PROFILE_MAJOR_WIDTH,
-                                       PROFILE_RECORD_WIDTH,
-                                       PROFILE_UNIVERSITY_WIDTH,
-                                       PROFILE_USERNAME_WIDTH)
+from incollege_tests.constants import (
+    ACCOUNT_PASSWORD_WIDTH,
+    ACCOUNT_RECORD_WIDTH,
+    ACCOUNT_USERNAME_WIDTH,
+    PROFILE_ABOUT_ME_WIDTH,
+    PROFILE_COUNT_WIDTH,
+    PROFILE_EDU_DEGREE_WIDTH,
+    PROFILE_EDU_MAX,
+    PROFILE_EDU_UNIVERSITY_WIDTH,
+    PROFILE_EDU_YEARS_WIDTH,
+    PROFILE_EXP_COMPANY_WIDTH,
+    PROFILE_EXP_DATES_WIDTH,
+    PROFILE_EXP_DESC_WIDTH,
+    PROFILE_EXP_MAX,
+    PROFILE_EXP_TITLE_WIDTH,
+    PROFILE_FIRST_NAME_WIDTH,
+    PROFILE_GRAD_YEAR_WIDTH,
+    PROFILE_HAS_PROFILE_WIDTH,
+    PROFILE_LAST_NAME_WIDTH,
+    PROFILE_MAJOR_WIDTH,
+    PROFILE_RECORD_WIDTH,
+    PROFILE_UNIVERSITY_WIDTH,
+    PROFILE_USERNAME_WIDTH,
+)
 from incollege_tests.models import ProfileRecordData, SeedUserMacro
 
 

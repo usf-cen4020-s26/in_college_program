@@ -9,13 +9,24 @@ from __future__ import annotations
 
 from incollege_tests.cli import main as cli_main
 from incollege_tests.cli import run_single_fixture, run_test_suite
-from incollege_tests.discovery import (build_dump_output_path,
-                                       derive_expected_output_path,
-                                       discover_tests)
-from incollege_tests.macros import (expand_macros, has_macros, load_macros,
-                                    validate_no_unexpanded)
-from incollege_tests.models import (ProfileRecordData, SeedUserMacro, TestCase,
-                                    TestResult, TestStatus)
+from incollege_tests.discovery import (
+    build_dump_output_path,
+    derive_expected_output_path,
+    discover_tests,
+)
+from incollege_tests.macros import (
+    expand_macros,
+    has_macros,
+    load_macros,
+    validate_no_unexpanded,
+)
+from incollege_tests.models import (
+    ProfileRecordData,
+    SeedUserMacro,
+    TestCase,
+    TestResult,
+    TestStatus,
+)
 from incollege_tests.packaging import main as packaging_main
 from incollege_tests.persistence import PersistenceManager
 from incollege_tests.preprocessing import preprocess_input_file

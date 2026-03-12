@@ -10,8 +10,12 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from incollege_tests.macros import (expand_macros, has_macros, load_macros,
-                                    validate_no_unexpanded)
+from incollege_tests.macros import (
+    expand_macros,
+    has_macros,
+    load_macros,
+    validate_no_unexpanded,
+)
 
 MACRO_DEFS_PATH: Path = Path(__file__).resolve().parent / "macro_defs" / "menus.yml"
 

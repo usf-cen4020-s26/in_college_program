@@ -10,8 +10,7 @@ from __future__ import annotations
 import shlex
 from pathlib import Path
 
-from incollege_tests.constants import (ACCOUNT_PASSWORD_WIDTH,
-                                       ACCOUNT_USERNAME_WIDTH)
+from incollege_tests.constants import ACCOUNT_PASSWORD_WIDTH, ACCOUNT_USERNAME_WIDTH
 from incollege_tests.models import SeedUserMacro
 
 
