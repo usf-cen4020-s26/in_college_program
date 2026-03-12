@@ -1,0 +1,177 @@
+2       # Note WS-MAX-JOBS is set to 25 - Possible TODO to fix later and limit number of job postings
+lisa01
+Lisa1234!
+1           # Log in
+lisa01
+Lisa1234!
+3           # Search for a job
+1           # Post job #1
+Frontend Developer
+Build responsive React components and UI features
+WebDev Inc
+Remote
+$75000/year
+1           # Post job #2
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 3
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 4
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 5
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 6
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 7
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 8
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 9
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 10
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 11
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 12
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 13
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 14
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 15
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 16
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 17
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 18
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 19
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 20
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 21
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 22
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 23
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 24
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 25
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 26
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 27
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+1           # Post job # 28
+Backend Developer
+Design and implement REST APIs and microservices
+WebDev Inc
+Remote
+$80000/year
+3           # Back to Main Menu
+8           # Logout

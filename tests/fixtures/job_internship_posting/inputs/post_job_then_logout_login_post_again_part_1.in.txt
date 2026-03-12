@@ -1,0 +1,15 @@
+@seed_user username=relogin1 password=Relogin1! first_name=Seed last_name=User university=USF major=CS grad_year=2027
+
+1
+relogin1
+Relogin1!
+3
+1
+First Job
+Initial job posting for persistence test
+PersistCo
+Chicago, IL
+NONE
+3
+8
+3

@@ -1,0 +1,58 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+multiA
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Frontend Dev
+Enter Description (max 200 chars):
+Build responsive UI components with React
+Enter Employer Name:
+TechStartup
+Enter Location:
+Remote
+Enter Salary (optional, enter 'NONE' to skip):
+$70000/year
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+3
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+multiB
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Backend Dev
+Enter Description (max 200 chars):
+Design RESTful APIs and database schemas
+Enter Employer Name:
+TechStartup
+Enter Location:
+New York, NY
+Enter Salary (optional, enter 'NONE' to skip):
+$75000/year
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+3
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

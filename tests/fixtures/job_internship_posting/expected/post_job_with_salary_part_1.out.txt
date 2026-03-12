@@ -1,0 +1,38 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+2
+{{CREATE_ACCOUNT_HEADER}}
+UserA
+{{PASSWORD_PROMPT}}
+********
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+UserA
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Data Analyst
+Enter Description (max 200 chars):
+Analyzes business data and produces reports for stakeholders.
+Enter Employer Name:
+DataCo Inc
+Enter Location:
+New York, NY
+Enter Salary (optional, enter 'NONE' to skip):
+$50,000/year
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+3
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

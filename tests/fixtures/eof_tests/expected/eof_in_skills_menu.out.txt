@@ -41,7 +41,13 @@ You have successfully logged in
 8. Logout
 Enter choice (1-8):
 3
-Search for a job is under construction.
+
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. Back to Main Menu
+Enter your choice (1-3):
+3
 
 === MAIN MENU ===
 1. Create/Edit My Profile
@@ -53,5 +59,13 @@ Search for a job is under construction.
 7. View My Network
 8. Logout
 Enter choice (1-8):
+8
+
+Please select an option:
+1. Login with existing account
+2. Create new account
+3. Exit
+Enter choice (1-3):
+3
 
 Thank you for using InCollege!

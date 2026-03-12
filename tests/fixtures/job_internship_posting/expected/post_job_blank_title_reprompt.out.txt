@@ -1,0 +1,42 @@
+
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+2
+{{CREATE_ACCOUNT_HEADER}}
+carol
+{{PASSWORD_PROMPT}}
+********
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+carol
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Job Title is required. Please try again.
+Enter Job Title:
+Job Title is required. Please try again.
+Enter Job Title:
+UX Designer
+Enter Description (max 200 chars):
+Design user flows and wireframes
+Enter Employer Name:
+DesignStudio
+Enter Location:
+Tampa, FL
+Enter Salary (optional, enter 'NONE' to skip):
+$45/hour
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+3
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+{{EXIT_MESSAGE}}
