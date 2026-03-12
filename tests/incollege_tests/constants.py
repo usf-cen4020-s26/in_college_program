@@ -70,7 +70,7 @@ PROFILE_RECORD_WIDTH: Final[int] = (
 # Job posting field widths
 # ---------------------------------------------------------------------------
 JOB_TITLE_WIDTH: Final[int] = 50
-JOB_DESC_WIDTH: Final[int] = 250
+JOB_DESC_WIDTH: Final[int] = 200
 JOB_EMPLOYER_WIDTH: Final[int] = 50
 JOB_LOCATION_WIDTH: Final[int] = 50
 JOB_SALARY_WIDTH: Final[int] = 20
