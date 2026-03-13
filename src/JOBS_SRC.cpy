@@ -5,7 +5,7 @@
        5300-JOB-SEARCH-MENU.
            MOVE "1" TO WS-JOB-MENU-CHOICE
 
-           PERFORM UNTIL WS-JOB-MENU-CHOICE = "3"
+           PERFORM UNTIL WS-JOB-MENU-CHOICE = "4"
                OR WS-PROGRAM-RUNNING = 0
 
                MOVE " " TO WS-OUTPUT-LINE
@@ -17,9 +17,11 @@
                PERFORM 8000-WRITE-OUTPUT
                MOVE "2. Browse Jobs/Internships" TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
-               MOVE "3. Back to Main Menu" TO WS-OUTPUT-LINE
+               MOVE "3. View My Applications" TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
-               MOVE "Enter your choice (1-3): " TO WS-OUTPUT-LINE
+               MOVE "4. Back to Main Menu" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               MOVE "Enter your choice (1-4): " TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
 
                PERFORM 8100-READ-INPUT
@@ -36,8 +38,10 @@
                    WHEN "1"
                        PERFORM 5310-POST-JOB
                    WHEN "2"
-                       PERFORM 5320-BROWSE-JOBS-STUB
+                       PERFORM 5320-BROWSE-JOBS
                    WHEN "3"
+                       PERFORM 5340-VIEW-MY-APPLICATIONS
+                   WHEN "4"
                        EXIT PERFORM
                    WHEN OTHER
                        MOVE "Invalid choice. Please try again."
@@ -191,6 +195,15 @@
            IF WS-JOB-WRITE-SUCCESS = 1
                MOVE JOB-ID TO WS-JOB-ID-COUNTER
                ADD 1 TO WS-JOB-COUNT
+               IF WS-JOB-COUNT <= WS-MAX-JOBS
+                   MOVE JOB-ID          TO WS-JT-ID(WS-JOB-COUNT)
+                   MOVE JOB-POSTER      TO WS-JT-POSTER(WS-JOB-COUNT)
+                   MOVE JOB-TITLE       TO WS-JT-TITLE(WS-JOB-COUNT)
+                   MOVE JOB-DESCRIPTION TO WS-JT-DESC(WS-JOB-COUNT)
+                   MOVE JOB-EMPLOYER    TO WS-JT-EMPLOYER(WS-JOB-COUNT)
+                   MOVE JOB-LOCATION    TO WS-JT-LOCATION(WS-JOB-COUNT)
+                   MOVE JOB-SALARY      TO WS-JT-SALARY(WS-JOB-COUNT)
+               END-IF
 
       *> --- Confirmation ---
                MOVE "Job posted successfully!" TO WS-OUTPUT-LINE
@@ -204,93 +217,5 @@
            END-IF
            EXIT.
 
-      *> Browse flow in dedicated copybook (Week 6 implementation guidance)
        COPY BROWSEJOBS_SRC.
 
-                 *>*****************************************************************
-      *> 5350-LOAD-JOBS: Load existing jobs from JOBS.DAT at startup
-      *> 1) Reads file so WS-JOB-COUNT reflects existing data
-      *> 2) Sets WS-JOB-ID-COUNTER to highest ID found
-      *>*****************************************************************
-       5350-LOAD-JOBS.
-           MOVE 0   TO WS-JOB-COUNT
-           MOVE "N" TO WS-JOBS-EOF
-           MOVE 0   TO WS-JOB-ID-COUNTER
-
-           OPEN INPUT JOBS-FILE
-
-           EVALUATE WS-JOBS-STATUS
-               WHEN "00"
-                   PERFORM 5355-READ-JOBS-LOOP
-                   CLOSE JOBS-FILE
-               WHEN "35"
-                   CONTINUE
-               WHEN OTHER
-                   MOVE SPACES TO WS-OUTPUT-LINE
-                   STRING "WARNING: Could not open JOBS.DAT. STATUS="
-                       WS-JOBS-STATUS
-                       DELIMITED BY SIZE INTO WS-OUTPUT-LINE
-                   END-STRING
-                   PERFORM 8000-WRITE-OUTPUT
-           END-EVALUATE
-           EXIT.
-
-      *>*****************************************************************
-      *> 5355-READ-JOBS-LOOP: Read all records, track highest job ID
-      *> Sequential ID counter = max ID found in file
-      *>*****************************************************************
-       5355-READ-JOBS-LOOP.
-           READ JOBS-FILE
-               AT END
-                   MOVE "Y" TO WS-JOBS-EOF
-               NOT AT END
-                   ADD 1 TO WS-JOB-COUNT
-                   IF JOB-ID > WS-JOB-ID-COUNTER
-                       MOVE JOB-ID TO WS-JOB-ID-COUNTER
-                   END-IF
-           END-READ
-
-           IF WS-JOBS-EOF = "N"
-               PERFORM 5355-READ-JOBS-LOOP
-           END-IF
-           EXIT.
-
-      *>*****************************************************************
-      *> 5330-WRITE-JOB-TO-FILE: Append one job record to JOBS.DAT
-      *> Called after user completes posting flow
-      *>*****************************************************************
-       5330-WRITE-JOB-TO-FILE.
-           MOVE 0 TO WS-JOB-WRITE-SUCCESS
-           OPEN EXTEND JOBS-FILE
-
-           IF WS-JOBS-STATUS = "35"
-               OPEN OUTPUT JOBS-FILE
-               CLOSE JOBS-FILE
-               OPEN EXTEND JOBS-FILE
-           END-IF
-
-           IF WS-JOBS-STATUS NOT = "00"
-               MOVE SPACES TO WS-OUTPUT-LINE
-               STRING "ERROR: Could not open JOBS.DAT. STATUS="
-                   WS-JOBS-STATUS
-                   DELIMITED BY SIZE INTO WS-OUTPUT-LINE
-               END-STRING
-               PERFORM 8000-WRITE-OUTPUT
-               EXIT PARAGRAPH
-           END-IF
-
-           WRITE JOB-RECORD
-
-           IF WS-JOBS-STATUS NOT = "00"
-               MOVE SPACES TO WS-OUTPUT-LINE
-               STRING "ERROR: Could not write to JOBS.DAT. STATUS="
-                   WS-JOBS-STATUS
-                   DELIMITED BY SIZE INTO WS-OUTPUT-LINE
-               END-STRING
-               PERFORM 8000-WRITE-OUTPUT
-           ELSE
-               MOVE 1 TO WS-JOB-WRITE-SUCCESS
-           END-IF
-
-           CLOSE JOBS-FILE
-           EXIT.

@@ -12,5 +12,5 @@ Create social media content and run ad campaigns
 BrandCo
 Chicago, IL
 NONE
-3           # Back to Main Menu
+4           # Back to Main Menu
 8           # Logout
