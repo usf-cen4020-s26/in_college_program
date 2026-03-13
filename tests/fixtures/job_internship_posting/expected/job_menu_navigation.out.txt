@@ -53,10 +53,13 @@ NONE
 {{JOB_POST_SUCCESS}}
 {{JOB_MENU}}
 2
-
-{{BROWSE_UNDER_CONSTRUCTION}}
+{{JOB_BROWSE_HEADER}}
+001. Nav Test Job at NavCorp (Remote)
+{{JOB_BROWSE_SEPARATOR}}
+Enter job number to view details, or 0 to go back:
+0
 {{JOB_MENU}}
-3
+4
 {{MAIN_MENU}}
 8
 {{LOGIN_SCREEN}}

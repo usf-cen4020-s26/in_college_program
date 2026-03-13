@@ -3,6 +3,7 @@ multiA
 MultiA1!
 3
 2
-3
+0
+4
 8
 3

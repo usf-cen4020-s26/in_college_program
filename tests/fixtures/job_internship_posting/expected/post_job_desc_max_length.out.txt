@@ -23,7 +23,7 @@ Enter Salary (optional, enter 'NONE' to skip):
 NONE
 {{JOB_POST_SUCCESS}}
 {{JOB_MENU}}
-3
+4
 {{MAIN_MENU}}
 8
 {{LOGIN_SCREEN}}
