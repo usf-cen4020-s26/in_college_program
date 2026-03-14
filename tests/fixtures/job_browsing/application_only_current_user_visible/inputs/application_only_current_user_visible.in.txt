@@ -1,0 +1,58 @@
+2
+poster1
+Password1!
+1
+poster1
+Password1!
+3
+1
+Software Engineer Intern
+Build and test application features
+Google
+Tampa, FL
+$25/hr
+1
+QA Analyst Intern
+Test software and report defects
+Amazon
+Orlando, FL
+$22/hr
+4
+8
+
+2
+userA1
+Password1!
+1
+userA1
+Password1!
+3
+2
+1
+1
+0
+4
+8
+
+2
+userB1
+Password1!
+1
+userB1
+Password1!
+3
+2
+2
+1
+0
+4
+8
+
+1
+userA1
+Password1!
+3
+3
+4
+8
+3
