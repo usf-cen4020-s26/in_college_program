@@ -11,7 +11,7 @@ Enter password:
 {{JOB_MENU}}
 2
 {{JOB_BROWSE_HEADER}}
-001. Data Analyst at DataCo Inc (New York, NY)
+1. Data Analyst at DataCo Inc (New York, NY)
 {{JOB_BROWSE_SEPARATOR}}
 Enter job number to view details, or 0 to go back:
 0

@@ -27,7 +27,11 @@
                PERFORM VARYING WS-BROWSE-IDX FROM 1 BY 1
                    UNTIL WS-BROWSE-IDX > WS-JOB-COUNT
                    MOVE SPACES TO WS-OUTPUT-LINE
-                   STRING WS-BROWSE-IDX ". "
+                   MOVE WS-BROWSE-IDX TO WS-DISPLAY-NUM
+                   MOVE WS-DISPLAY-NUM TO WS-DISP-ALPHANUM
+                   MOVE FUNCTION TRIM(WS-DISP-ALPHANUM) TO WS-NUM-DISP-STR
+                   STRING WS-NUM-DISP-STR DELIMITED BY SPACE
+                       ". "
                        FUNCTION TRIM(WS-JT-TITLE(WS-BROWSE-IDX))
                        " at "
                        FUNCTION TRIM(WS-JT-EMPLOYER(WS-BROWSE-IDX))

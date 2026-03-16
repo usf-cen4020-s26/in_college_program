@@ -54,7 +54,7 @@ NONE
 {{JOB_MENU}}
 2
 {{JOB_BROWSE_HEADER}}
-001. Nav Test Job at NavCorp (Remote)
+1. Nav Test Job at NavCorp (Remote)
 {{JOB_BROWSE_SEPARATOR}}
 Enter job number to view details, or 0 to go back:
 0

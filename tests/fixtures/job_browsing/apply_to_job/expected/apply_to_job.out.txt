@@ -49,7 +49,7 @@ Enter your choice:
 1
 Your application for Software Engineer Intern at Google has been submitted.
 {{JOB_BROWSE_HEADER}}
-001. Software Engineer Intern at Google (Tampa, FL)
+1. Software Engineer Intern at Google (Tampa, FL)
 {{JOB_BROWSE_SEPARATOR}}
 Enter job number to view details, or 0 to go back:
 0

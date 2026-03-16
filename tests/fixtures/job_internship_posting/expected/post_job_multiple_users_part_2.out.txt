@@ -11,8 +11,8 @@ Enter password:
 {{JOB_MENU}}
 2
 {{JOB_BROWSE_HEADER}}
-001. Frontend Dev at TechStartup (Remote)
-002. Backend Dev at TechStartup (New York, NY)
+1. Frontend Dev at TechStartup (Remote)
+2. Backend Dev at TechStartup (New York, NY)
 {{JOB_BROWSE_SEPARATOR}}
 Enter job number to view details, or 0 to go back:
 0

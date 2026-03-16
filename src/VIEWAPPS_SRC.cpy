@@ -39,12 +39,19 @@
                    PERFORM 8000-WRITE-OUTPUT
            END-EVALUATE
 
+           IF WS-APP-COUNT = 0
+               MOVE "No job applications found" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF
+
            MOVE "------------------------------" TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
 
+           MOVE WS-APP-COUNT TO WS-DISPLAY-NUM
+           MOVE WS-DISPLAY-NUM TO WS-DISP-ALPHANUM
+           MOVE FUNCTION TRIM(WS-DISP-ALPHANUM) TO WS-NUM-DISP-STR
            MOVE SPACES TO WS-OUTPUT-LINE
-           STRING "Total Applications: "
-               WS-APP-COUNT
+           STRING "Total Applications: " WS-NUM-DISP-STR
                DELIMITED BY SIZE INTO WS-OUTPUT-LINE
            END-STRING
            PERFORM 8000-WRITE-OUTPUT
@@ -121,3 +128,4 @@
                    PERFORM 8000-WRITE-OUTPUT
            END-EVALUATE
            EXIT.
+

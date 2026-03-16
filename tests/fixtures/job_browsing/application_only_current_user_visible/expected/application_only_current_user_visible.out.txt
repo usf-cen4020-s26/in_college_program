@@ -66,8 +66,8 @@ Enter password:
 {{JOB_MENU}}
 2
 {{JOB_BROWSE_HEADER}}
-001. Software Engineer Intern at Google (Tampa, FL)
-002. QA Analyst Intern at Amazon (Orlando, FL)
+1. Software Engineer Intern at Google (Tampa, FL)
+2. QA Analyst Intern at Amazon (Orlando, FL)
 {{JOB_BROWSE_SEPARATOR}}
 Enter job number to view details, or 0 to go back:
 1
@@ -84,8 +84,8 @@ Enter your choice:
 1
 Your application for Software Engineer Intern at Google has been submitted.
 {{JOB_BROWSE_HEADER}}
-001. Software Engineer Intern at Google (Tampa, FL)
-002. QA Analyst Intern at Amazon (Orlando, FL)
+1. Software Engineer Intern at Google (Tampa, FL)
+2. QA Analyst Intern at Amazon (Orlando, FL)
 {{JOB_BROWSE_SEPARATOR}}
 Enter job number to view details, or 0 to go back:
 0
@@ -112,8 +112,8 @@ Enter password:
 {{JOB_MENU}}
 2
 {{JOB_BROWSE_HEADER}}
-001. Software Engineer Intern at Google (Tampa, FL)
-002. QA Analyst Intern at Amazon (Orlando, FL)
+1. Software Engineer Intern at Google (Tampa, FL)
+2. QA Analyst Intern at Amazon (Orlando, FL)
 {{JOB_BROWSE_SEPARATOR}}
 Enter job number to view details, or 0 to go back:
 2
@@ -130,8 +130,8 @@ Enter your choice:
 1
 Your application for QA Analyst Intern at Amazon has been submitted.
 {{JOB_BROWSE_HEADER}}
-001. Software Engineer Intern at Google (Tampa, FL)
-002. QA Analyst Intern at Amazon (Orlando, FL)
+1. Software Engineer Intern at Google (Tampa, FL)
+2. QA Analyst Intern at Amazon (Orlando, FL)
 {{JOB_BROWSE_SEPARATOR}}
 Enter job number to view details, or 0 to go back:
 0
@@ -158,7 +158,7 @@ Employer: Google
 Location: Tampa, FL
 {{APP_SEPARATOR}}
 {{APP_SUMMARY_SEPARATOR}}
-Total Applications: 001
+Total Applications: 1
 {{APP_SUMMARY_SEPARATOR}}
 {{JOB_MENU}}
 4
