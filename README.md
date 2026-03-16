@@ -63,7 +63,28 @@ InCollege is a career networking platform implemented in COBOL using GNU COBOL. 
 - Optional salary field (`NONE` skips salary)
 - Required-field re-prompting when Title/Description/Employer/Location is blank
 - Persistent storage of postings in `JOBS.DAT` across program runs
-- Browse Jobs/Internships option currently returns an under-construction message
+
+### Job Browsing & Applications (Epic 7)
+
+- **Browse Jobs/Internships:** Fully functional listing of all available job and internship postings
+  - Each listing shows Job Title, Employer, and Location as a quick summary
+  - Enter `0` to return to the Job Search/Internship menu
+- **View Full Job Details:** Select a job by number to view complete details:
+  - Job Title, Description, Employer, Location, and Salary (if provided)
+- **Apply for a Job:** From the job detail view, apply with one menu selection
+  - Application is recorded persistently in `APPLICATIONS.DAT`
+  - Confirmation message displayed: `Your application for [Job Title] at [Employer] has been submitted.`
+- **View My Applications:** New menu option in the Job Search/Internship submenu
+  - Generates a Job Application Summary Report for the currently logged-in user
+  - Report displays: Job Title, Employer, and Location for each application
+  - Includes a header, separator lines, and a total application count
+  - Only shows applications belonging to the logged-in user
+
+**Job Search/Internship Menu options:**
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Back to Main Menu
 
 ### Additional Features
 
@@ -148,7 +169,7 @@ This input would:
 6. Select "Exit" (3) from the main welcome screen
 
 **Data Persistence:**
-User accounts are stored in `ACCOUNTS.DAT`, profiles in `PROFILES.DAT`, and job/internship postings in `JOBS.DAT`. These files persist between program executions.
+User accounts are stored in `ACCOUNTS.DAT`, profiles in `PROFILES.DAT`, job/internship postings in `JOBS.DAT`, and job applications in `APPLICATIONS.DAT`. These files persist between program executions.
 
 ### Epic 6 Input Example (Post Job/Internship)
 
@@ -181,6 +202,35 @@ Flow mapping:
 4. Choose `Post a Job/Internship`
 5. Enter job details
 6. Return to main menu, logout, then exit
+
+### Epic 7 Input Example (Browse, Apply, View Applications)
+
+This example shows browsing jobs, applying to one, and viewing the application report:
+
+```text
+1
+UserA
+Passw0rd!
+3
+2
+1
+1
+0
+3
+8
+3
+```
+
+Flow mapping:
+
+1. Login as `UserA`
+2. Open `Search for a job` (option `3` from main menu)
+3. Choose `Browse Jobs/Internships` (option `2`)
+4. Select job `1` to view full details
+5. Choose `Apply for this Job` (option `1`)
+6. Return to job list (option `0`)
+7. Choose `View My Applications` (option `3`) to generate the report
+8. Return to main menu, logout, then exit
 
 ### Live Replay CLI (Interactive Simulation)
 
@@ -243,6 +293,7 @@ Tests are organized by feature category under `tests/fixtures/`:
 - `profiles/` - Profile creation, editing, and viewing tests
 - `main_menu/` - Post-login menu navigation tests
 - `job_internship_posting/` - Job posting and submenu behavior tests
+- `job_browsing/` - Job browsing, full detail view, applying to jobs, and application report tests
 - `eof_tests/` - End-of-file handling validation
 
 The test suite also supports:
@@ -266,7 +317,7 @@ Some features require testing persistence across multiple program executions. Fo
 The test runner automatically detects these multi-part tests and:
 
 - Executes parts sequentially in numerical order
-- Maintains `ACCOUNTS.DAT`, `PROFILES.DAT`, and `JOBS.DAT` between parts
+- Maintains `ACCOUNTS.DAT`, `PROFILES.DAT`, `JOBS.DAT`, and `APPLICATIONS.DAT` between parts
 - Clears persistent storage between different test groups
 
 ### Running Tests
