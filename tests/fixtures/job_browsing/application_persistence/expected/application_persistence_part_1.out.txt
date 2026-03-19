@@ -1,0 +1,95 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+2
+{{CREATE_ACCOUNT_HEADER}}
+persistuser
+{{PASSWORD_PROMPT}}
+********
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+persistuser
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Software Intern
+Enter Description (max 200 chars):
+Develop tools for internal testing.
+Enter Employer Name:
+TechCorp
+Enter Location:
+New York, NY
+Enter Salary (optional, enter 'NONE' to skip):
+$25/hour
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Data Analyst
+Enter Description (max 200 chars):
+Analyze data pipelines.
+Enter Employer Name:
+DataSolutions
+Enter Location:
+Remote
+Enter Salary (optional, enter 'NONE' to skip):
+NONE
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+2
+{{JOB_BROWSE_HEADER}}
+1. Software Intern at TechCorp (New York, NY)
+2. Data Analyst at DataSolutions (Remote)
+{{JOB_BROWSE_SEPARATOR}}
+Enter job number to view details, or 0 to go back:
+1
+{{JOB_DETAILS_HEADER}}
+Title: Software Intern
+Description: Develop tools for internal testing.
+Employer: TechCorp
+Location: New York, NY
+Salary: $25/hour
+{{JOB_DETAILS_FOOTER}}
+1. Apply for this Job
+2. Back to Job List
+Enter your choice:
+1
+Your application for Software Intern at TechCorp has been submitted.
+{{JOB_BROWSE_HEADER}}
+1. Software Intern at TechCorp (New York, NY)
+2. Data Analyst at DataSolutions (Remote)
+{{JOB_BROWSE_SEPARATOR}}
+Enter job number to view details, or 0 to go back:
+2
+{{JOB_DETAILS_HEADER}}
+Title: Data Analyst
+Description: Analyze data pipelines.
+Employer: DataSolutions
+Location: Remote
+{{JOB_DETAILS_FOOTER}}
+1. Apply for this Job
+2. Back to Job List
+Enter your choice:
+1
+Your application for Data Analyst at DataSolutions has been submitted.
+{{JOB_BROWSE_HEADER}}
+1. Software Intern at TechCorp (New York, NY)
+2. Data Analyst at DataSolutions (Remote)
+{{JOB_BROWSE_SEPARATOR}}
+Enter job number to view details, or 0 to go back:
+0
+{{JOB_MENU}}
+4
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}
