@@ -1,0 +1,33 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+persistuser
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+3
+{{VIEW_APPS_HEADER}}
+Application Summary for persistuser
+{{APP_SUMMARY_SEPARATOR}}
+Job Title: Software Intern
+Employer: TechCorp
+Location: New York, NY
+{{APP_SEPARATOR}}
+Job Title: Data Analyst
+Employer: DataSolutions
+Location: Remote
+{{APP_SEPARATOR}}
+{{APP_SUMMARY_SEPARATOR}}
+Total Applications: 2
+{{APP_SUMMARY_SEPARATOR}}
+{{JOB_MENU}}
+4
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

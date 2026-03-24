@@ -1,0 +1,20 @@
+2
+confirmuser
+Password1!
+1
+confirmuser
+Password1!
+3
+1
+Software Intern
+Develop tools for internal testing.
+TechCorp
+New York, NY
+$25/hour
+2
+1
+1
+0
+4
+8
+3
