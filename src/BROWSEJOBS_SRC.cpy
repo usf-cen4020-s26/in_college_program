@@ -1,3 +1,4 @@
+>>SOURCE FORMAT FREE
       *>*****************************************************************
       *> 5320-BROWSE-JOBS: Display numbered job list, let user select one.
       *> Loops until user enters 0 to go back to job menu.
@@ -60,11 +61,15 @@
 
       *> Validate input is numeric and in range
                MOVE 0 TO WS-BROWSE-CHOICE
-               IF FUNCTION TRIM(WS-JOB-MENU-CHOICE) IS NUMERIC
-                   MOVE FUNCTION NUMVAL(WS-JOB-MENU-CHOICE)
-                       TO WS-BROWSE-CHOICE
-               ELSE
+               IF FUNCTION TRIM(WS-JOB-MENU-CHOICE) = SPACES
                    MOVE 999 TO WS-BROWSE-CHOICE
+               ELSE
+                   IF FUNCTION TRIM(WS-JOB-MENU-CHOICE) IS NUMERIC
+                       MOVE FUNCTION NUMVAL(WS-JOB-MENU-CHOICE)
+                           TO WS-BROWSE-CHOICE
+                   ELSE
+                       MOVE 999 TO WS-BROWSE-CHOICE
+                   END-IF
                END-IF
 
                EVALUATE TRUE
@@ -154,14 +159,13 @@
            MOVE WS-DETAIL-CHOICE TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
 
-           EVALUATE WS-DETAIL-CHOICE
-               WHEN "1"
-                   PERFORM 5325-APPLY-FOR-JOB
-               WHEN "2"
-                   CONTINUE
-               WHEN OTHER
-                   MOVE "Invalid choice. Returning to job list."
-                       TO WS-OUTPUT-LINE
-                   PERFORM 8000-WRITE-OUTPUT
-           END-EVALUATE
+           IF WS-DETAIL-CHOICE = "1"
+               PERFORM 5325-APPLY-FOR-JOB
+           END-IF
+
+           IF WS-DETAIL-CHOICE NOT = "1" AND WS-DETAIL-CHOICE NOT = "2"
+               MOVE "Invalid choice. Returning to job list."
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF
            EXIT.

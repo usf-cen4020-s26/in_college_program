@@ -1,3 +1,4 @@
+>>SOURCE FORMAT FREE
 *> *      *>*****************************************************************
 *> *      *> 5300-JOB-SEARCH-MENU: Job Search/Internship submenu loop
 *> *      *> Displays submenu and handles user input for job search/internship options
