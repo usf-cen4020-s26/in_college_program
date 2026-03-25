@@ -44,9 +44,9 @@
                        MOVE JOB-EMPLOYER    TO WS-JT-EMPLOYER(WS-JOB-COUNT)
                        MOVE JOB-LOCATION    TO WS-JT-LOCATION(WS-JOB-COUNT)
                        MOVE JOB-SALARY      TO WS-JT-SALARY(WS-JOB-COUNT)
-                       IF JOB-ID > WS-JOB-ID-COUNTER
-                           MOVE JOB-ID TO WS-JOB-ID-COUNTER
-                       END-IF
+                   END-IF
+                   IF JOB-ID > WS-JOB-ID-COUNTER
+                       MOVE JOB-ID TO WS-JOB-ID-COUNTER
                    END-IF
            END-READ
 
