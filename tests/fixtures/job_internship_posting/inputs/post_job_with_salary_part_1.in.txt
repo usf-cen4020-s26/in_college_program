@@ -11,6 +11,6 @@ Analyzes business data and produces reports for stakeholders.
 DataCo Inc
 New York, NY
 $50,000/year
-3
+4
 8
 3

@@ -20,7 +20,8 @@ Testing navigation flow for job posting submenu
 NavCorp
 Remote
 NONE
-2           # Select Browse Jobs/Internships - should show under construction
-3           # Return to Main Menu
+2           # Select Browse Jobs/Internships - now shows real listing
+0           # Exit browse (enter 0 to go back)
+4           # Return to Main Menu
 8           # Logout
 3

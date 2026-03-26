@@ -1,0 +1,169 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+2
+{{CREATE_ACCOUNT_HEADER}}
+poster1
+{{PASSWORD_PROMPT}}
+********
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+poster1
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+Software Engineer Intern
+Enter Description (max 200 chars):
+Build and test application features
+Enter Employer Name:
+Google
+Enter Location:
+Tampa, FL
+Enter Salary (optional, enter 'NONE' to skip):
+$25/hr
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+1
+{{JOB_POST_HEADER}}
+Enter Job Title:
+QA Analyst Intern
+Enter Description (max 200 chars):
+Test software and report defects
+Enter Employer Name:
+Amazon
+Enter Location:
+Orlando, FL
+Enter Salary (optional, enter 'NONE' to skip):
+$22/hr
+{{JOB_POST_SUCCESS}}
+{{JOB_MENU}}
+4
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+2
+{{CREATE_ACCOUNT_HEADER}}
+userA1
+{{PASSWORD_PROMPT}}
+********
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+userA1
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+2
+{{JOB_BROWSE_HEADER}}
+1. Software Engineer Intern at Google (Tampa, FL)
+2. QA Analyst Intern at Amazon (Orlando, FL)
+{{JOB_BROWSE_SEPARATOR}}
+Enter job number to view details, or 0 to go back:
+1
+{{JOB_DETAILS_HEADER}}
+Title: Software Engineer Intern
+Description: Build and test application features
+Employer: Google
+Location: Tampa, FL
+Salary: $25/hr
+-------------------
+1. Apply for this Job
+2. Back to Job List
+Enter your choice:
+1
+Your application for Software Engineer Intern at Google has been submitted.
+{{JOB_BROWSE_HEADER}}
+1. Software Engineer Intern at Google (Tampa, FL)
+2. QA Analyst Intern at Amazon (Orlando, FL)
+{{JOB_BROWSE_SEPARATOR}}
+Enter job number to view details, or 0 to go back:
+0
+{{JOB_MENU}}
+4
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+2
+{{CREATE_ACCOUNT_HEADER}}
+userB1
+{{PASSWORD_PROMPT}}
+********
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+userB1
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+2
+{{JOB_BROWSE_HEADER}}
+1. Software Engineer Intern at Google (Tampa, FL)
+2. QA Analyst Intern at Amazon (Orlando, FL)
+{{JOB_BROWSE_SEPARATOR}}
+Enter job number to view details, or 0 to go back:
+2
+{{JOB_DETAILS_HEADER}}
+Title: QA Analyst Intern
+Description: Test software and report defects
+Employer: Amazon
+Location: Orlando, FL
+Salary: $22/hr
+-------------------
+1. Apply for this Job
+2. Back to Job List
+Enter your choice:
+1
+Your application for QA Analyst Intern at Amazon has been submitted.
+{{JOB_BROWSE_HEADER}}
+1. Software Engineer Intern at Google (Tampa, FL)
+2. QA Analyst Intern at Amazon (Orlando, FL)
+{{JOB_BROWSE_SEPARATOR}}
+Enter job number to view details, or 0 to go back:
+0
+{{JOB_MENU}}
+4
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+userA1
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+3
+{{VIEW_APPS_HEADER}}
+Application Summary for userA1
+{{APP_SUMMARY_SEPARATOR}}
+Job Title: Software Engineer Intern
+Employer: Google
+Location: Tampa, FL
+{{APP_SEPARATOR}}
+{{APP_SUMMARY_SEPARATOR}}
+Total Applications: 1
+{{APP_SUMMARY_SEPARATOR}}
+{{JOB_MENU}}
+4
+{{MAIN_MENU}}
+8
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

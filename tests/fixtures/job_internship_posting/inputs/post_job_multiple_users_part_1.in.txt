@@ -11,7 +11,7 @@ Build responsive UI components with React
 TechStartup
 Remote
 $70000/year
-3
+4
 8
 1
 multiB
@@ -23,6 +23,6 @@ Design RESTful APIs and database schemas
 TechStartup
 New York, NY
 $75000/year
-3
+4
 8
 3

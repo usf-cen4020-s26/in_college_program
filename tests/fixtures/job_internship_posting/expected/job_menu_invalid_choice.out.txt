@@ -22,7 +22,7 @@ Enter password:
 X
 {{INVALID_CHOICE}}
 {{JOB_MENU}}
-3
+4
 {{MAIN_MENU}}
 8
 {{LOGIN_SCREEN}}

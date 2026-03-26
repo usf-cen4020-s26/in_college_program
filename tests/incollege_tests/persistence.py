@@ -131,7 +131,8 @@ class PersistenceManager:
             self.profiles_dat,
             self.pending_dat,
             self.connections_dat,
-            self.jobs_dat
+            self.jobs_dat,
+            self.work_dir / "APPLICATIONS.DAT",
         ):
             if dat.exists():
                 dat.unlink()
@@ -145,6 +146,8 @@ class PersistenceManager:
             "PROFILES.DAT",
             "PENDING.DAT",
             "CONNECTIONS.DAT",
+            "JOBS.DAT",
+            "APPLICATIONS.DAT",
         ):
             p = self.work_dir / name
             if p.exists():

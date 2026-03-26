@@ -1,4 +1,3 @@
-
 {{WELCOME_BANNER}}
 {{LOGIN_SCREEN}}
 2
@@ -35,7 +34,7 @@ Enter Salary (optional, enter 'NONE' to skip):
 $45/hour
 {{JOB_POST_SUCCESS}}
 {{JOB_MENU}}
-3
+4
 {{MAIN_MENU}}
 8
 {{LOGIN_SCREEN}}
