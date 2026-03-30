@@ -1,34 +1,13 @@
-2
-PReqUserA
-Pass123!
-2
-PReqUserB
-Pass123!
+@seed_user username=PReqUserA password=Pass123! first_name=Alex last_name=Brown university=USF major="Computer Science" grad_year=2027 about_me="Software developer and team collaborator."
+@seed_user username=PReqUserB password=Pass123! first_name=Blake last_name=Davis university=UCF major="Data Science" grad_year=2026 about_me="Data analytics and machine learning enthusiast."
+
 1
 PReqUserA
 Pass123!
-1
-Alex
-Brown
-USF
-Computer Science
-2027
-Software developer and team collaborator.
-DONE
-DONE
 8
 1
 PReqUserB
 Pass123!
-1
-Blake
-Davis
-UCF
-Data Science
-2026
-Data analytics and machine learning enthusiast.
-DONE
-DONE
 8
 1
 PReqUserA

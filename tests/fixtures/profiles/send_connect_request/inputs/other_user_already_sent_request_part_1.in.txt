@@ -1,34 +1,13 @@
-2
-UserE
-Pass123!
+@seed_user username=UserE password=Pass123! first_name=Anna last_name=Collins university=USF major="Computer Science" grad_year=2027 about_me="Code until tonight's hackathon, then sleep."
+@seed_user username=UserF password=Pass123! first_name=James last_name=Anderson university=UF major="Computer Science" grad_year=2027 about_me="Aspiring software developer with a passion for complex problems."
+
 1
 UserE
 Pass123!
-1
-Anna
-Collins
-USF
-Computer Science
-2027
-Code until tonight's hackathon, then sleep.
-DONE
-DONE
 8
-2
-UserF
-Pass123!
 1
 UserF
 Pass123!
-1
-James
-Anderson
-UF
-Computer Science
-2027
-Aspiring software developer with a passion for complex problems.
-DONE
-DONE
 4
 Anna Collins
 1
