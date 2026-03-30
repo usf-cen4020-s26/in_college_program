@@ -8,7 +8,7 @@ Bob123!
 4       # Find someone you know
 Alice Smith
 1       # Send connection request
-8       # Logout
+9       # Logout
 
 # Alice rejects Bob's request
 1       # Login
@@ -16,5 +16,5 @@ alice
 Alice1!
 5       # View pending requests
 2       # Reject
-8       # Logout
+9       # Logout
 3       # Exit

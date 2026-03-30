@@ -5,5 +5,5 @@
 alice
 Alice1!
 7       # View My Network (empty)
-8       # Logout
+9       # Logout
 3       # Exit

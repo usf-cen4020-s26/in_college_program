@@ -126,7 +126,7 @@ Education:
   Years: 2025-2027
 --------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

@@ -138,7 +138,7 @@ Total Applications: 3
 {{JOB_MENU}}
 4
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -191,7 +191,7 @@ Total Applications: 1
 {{JOB_MENU}}
 4
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

@@ -25,7 +25,7 @@ $70000/year
 {{JOB_MENU}}
 4
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -52,7 +52,7 @@ $75000/year
 {{JOB_MENU}}
 4
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

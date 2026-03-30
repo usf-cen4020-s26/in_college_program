@@ -9,5 +9,5 @@ Alice1!
 Bob Jones
 2       # Back to Main Menu (don't send request)
 5       # View pending requests (should be empty)
-8       # Logout
+9       # Logout
 3       # Exit

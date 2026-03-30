@@ -12,4 +12,4 @@ BrandCo
 Chicago, IL
 NONE
 4           # Back to Main Menu
-8           # Logout
+9           # Logout

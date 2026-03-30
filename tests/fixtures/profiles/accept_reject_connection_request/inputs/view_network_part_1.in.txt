@@ -10,25 +10,25 @@ User1!   # Password
 4        # Search for user5 to add
 User5 FifthUser # Search query
 1        # Send connection request
-8        # Log out of user1
+9        # Log out of user1
 1 # Login as user2
 user2
 User2!
 4
 User5 FifthUser # add user 5 as friend
 1 # send connection request
-8 # log out of user2
+9 # log out of user2
 1 # Login as user3
 user3
 User3!
 4
 User5 FifthUser # add user 5 as friend
 1 # send connection request
-8 # log out of user3
+9 # log out of user3
 1 # Login as user4
 user4
 User4!
 4
 User5 FifthUser # add user 5 as friend
 1 # send connection request
-8 # log out of user4
+9 # log out of user4

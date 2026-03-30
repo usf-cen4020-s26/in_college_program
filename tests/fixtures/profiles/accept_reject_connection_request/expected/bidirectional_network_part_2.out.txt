@@ -21,7 +21,7 @@ Connection request from Bob Jones accepted!
 Connected with: Bob Jones (University: UCF, Major: Math)
 -----------------------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -35,7 +35,7 @@ Enter password:
 Connected with: Alice Smith (University: USF, Major: CS)
 -----------------------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

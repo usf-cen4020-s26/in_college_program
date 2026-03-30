@@ -7,7 +7,7 @@ Alice1!
 1       # Accept Bob's request
 7       # View network (should show Bob)
 5       # View pending again (should be empty now)
-8       # Logout
+9       # Logout
 
 # Bob checks his network and pending
 1       # Login as bob
@@ -15,5 +15,5 @@ bob
 Bob123!
 7       # View network (should show Alice)
 5       # View pending (should be empty)
-8       # Logout
+9       # Logout
 3       # Exit

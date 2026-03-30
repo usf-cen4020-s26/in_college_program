@@ -6,5 +6,5 @@ Alice1!
 4       # Find someone you know
 Alice Smith   # Search for herself
 1       # Send connection request to self
-8       # Logout
+9       # Logout
 3       # Exit

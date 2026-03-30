@@ -28,7 +28,7 @@ Enter your choice:
 1
 You have already sent a connection request to this user.
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

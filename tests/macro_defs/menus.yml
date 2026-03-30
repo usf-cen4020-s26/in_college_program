@@ -46,8 +46,9 @@ MAIN_MENU: |
   5. View Pending Connection Requests
   6. Learn a new skill
   7. View My Network
-  8. Logout
-  Enter choice (1-8):
+  8. Messages
+  9. Logout
+  Enter choice (1-9):
 
 SKILLS_MENU: |
 
@@ -145,3 +146,11 @@ NO_CONNECTIONS: "You have no connections in your network yet."
 PASSWORD_VALIDATION_ERROR: |
   Password does not meet requirements.
   Please try again.
+
+MESSAGES_MENU: |
+
+  --- Messages Menu ---
+  1. Send a New Message
+  2. View My Messages
+  3. Back to Main Menu
+  Enter your choice:

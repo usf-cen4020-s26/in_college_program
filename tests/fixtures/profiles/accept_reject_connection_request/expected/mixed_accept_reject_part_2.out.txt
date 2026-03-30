@@ -30,7 +30,7 @@ Connection request from Carol Davis rejected!
 Connected with: Bob Jones (University: UCF, Major: Math)
 -----------------------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

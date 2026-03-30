@@ -7,7 +7,7 @@ Enter password:
 ********
 {{LOGIN_SUCCESS}}
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -16,7 +16,7 @@ Enter password:
 ********
 {{LOGIN_SUCCESS}}
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -46,7 +46,7 @@ Enter your choice:
 1
 Connection request sent!
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -60,7 +60,7 @@ Enter password:
 John Sanders
 -----------------------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

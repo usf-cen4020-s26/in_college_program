@@ -28,7 +28,7 @@ Enter your choice:
 1
 Connection request sent!
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -58,7 +58,7 @@ Enter your choice:
 1
 Connection request sent!
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -88,7 +88,7 @@ Enter your choice:
 1
 Connection request sent!
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -118,6 +118,6 @@ Enter your choice:
 1
 Connection request sent!
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 {{EXIT_MESSAGE}}

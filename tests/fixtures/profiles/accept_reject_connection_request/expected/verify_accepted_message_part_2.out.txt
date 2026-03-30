@@ -16,7 +16,7 @@ Enter your choice for Mason Russell:
 Connection request from Mason Russell accepted!
 -----------------------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

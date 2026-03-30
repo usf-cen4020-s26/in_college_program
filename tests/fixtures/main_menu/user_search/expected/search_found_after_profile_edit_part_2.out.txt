@@ -29,7 +29,7 @@ Add Education (optional, max 3 entries. Enter anything to continue and 'DONE' to
 DONE
 {{PROFILE_SAVED}}
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -64,7 +64,7 @@ Education: None
 Enter your choice:
 2
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

@@ -5,11 +5,11 @@ Alice1!
 5 # View pending requests
 1 # Accept bob's request
 7 # View network (bob should appear)
-8 # Log out
+9 # Log out
 # Now bob logs in and checks his network
 1 # Log in as bob
 bob
 Bob123!
 7 # View network (alice should appear)
-8 # Log out
+9 # Log out
 3 # Exit

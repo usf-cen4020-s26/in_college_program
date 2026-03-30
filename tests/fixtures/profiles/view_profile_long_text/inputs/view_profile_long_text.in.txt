@@ -13,10 +13,10 @@ Computer Science
 This is a very long About Me section designed to approach the two-hundred character limit so that we can verify wrapping and full display in both console and output file without truncation occurring.
 DONE
 DONE
-8
+9
 1
 LongTextUser
 Pass123!
 2
-8
+9
 3
