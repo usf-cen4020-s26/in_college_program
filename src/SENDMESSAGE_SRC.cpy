@@ -185,6 +185,7 @@
            OPEN EXTEND MESSAGES-FILE
 
            IF WS-MESSAGES-STATUS = "35"
+               CLOSE MESSAGES-FILE
                OPEN OUTPUT MESSAGES-FILE
                CLOSE MESSAGES-FILE
                OPEN EXTEND MESSAGES-FILE
