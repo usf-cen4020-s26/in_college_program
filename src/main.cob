@@ -94,10 +94,11 @@ FD  APPLICATIONS-FILE.
 
 FD  MESSAGES-FILE.
 01  MSG-RECORD.
+    05  MSG-ID                 PIC 9(5).
     05  MSG-SENDER             PIC X(20).
     05  MSG-RECIPIENT          PIC X(20).
     05  MSG-CONTENT            PIC X(200).
-    05  MSG-TIMESTAMP          PIC x(20).
+    05  MSG-TIMESTAMP          PIC X(20).
 
 WORKING-STORAGE SECTION.
 01  WS-USER-ACCOUNTS.
@@ -307,6 +308,15 @@ WORKING-STORAGE SECTION.
 01  WS-NUM-DISP-STR            PIC X(5) VALUE SPACES.
 01  WS-MESSAGES-STATUS         PIC XX.
 
+*> ===== Messaging working-storage =====
+01  WS-MSG-MENU-CHOICE          PIC X VALUE SPACES.
+01  WS-MSG-RECIPIENT            PIC X(20) VALUE SPACES.
+01  WS-MSG-CONTENT              PIC X(200) VALUE SPACES.
+01  WS-MSG-TIMESTAMP            PIC X(20) VALUE SPACES.
+01  WS-MSG-CONN-FOUND           PIC 9 VALUE 0.
+01  WS-MSG-CURRENT-DATE         PIC X(21).
+01  WS-MSG-NEXT-ID              PIC 9(5) VALUE 0.
+
 
 PROCEDURE DIVISION.
        0000-MAIN-PROGRAM.
@@ -341,6 +351,7 @@ PROCEDURE DIVISION.
            PERFORM 9250-LOAD-CONNECTIONS.
            PERFORM 5350-LOAD-JOBS.
            PERFORM 5360-LOAD-APPLICATIONS.
+           PERFORM 9270-LOAD-NEXT-MSG-ID.
 
            MOVE "========================================"
            TO WS-OUTPUT-LINE.
@@ -477,6 +488,46 @@ PROCEDURE DIVISION.
            IF WS-CONNECTIONS-EOF = "N"
                PERFORM 9260-READ-CONNECTIONS-LOOP
            END-IF.
+           EXIT.
+
+*>*****************************************************************
+*> 9270-LOAD-NEXT-MSG-ID
+*>   Scans MESSAGES.DAT to find the highest MSG-ID, then sets
+*>   WS-MSG-NEXT-ID to max + 1 for the next message insert.
+*>*****************************************************************
+       9270-LOAD-NEXT-MSG-ID.
+           MOVE 0 TO WS-MSG-NEXT-ID
+
+           OPEN INPUT MESSAGES-FILE
+
+           EVALUATE WS-MESSAGES-STATUS
+               WHEN "00"
+                   PERFORM 9275-READ-MSG-ID-LOOP
+                   CLOSE MESSAGES-FILE
+               WHEN "35"
+                   MOVE 0 TO WS-MSG-NEXT-ID
+               WHEN OTHER
+                   MOVE 0 TO WS-MSG-NEXT-ID
+           END-EVALUATE
+
+           ADD 1 TO WS-MSG-NEXT-ID.
+           EXIT.
+
+*>*****************************************************************
+*> 9275-READ-MSG-ID-LOOP
+*>   Reads each message record and tracks the highest MSG-ID.
+*>*****************************************************************
+       9275-READ-MSG-ID-LOOP.
+           READ MESSAGES-FILE
+               AT END
+                   EXIT PARAGRAPH
+               NOT AT END
+                   IF MSG-ID > WS-MSG-NEXT-ID
+                       MOVE MSG-ID TO WS-MSG-NEXT-ID
+                   END-IF
+           END-READ
+
+           PERFORM 9275-READ-MSG-ID-LOOP.
            EXIT.
 
 *> *      *>*****************************************************************
@@ -980,7 +1031,7 @@ PROCEDURE DIVISION.
        5000-POST-LOGIN-MENU.
            MOVE "1" TO WS-MAIN-MENU-CHOICE.
 
-           PERFORM UNTIL WS-MAIN-MENU-CHOICE = "8"
+           PERFORM UNTIL WS-MAIN-MENU-CHOICE = "9"
            OR WS-PROGRAM-RUNNING = 0
                    MOVE " " TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
@@ -1000,9 +1051,11 @@ PROCEDURE DIVISION.
                    PERFORM 8000-WRITE-OUTPUT
                    MOVE "7. View My Network" TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
-                   MOVE "8. Logout" TO WS-OUTPUT-LINE
+                   MOVE "8. Messages" TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
-                   MOVE "Enter choice (1-8): " TO WS-OUTPUT-LINE
+                   MOVE "9. Logout" TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+                   MOVE "Enter choice (1-9): " TO WS-OUTPUT-LINE
                    PERFORM 8000-WRITE-OUTPUT
 
                    IF WS-SKIP-NEXT-MENU-READ = "Y"
@@ -1036,6 +1089,8 @@ PROCEDURE DIVISION.
                        WHEN "7"
                            PERFORM 7700-VIEW-NETWORK-LIST
                        WHEN "8"
+                           PERFORM 7800-MESSAGES-MENU
+                       WHEN "9"
                            EXIT PERFORM
                        WHEN OTHER
                           MOVE "Invalid choice. Please try again."
@@ -2081,6 +2136,7 @@ PROCEDURE DIVISION.
            MOVE INPUT-RECORD TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
+        COPY SENDMESSAGE_SRC.
         COPY APPLYJOB_SRC.
         COPY VIEWAPPS_SRC.
         COPY JOBSIO_SRC.
