@@ -1,22 +1,10 @@
-2
-UserB
-Pass123!
+@seed_user username=UserB password=Pass123! first_name=Mason last_name=Russell university=UCF major="Computer Science" grad_year=2026 about_me="I'm CS but I love other majors, only if they're engineering related."
+@seed_user username=UserA password=Pass123! with_profile=false
+
 1
 UserB
 Pass123!
-1
-Mason
-Russell
-UCF
-Computer Science
-2026
-I'm CS but I love other majors, only if they're engineering related.
-DONE
-DONE
 8
-2
-UserA
-Pass123!
 1
 UserA
 Pass123!

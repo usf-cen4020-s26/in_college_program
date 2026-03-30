@@ -1,6 +1,5 @@
-2
-invaliduser
-Password1!
+@seed_user username=invaliduser password=Password1! with_profile=false
+
 1
 invaliduser
 Password1!

@@ -1,33 +1,12 @@
-2
-UserI
-Pass123!
-2
-UserJ
-Pass123!
+@seed_user username=UserI password=Pass123! first_name=Ivy last_name=Kim university=FSU major=Chemistry grad_year=2027 about_me="Lab work and research enthusiast."
+@seed_user username=UserJ password=Pass123! first_name=Jack last_name=Lee university=UCF major=Physics grad_year=2026 about_me="Theoretical physics and experiments."
+
 1
 UserI
 Pass123!
-1
-Ivy
-Kim
-FSU
-Chemistry
-2027
-Lab work and research enthusiast.
-DONE
-DONE
 8
 1
 UserJ
 Pass123!
-1
-Jack
-Lee
-UCF
-Physics
-2026
-Theoretical physics and experiments.
-DONE
-DONE
 8
 3

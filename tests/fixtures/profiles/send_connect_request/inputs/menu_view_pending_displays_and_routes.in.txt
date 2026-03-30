@@ -1,6 +1,5 @@
-2
-MenuTestUser
-Pass123!
+@seed_user username=MenuTestUser password=Pass123! with_profile=false
+
 1
 MenuTestUser
 Pass123!

@@ -1,6 +1,5 @@
-2   # Create account
-eve01
-Eve1Pass!
+@seed_user username=eve01 password=Eve1Pass! with_profile=false
+
 1           # Log in
 eve01
 Eve1Pass!

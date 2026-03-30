@@ -1,26 +1,11 @@
-========================================
-     WELCOME TO INCOLLEGE
-========================================
-
-Please select an option:
-1. Login with existing account
-2. Create new account
-3. Exit
-Enter choice (1-3):
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
 2
-
-=== CREATE NEW ACCOUNT ===
-Enter username:
+{{CREATE_ACCOUNT_HEADER}}
 TestUser1
-Enter password (8-12 chars, 1 uppercase, 1 digit, 1 special character):
+{{PASSWORD_PROMPT}}
 ********
-Account created successfully!
-
-Please select an option:
-1. Login with existing account
-2. Create new account
-3. Exit
-Enter choice (1-3):
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
 3
-
-Thank you for using InCollege!
+{{EXIT_MESSAGE}}

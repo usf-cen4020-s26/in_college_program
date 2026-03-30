@@ -1,6 +1,5 @@
-2           # Create account
-grace1
-Grace12!
+@seed_user username=grace1 password=Grace12! with_profile=false
+
 1           # Log in
 grace1
 Grace12!

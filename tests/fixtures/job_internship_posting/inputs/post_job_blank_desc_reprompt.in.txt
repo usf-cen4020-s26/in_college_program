@@ -1,6 +1,5 @@
-2
-dave1
-Dave1234!
+@seed_user username=dave1 password=Dave1234! with_profile=false
+
 1           # Log in
 dave1
 Dave1234!
