@@ -1,6 +1,6 @@
-2
-reportuser
-Password1!
+@seed_user username=reportuser password=Password1! with_profile=false
+@seed_user username=otheruser password=Password1! with_profile=false
+
 1
 reportuser
 Password1!
@@ -34,9 +34,6 @@ $50000/year
 3
 4
 8
-2
-otheruser
-Password1!
 1
 otheruser
 Password1!

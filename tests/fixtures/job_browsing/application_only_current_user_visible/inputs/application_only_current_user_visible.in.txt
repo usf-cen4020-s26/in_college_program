@@ -1,6 +1,7 @@
-2
-poster1
-Password1!
+@seed_user username=poster1 password=Password1! with_profile=false
+@seed_user username=userA1 password=Password1! with_profile=false
+@seed_user username=userB1 password=Password1! with_profile=false
+
 1
 poster1
 Password1!
@@ -20,9 +21,6 @@ $22/hr
 4
 8
 
-2
-userA1
-Password1!
 1
 userA1
 Password1!
@@ -34,9 +32,6 @@ Password1!
 4
 8
 
-2
-userB1
-Password1!
 1
 userB1
 Password1!

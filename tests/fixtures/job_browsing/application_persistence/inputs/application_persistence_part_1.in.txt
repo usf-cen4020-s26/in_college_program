@@ -1,6 +1,5 @@
-2
-persistuser
-Password1!
+@seed_user username=persistuser password=Password1! with_profile=false
+
 1
 persistuser
 Password1!
