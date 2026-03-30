@@ -1,0 +1,117 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+2
+{{CREATE_ACCOUNT_HEADER}}
+NavUser
+{{PASSWORD_PROMPT}}
+********
+{{ACCOUNT_CREATED}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+NavUser
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+1
+{{PROFILE_CREATE_HEADER}}
+Enter First Name:
+Nav
+Enter Last Name:
+User
+Enter University/College Attended:
+USF
+Enter Major:
+CS
+Enter Graduation Year (YYYY):
+2025
+Enter About Me (optional, max 200 chars, enter blank line to skip):
+(skipped)
+
+Add Experience (optional, max 3 entries. Enter anything to continue and 'DONE' to finish):
+DONE
+
+Add Education (optional, max 3 entries. Enter anything to continue and 'DONE' to finish):
+DONE
+{{PROFILE_SAVED}}
+{{MAIN_MENU}}
+2
+
+=== YOUR PROFILE ===
+Name: Nav User
+University: USF
+Major: CS
+Graduation Year: 2025
+About Me: None
+Experience: None
+Education: None
+--------------------
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+4
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+NavUser
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+2
+
+=== YOUR PROFILE ===
+Name: Nav User
+University: USF
+Major: CS
+Graduation Year: 2025
+About Me: None
+Experience: None
+Education: None
+--------------------
+{{MAIN_MENU}}
+3
+{{JOB_MENU}}
+4
+{{MAIN_MENU}}
+4
+
+{{SEARCH_PROMPT}}
+Nobody Here
+{{USER_NOT_FOUND}}
+{{MAIN_MENU}}
+5
+{{PENDING_REQUESTS_HEADER}}
+{{NO_PENDING_REQUESTS}}
+{{MAIN_MENU}}
+6
+{{SKILLS_MENU}}
+6
+{{MAIN_MENU}}
+7
+{{MY_NETWORK_HEADER}}
+{{NO_CONNECTIONS}}
+-----------------------------------
+{{MAIN_MENU}}
+8
+{{MESSAGES_MENU}}
+2
+View My Messages is under construction.
+{{MESSAGES_MENU}}
+8
+{{INVALID_CHOICE}}
+{{MESSAGES_MENU}}
+1
+Enter recipient's username (must be a connection):
+NotAConn
+You can only message users you are connected with.
+{{MESSAGES_MENU}}
+3
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}
