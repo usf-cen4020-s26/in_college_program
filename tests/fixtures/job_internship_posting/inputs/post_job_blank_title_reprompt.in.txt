@@ -1,6 +1,5 @@
-2   # Create account
-carol
-Carol12!
+@seed_user username=carol password=Carol12! with_profile=false
+
 1           # Log in
 carol
 Carol12!

@@ -1,6 +1,5 @@
-2
-frank1
-Frank12!
+@seed_user username=frank1 password=Frank12! with_profile=false
+
 1           # Log in
 frank1
 Frank12!

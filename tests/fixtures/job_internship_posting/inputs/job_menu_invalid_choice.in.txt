@@ -1,6 +1,5 @@
-2       # Create Account
-hank01
-Hank1234!
+@seed_user username=hank01 password=Hank1234! with_profile=false
+
 1           # Log in
 hank01
 Hank1234!
