@@ -6,7 +6,7 @@
       *>   Adds a new connection to memory + appends to CONNECTIONS.DAT
       *>*****************************************************************
        9400-ADD-CONNECTION.
-           IF WS-CONNECTIONS-COUNT >= WS-MAX-CONNECTIONS
+           IF WS-CONNECTIONS-COUNT >= WS-CONST-MAX-CONNECTIONS
                MOVE "ERROR: Connections table is full." TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
                EXIT PARAGRAPH

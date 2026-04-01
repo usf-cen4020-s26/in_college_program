@@ -14,7 +14,7 @@
                AT END
                    MOVE 1 TO WS-EOF-FLAG
                NOT AT END
-                   IF WS-ACCOUNT-COUNT < WS-MAX-ACCOUNTS
+                   IF WS-ACCOUNT-COUNT < WS-CONST-MAX-ACCOUNTS
                        ADD 1 TO WS-ACCOUNT-COUNT
                        MOVE ACCT-USERNAME TO
                            WS-USERNAME(WS-ACCOUNT-COUNT)
@@ -116,7 +116,7 @@
                AT END
                    MOVE "Y" TO WS-CONNECTIONS-EOF
                NOT AT END
-                   IF WS-CONNECTIONS-COUNT < WS-MAX-CONNECTIONS
+                   IF WS-CONNECTIONS-COUNT < WS-CONST-MAX-CONNECTIONS
                        ADD 1 TO WS-CONNECTIONS-COUNT
                        MOVE CONN-USER-A TO
                            WS-CONN-USER-A(WS-CONNECTIONS-COUNT)
@@ -203,7 +203,7 @@
                AT END
                    MOVE 1 TO WS-EOF-FLAG
                NOT AT END
-                   IF WS-PROFILE-COUNT < WS-MAX-ACCOUNTS
+                   IF WS-PROFILE-COUNT < WS-CONST-MAX-ACCOUNTS
                        ADD 1 TO WS-PROFILE-COUNT
                        MOVE PROF-USERNAME TO
                            WS-PROF-USERNAME(WS-PROFILE-COUNT)

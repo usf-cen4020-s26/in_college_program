@@ -7,7 +7,6 @@
         10  WS-PASSWORD         PIC X(12).
 
 01  WS-ACCOUNT-COUNT            PIC 9 VALUE 0.
-01  WS-MAX-ACCOUNTS             PIC 9 VALUE 5.
 01  WS-PROFILE-COUNT            PIC 9 VALUE 0.
 
 01  WS-LOGIN-USERNAME           PIC X(20).
