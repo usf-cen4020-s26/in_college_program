@@ -113,7 +113,7 @@
            END-IF
 
       *>   Message content validation loop (MSW-451 / MSW-453)
-           PERFORM UNTIL 1 = 0
+           PERFORM FOREVER
                MOVE "Enter your message (max 200 chars):"
                    TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
