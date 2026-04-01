@@ -121,6 +121,7 @@ COBOL uses fixed-point decimal arithmetic. `0.1 + 0.2` produces exactly `0.30` i
 - **PERFORM variants**: `PERFORM paragraph-name`, `PERFORM THRU`, `PERFORM n TIMES`, `PERFORM UNTIL`, `PERFORM WITH TEST AFTER UNTIL` (do-while), `PERFORM VARYING idx FROM 1 BY 1 UNTIL idx > limit`, inline `PERFORM ... END-PERFORM`.
 - **GO TO**: Avoided in new code. Acceptable only within `SORT INPUT/OUTPUT PROCEDURE` blocks where it is idiomatic.
 - **EXIT**: No-op paragraph endpoint. `EXIT PROGRAM` terminates subprogram. `EXIT PARAGRAPH`, `EXIT PERFORM`, `EXIT SECTION` for structured early exit.
+- **CRITICAL: EXIT PARAGRAPH / EXIT SECTION inside inline PERFORM**: In GnuCOBOL, using `EXIT PARAGRAPH` or `EXIT SECTION` inside an inline `PERFORM ... END-PERFORM` block causes **undefined scope behavior**. The compiler loses track of the `END-PERFORM` closure, which corrupts paragraph boundaries for all subsequent code — including copybooks included after the affected one. **Always use `EXIT PERFORM` to exit inline PERFORM blocks.** If you need to exit the paragraph after the loop, add a guard check after `END-PERFORM` (e.g., `IF WS-FLAG = 1 EXIT PARAGRAPH END-IF`). This is the #1 most common GnuCOBOL compilation bug in this project.
 - **CONTINUE**: No-op in flow. Use instead of `NEXT SENTENCE`.
 - **NEXT SENTENCE**: Legacy. Dangerous. Never use in new code.
 
@@ -374,6 +375,7 @@ PROCEDURE DIVISION USING LK-HOURS LK-RATE LK-GROSSPAY.
 - You do not access array elements without validating bounds.
 - You do not write a `SEARCH ALL` against an unsorted table.
 - You do not confuse subscripts with indexes or use `MOVE` to set index values (always `SET`).
+- You **NEVER** use `EXIT PARAGRAPH` or `EXIT SECTION` inside an inline `PERFORM ... END-PERFORM` block in GnuCOBOL — this causes undefined scope behavior where the compiler loses track of paragraph boundaries, producing cryptic "not defined" errors in completely unrelated copybooks. Always use `EXIT PERFORM` inside inline PERFORM blocks, and add a post-loop guard if you need to conditionally exit the paragraph.
 
 ---
 

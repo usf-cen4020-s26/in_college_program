@@ -84,6 +84,24 @@
            MOVE WS-MSG-RECIPIENT TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
 
+      *>   Check if the recipient exists in the system (MSW-454)
+           MOVE 0 TO WS-MSG-USER-EXISTS
+           PERFORM VARYING WS-ACCOUNT-INDEX FROM 1 BY 1
+               UNTIL WS-ACCOUNT-INDEX > WS-ACCOUNT-COUNT
+               OR WS-MSG-USER-EXISTS = 1
+               IF FUNCTION TRIM(WS-USERNAME(WS-ACCOUNT-INDEX))
+                   = FUNCTION TRIM(WS-MSG-RECIPIENT)
+                   MOVE 1 TO WS-MSG-USER-EXISTS
+               END-IF
+           END-PERFORM
+
+           IF WS-MSG-USER-EXISTS = 0
+               MOVE "User not found in your network."
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+               EXIT PARAGRAPH
+           END-IF
+
            PERFORM 7820-VALIDATE-RECIPIENT
 
            IF WS-MSG-CONN-FOUND = 0
@@ -94,20 +112,48 @@
                EXIT PARAGRAPH
            END-IF
 
-           MOVE "Enter your message (max 200 chars):"
-               TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
+      *>   Message content validation loop (MSW-451 / MSW-453)
+           PERFORM UNTIL 1 = 0
+               MOVE "Enter your message (max 200 chars):"
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
 
-           PERFORM 8100-READ-INPUT
-           IF WS-EOF-FLAG = 1
-               MOVE 0 TO WS-PROGRAM-RUNNING
+               PERFORM 8100-READ-INPUT
+               IF WS-EOF-FLAG = 1
+                   MOVE 0 TO WS-PROGRAM-RUNNING
+                   EXIT PERFORM
+               END-IF
+
+               MOVE FUNCTION TRIM(INPUT-RECORD TRAILING)
+                   TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+
+               IF FUNCTION TRIM(INPUT-RECORD) = SPACES
+                   MOVE "Message cannot be empty. Please try again."
+                       TO WS-OUTPUT-LINE
+                   PERFORM 8000-WRITE-OUTPUT
+               ELSE
+                   IF FUNCTION LENGTH(
+                       FUNCTION TRIM(INPUT-RECORD TRAILING))
+                       > 200
+                       MOVE SPACES TO WS-OUTPUT-LINE
+                       STRING "Message is too long. "
+                           "Please enter 200 "
+                           "characters or fewer."
+                           DELIMITED BY SIZE
+                           INTO WS-OUTPUT-LINE
+                       END-STRING
+                       PERFORM 8000-WRITE-OUTPUT
+                   ELSE
+                       MOVE INPUT-RECORD TO WS-MSG-CONTENT
+                       EXIT PERFORM
+                   END-IF
+               END-IF
+           END-PERFORM
+
+           IF WS-PROGRAM-RUNNING = 0
                EXIT PARAGRAPH
            END-IF
-
-           MOVE INPUT-RECORD TO WS-MSG-CONTENT
-           MOVE FUNCTION TRIM(WS-MSG-CONTENT TRAILING)
-               TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
 
            PERFORM 7830-WRITE-MESSAGE
 
@@ -210,10 +256,10 @@
                    DELIMITED BY SIZE INTO WS-OUTPUT-LINE
                END-STRING
                PERFORM 8000-WRITE-OUTPUT
-           END-IF.
+           END-IF
 
            ADD 1 TO WS-MSG-NEXT-ID
 
-           CLOSE MESSAGES-FILE
+           CLOSE MESSAGES-FILE.
            EXIT.
 
