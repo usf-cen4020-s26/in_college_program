@@ -113,7 +113,7 @@
            END-IF
 
       *>   Message content validation loop (MSW-451 / MSW-453)
-           PERFORM UNTIL 1 = 0
+           PERFORM FOREVER
                MOVE "Enter your message (max 200 chars):"
                    TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
@@ -230,14 +230,14 @@
 
            OPEN EXTEND MESSAGES-FILE
 
-           IF WS-MESSAGES-STATUS = "35"
+           IF WS-MESSAGES-STATUS = WS-CONST-FS-NOT-FOUND
                CLOSE MESSAGES-FILE
                OPEN OUTPUT MESSAGES-FILE
                CLOSE MESSAGES-FILE
                OPEN EXTEND MESSAGES-FILE
            END-IF
 
-           IF WS-MESSAGES-STATUS NOT = "00"
+           IF WS-MESSAGES-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not open MESSAGES.DAT. STATUS="
                    WS-MESSAGES-STATUS
@@ -249,7 +249,7 @@
 
            WRITE MSG-RECORD
 
-           IF WS-MESSAGES-STATUS NOT = "00"
+           IF WS-MESSAGES-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not write to MESSAGES.DAT. STATUS="
                    WS-MESSAGES-STATUS

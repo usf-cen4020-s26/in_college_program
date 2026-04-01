@@ -1,0 +1,50 @@
+      *> ============================================================
+      *> WS-CONNECTIONS.cpy - Pending requests, connections, network
+      *> ============================================================
+
+01  WS-PENDING-COUNT            PIC 99 VALUE 0.
+01  WS-PENDING-TABLE.
+    05  WS-PENDING-ENTRY OCCURS 50 TIMES.
+        10  WS-PEND-SENDER-USERNAME     PIC X(20).
+        10  WS-PEND-RECIPIENT-USERNAME  PIC X(20).
+        10  WS-PEND-STATUS              PIC X(1).
+           88  PEND-STATUS-PENDING      VALUE "P".
+           88  PEND-STATUS-PENDING-OR-EMPTY VALUES "P", " ".
+
+01  WS-CONNECTIONS-STATUS      PIC XX.
+
+01  WS-SENDREQ-CHOICE           PIC X(2).
+
+01  WS-SENDREQ-TARGET-INDEX     PIC 9 VALUE 0.
+
+01  WS-VIEWREQ-FOUND             PIC X VALUE "N".
+01  WS-PEND-IDX                  PIC 99 VALUE 0.
+01  WS-SENDER-FOUND              PIC 9 VALUE 0.
+01  WS-SENDER-IDX                PIC 9 VALUE 0.
+
+01  WS-VIEWREQ-FOUND-FLAG        PIC X VALUE "N".
+01  WS-VIEWREQ-PEND-IDX          PIC 99 VALUE 0.
+01  WS-VIEWREQ-SENDER-USERNAME   PIC x(20).
+01  WS-VIEWREQ-SENDER-IDX        PIC 9 VALUE 0.
+
+*> ===== View Pending Requests (VIEWREQ_SRC) working-storage =====
+01  WS-VIEWREQ-DISP-COUNT           PIC 99 VALUE 0.
+01  WS-VIEWREQ-MAP-TABLE.
+    05 WS-VIEWREQ-MAP-IDX           OCCURS 50 TIMES PIC 99 VALUE 0.
+01  WS-VIEWREQ-SELECTION            PIC 99 VALUE 0.
+01  WS-VIEWREQ-SELECTED-PEND-IDX    PIC 99 VALUE 0.
+01  WS-VIEWREQ-ACTION               PIC X VALUE SPACE.
+
+01  WS-CONNECTIONS-COUNT       PIC 99 VALUE 0.
+01  WS-CONNECTIONS-TABLE.
+    05  WS-CONNECTION-ENTRY OCCURS 50 TIMES.
+        10  WS-CONN-USER-A     PIC X(20).
+        10  WS-CONN-USER-B     PIC X(20).
+01  WS-CONNECTIONS-EOF         PIC X VALUE "N".
+01  WS-CONN-IDX                PIC 99 VALUE 0.
+
+*> ===== Network List (VIEW NETWORK) working-storage =====
+01  WS-NETWORK-DISP-COUNT       PIC 99 VALUE 0.
+01  WS-NETWORK-FOUND-FLAG       PIC X VALUE "N".
+01  WS-NETWORK-OTHER-USERNAME   PIC X(20).
+01  WS-NETWORK-OTHER-IDX        PIC 9 VALUE 0.

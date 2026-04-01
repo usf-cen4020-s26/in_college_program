@@ -57,3 +57,6 @@ migrate_to_macros.py
 /tmp/**/*.DAT
 /tmp/**/*.TXT
 
+# AI Related
+.claude/*.local.*
+
