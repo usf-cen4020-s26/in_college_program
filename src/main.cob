@@ -101,6 +101,7 @@ FD  MESSAGES-FILE.
     05  MSG-TIMESTAMP          PIC X(20).
 
 WORKING-STORAGE SECTION.
+       COPY WS-CONSTANTS.
 01  WS-USER-ACCOUNTS.
     05  WS-ACCOUNT OCCURS 5 TIMES.
         10  WS-USERNAME         PIC X(20).
@@ -330,9 +331,9 @@ PROCEDURE DIVISION.
        1000-INITIALIZE.
            OPEN INPUT INPUT-FILE.
 
-           IF WS-INPUT-STATUS NOT = "00"
+           IF WS-INPUT-STATUS NOT = WS-CONST-FS-OK
               EVALUATE WS-INPUT-STATUS
-                 WHEN "35"
+                 WHEN WS-CONST-FS-NOT-FOUND
                     DISPLAY "ERROR: INPUT.TXT file not found"
                     DISPLAY "Create INPUT.TXT before running"
                  WHEN OTHER
@@ -365,7 +366,7 @@ PROCEDURE DIVISION.
 
        1100-LOAD-ACCOUNTS.
            OPEN INPUT ACCOUNTS-FILE.
-           IF WS-ACCOUNTS-STATUS = "00" OR WS-ACCOUNTS-STATUS = "97"
+           IF WS-ACCOUNTS-STATUS = WS-CONST-FS-OK OR WS-ACCOUNTS-STATUS = WS-CONST-FS-OPEN-OK
                PERFORM 1110-READ-ACCOUNT-LOOP
                CLOSE ACCOUNTS-FILE
            END-IF.
@@ -396,8 +397,8 @@ PROCEDURE DIVISION.
 *> *      *>*****************************************************************
        1150-LOAD-PROFILES.
            OPEN INPUT PROFILES-FILE.
-           IF WS-PROFILES-STATUS = "00" OR WS-PROFILES-STATUS = "97"
-               IF WS-PROFILES-STATUS = "00"
+           IF WS-PROFILES-STATUS = WS-CONST-FS-OK OR WS-PROFILES-STATUS = WS-CONST-FS-OPEN-OK
+               IF WS-PROFILES-STATUS = WS-CONST-FS-OK
                    PERFORM 1160-READ-PROFILE-LOOP
                END-IF
                CLOSE PROFILES-FILE
@@ -415,10 +416,10 @@ PROCEDURE DIVISION.
            OPEN INPUT PENDING-FILE.
 
            EVALUATE WS-PENDING-STATUS
-               WHEN "00"
+               WHEN WS-CONST-FS-OK
                    PERFORM 9210-READ-PENDING-LOOP
                    CLOSE PENDING-FILE
-               WHEN "35"
+               WHEN WS-CONST-FS-NOT-FOUND
                    *> file not found: that's ok (no pending yet)
                    MOVE 0 TO WS-PENDING-COUNT
                WHEN OTHER
@@ -452,10 +453,10 @@ PROCEDURE DIVISION.
            OPEN INPUT CONNECTIONS-FILE.
 
            EVALUATE WS-CONNECTIONS-STATUS
-               WHEN "00"
+               WHEN WS-CONST-FS-OK
                    PERFORM 9260-READ-CONNECTIONS-LOOP
                    CLOSE CONNECTIONS-FILE
-               WHEN "35"
+               WHEN WS-CONST-FS-NOT-FOUND
                    *> file not found: ok (no connections yet)
                    MOVE 0 TO WS-CONNECTIONS-COUNT
                WHEN OTHER
@@ -502,10 +503,10 @@ PROCEDURE DIVISION.
            OPEN INPUT MESSAGES-FILE
 
            EVALUATE WS-MESSAGES-STATUS
-               WHEN "00"
+               WHEN WS-CONST-FS-OK
                    PERFORM 9275-READ-MSG-ID-LOOP
                    CLOSE MESSAGES-FILE
-               WHEN "35"
+               WHEN WS-CONST-FS-NOT-FOUND
                    MOVE 0 TO WS-MSG-NEXT-ID
                WHEN OTHER
                    MOVE 0 TO WS-MSG-NEXT-ID
@@ -782,7 +783,7 @@ PROCEDURE DIVISION.
 *> *      *> USER STORY 4: New account creation with limits                *
 *> *      *>*****************************************************************
        4000-CREATE-ACCOUNT.
-           IF WS-ACCOUNT-COUNT >= 5
+           IF WS-ACCOUNT-COUNT >= WS-CONST-MAX-ACCOUNTS
 *> *      *> USER STORY 4, TASK 2: Notify user of account limit            *
 *> *      *>*****************************************************************
                MOVE " " TO WS-OUTPUT-LINE
@@ -1929,13 +1930,13 @@ PROCEDURE DIVISION.
 
            *> Append to file (create if missing)
            OPEN EXTEND CONNECTIONS-FILE
-           IF WS-CONNECTIONS-STATUS = "35"
+           IF WS-CONNECTIONS-STATUS = WS-CONST-FS-NOT-FOUND
                OPEN OUTPUT CONNECTIONS-FILE
                CLOSE CONNECTIONS-FILE
                OPEN EXTEND CONNECTIONS-FILE
            END-IF
 
-           IF WS-CONNECTIONS-STATUS NOT = "00"
+           IF WS-CONNECTIONS-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not open CONNECTIONS.DAT for append. STATUS="
                    WS-CONNECTIONS-STATUS
@@ -1948,7 +1949,7 @@ PROCEDURE DIVISION.
 
            WRITE CONNECTION-REC
 
-           IF WS-CONNECTIONS-STATUS NOT = "00"
+           IF WS-CONNECTIONS-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not write to CONNECTIONS.DAT. STATUS="
                    WS-CONNECTIONS-STATUS
@@ -1994,14 +1995,14 @@ PROCEDURE DIVISION.
            *> Append to file (create if missing)
            OPEN EXTEND PENDING-FILE
 
-           IF WS-PENDING-STATUS = "35"
+           IF WS-PENDING-STATUS = WS-CONST-FS-NOT-FOUND
                *> File not found -> create it
                OPEN OUTPUT PENDING-FILE
                CLOSE PENDING-FILE
                OPEN EXTEND PENDING-FILE
            END-IF
 
-           IF WS-PENDING-STATUS NOT = "00"
+           IF WS-PENDING-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not open PENDING.DAT for append. STATUS="
                    WS-PENDING-STATUS
@@ -2014,7 +2015,7 @@ PROCEDURE DIVISION.
 
            WRITE PENDING-REC
 
-           IF WS-PENDING-STATUS NOT = "00"
+           IF WS-PENDING-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not write to PENDING.DAT. STATUS="
                    WS-PENDING-STATUS
@@ -2060,7 +2061,7 @@ PROCEDURE DIVISION.
        9310-REWRITE-PENDING-FILE.
            OPEN OUTPUT PENDING-FILE
 
-           IF WS-PENDING-STATUS NOT = "00"
+           IF WS-PENDING-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not open PENDING.DAT for rewrite. STATUS="
                    WS-PENDING-STATUS
