@@ -178,7 +178,7 @@
                AT END
                    MOVE 1 TO WS-PENDING-EOF
                NOT AT END
-                   IF WS-PENDING-COUNT < WS-MAX-PENDING
+                   IF WS-PENDING-COUNT < WS-CONST-MAX-PENDING
                        ADD 1 TO WS-PENDING-COUNT
                        MOVE PEND-SENDER-USERNAME TO
                            WS-PEND-SENDER-USERNAME(WS-PENDING-COUNT)

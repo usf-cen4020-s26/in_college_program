@@ -6,7 +6,6 @@
       01  WS-JOBS-STATUS              PIC XX.
       01  WS-JOBS-EOF                 PIC X VALUE "N".
       01  WS-JOB-COUNT                PIC 999 VALUE 0.
-      01  WS-MAX-JOBS                 PIC 999 VALUE 25.
       01  WS-JOB-ID-COUNTER           PIC 9(5) VALUE 0.
       01  WS-JOB-WRITE-SUCCESS        PIC 9 VALUE 0.
       01  WS-TEMP-JOB-TITLE           PIC X(50).

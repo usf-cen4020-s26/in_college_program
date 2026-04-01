@@ -35,7 +35,7 @@
                AT END
                    MOVE "Y" TO WS-JOBS-EOF
                NOT AT END
-                   IF WS-JOB-COUNT < WS-MAX-JOBS
+                   IF WS-JOB-COUNT < WS-CONST-MAX-JOBS
                        ADD 1 TO WS-JOB-COUNT
                        MOVE JOB-ID          TO WS-JT-ID(WS-JOB-COUNT)
                        MOVE JOB-POSTER      TO WS-JT-POSTER(WS-JOB-COUNT)

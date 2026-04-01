@@ -64,7 +64,7 @@
       *>   Adds a new pending request to memory + appends to PENDING.DAT
       *>*****************************************************************
        9300-WRITE-PENDING-REQUEST.
-           IF WS-PENDING-COUNT >= WS-MAX-PENDING
+           IF WS-PENDING-COUNT >= WS-CONST-MAX-PENDING
                MOVE "ERROR: Pending requests table is full." TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
                EXIT PARAGRAPH
