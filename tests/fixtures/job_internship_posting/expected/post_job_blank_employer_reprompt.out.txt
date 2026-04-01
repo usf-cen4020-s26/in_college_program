@@ -27,6 +27,6 @@ $60000/year
 {{JOB_MENU}}
 4
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 {{EXIT_MESSAGE}}

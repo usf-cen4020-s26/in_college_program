@@ -12,7 +12,7 @@ TechStartup
 Remote
 $70000/year
 4
-8
+9
 1
 multiB
 MultiB1!
@@ -24,5 +24,5 @@ TechStartup
 New York, NY
 $75000/year
 4
-8
+9
 3

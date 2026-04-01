@@ -25,7 +25,7 @@ Connection request from Mason Russell rejected!
 {{NO_CONNECTIONS}}
 -----------------------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

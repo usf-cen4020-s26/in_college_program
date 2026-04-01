@@ -8,4 +8,4 @@ Bob123!
 4 # Find someone you know
 Alice Smith # Search for alice
 1 # Send connection request
-8 # Log out
+9 # Log out

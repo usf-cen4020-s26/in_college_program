@@ -32,7 +32,7 @@ Enter job number to view details, or 0 to go back:
 {{JOB_MENU}}
 4
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

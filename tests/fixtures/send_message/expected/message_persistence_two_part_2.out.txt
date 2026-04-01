@@ -1,0 +1,25 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+ConnUser
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+8
+{{MESSAGES_MENU}}
+1
+Enter recipient's username (must be a connection):
+OtherUser
+Enter your message (max 200 chars):
+M2
+Message sent to OtherUser successfully!
+---------------------
+{{MESSAGES_MENU}}
+3
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

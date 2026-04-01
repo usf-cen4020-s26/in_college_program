@@ -7,5 +7,5 @@ User1!
 5 # View pending again
 2 # Reject user3's request
 7 # View network (only user2 should appear)
-8 # Log out
+9 # Log out
 3 # Exit

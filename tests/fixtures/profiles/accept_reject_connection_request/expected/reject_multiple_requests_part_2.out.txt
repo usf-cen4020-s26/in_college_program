@@ -25,7 +25,7 @@ Enter your choice for Carol Martinez:
 Connection request from Carol Martinez rejected!
 -----------------------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

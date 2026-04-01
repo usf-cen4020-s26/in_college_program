@@ -13,5 +13,5 @@ NONE
 2           # Select Browse Jobs/Internships - now shows real listing
 0           # Exit browse (enter 0 to go back)
 4           # Return to Main Menu
-8           # Logout
+9           # Logout
 3

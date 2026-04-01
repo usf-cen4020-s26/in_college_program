@@ -7,7 +7,7 @@ Enter password:
 ********
 {{LOGIN_SUCCESS}}
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
@@ -36,7 +36,7 @@ Education: None
 Enter your choice:
 2
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

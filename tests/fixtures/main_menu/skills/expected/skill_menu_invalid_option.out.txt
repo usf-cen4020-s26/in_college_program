@@ -14,7 +14,7 @@ Enter password:
 {{SKILLS_MENU}}
 6
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

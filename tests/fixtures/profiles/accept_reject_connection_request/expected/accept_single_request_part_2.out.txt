@@ -21,7 +21,7 @@ Connection request from Mason Russell accepted!
 Connected with: Mason Russell (University: UCF, Major: Computer Science)
 -----------------------------------
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

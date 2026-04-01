@@ -9,7 +9,7 @@ Enter password:
 {{MAIN_MENU}}
 3
 {{JOB_MENU}}
-9
+10
 {{INVALID_CHOICE}}
 {{JOB_MENU}}
 X
@@ -17,6 +17,6 @@ X
 {{JOB_MENU}}
 4
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 {{EXIT_MESSAGE}}

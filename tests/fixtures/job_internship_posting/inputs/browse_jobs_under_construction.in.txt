@@ -6,4 +6,4 @@ Grace12!
 3           # Search for a job
 2           # Browse Jobs/Internships - should say under construction
 4           # Back to Main Menu
-8           # Logout
+9           # Logout

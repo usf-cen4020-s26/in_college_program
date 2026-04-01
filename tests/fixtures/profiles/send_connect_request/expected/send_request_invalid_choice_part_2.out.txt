@@ -28,7 +28,7 @@ Enter your choice:
 9
 {{INVALID_CHOICE}}
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}
