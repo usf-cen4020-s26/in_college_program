@@ -242,7 +242,7 @@
 *> *      *>*****************************************************************
        1161-COPY-EXPERIENCE-ENTRIES.
            PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
-               UNTIL WS-DISPLAY-INDEX > 3
+               UNTIL WS-DISPLAY-INDEX > WS-CONST-MAX-EXPERIENCES
 
                MOVE PROF-EXP-TITLE(WS-DISPLAY-INDEX) TO
                    WS-EXP-TITLE(WS-PROFILE-COUNT, WS-DISPLAY-INDEX)
@@ -259,7 +259,7 @@
 *> *      *>*****************************************************************
        1162-COPY-EDUCATION-ENTRIES.
            PERFORM VARYING WS-DISPLAY-INDEX FROM 1 BY 1
-               UNTIL WS-DISPLAY-INDEX > 3
+               UNTIL WS-DISPLAY-INDEX > WS-CONST-MAX-EDUCATIONS
 
                MOVE PROF-EDU-DEGREE(WS-DISPLAY-INDEX) TO
                    WS-EDU-DEGREE(WS-PROFILE-COUNT, WS-DISPLAY-INDEX)
