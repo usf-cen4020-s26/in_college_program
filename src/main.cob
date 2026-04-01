@@ -306,21 +306,21 @@ PROCEDURE DIVISION.
            MOVE "Y" TO WS-INPUT-PUSHBACK-FLAG
            EXIT.
 
-       COPY DATALOAD_SRC.
-       COPY AUTH_SRC.
-       COPY PROFILE_SRC.
-       COPY SEARCH_SRC.
-       COPY SKILLS_SRC.
-       COPY CONNMGMT_SRC.
-       COPY CONNWRITE_SRC.
-       COPY NETWORK_SRC.
-       COPY SENDREQ_SRC.
-       COPY JOBS_SRC.
-       COPY SENDMESSAGE_SRC.
-       COPY APPLYJOB_SRC.
-       COPY VIEWAPPS_SRC.
-       COPY JOBSIO_SRC.
-       COPY VIEWREQ_SRC.
+       COPY DATALOAD.
+       COPY AUTH.
+       COPY PROFILE.
+       COPY SEARCH.
+       COPY SKILLS.
+       COPY CONNMGMT.
+       COPY CONNWRITE.
+       COPY NETWORK.
+       COPY SENDREQ.
+       COPY JOBS.
+       COPY SENDMESSAGE.
+       COPY APPLYJOB.
+       COPY VIEWAPPS.
+       COPY JOBSIO.
+       COPY VIEWREQ.
 *> *      *>*****************************************************************
 *> *      *> 9000-TERMINATE: Cleanup and close files                       *
 *> *      *>*****************************************************************

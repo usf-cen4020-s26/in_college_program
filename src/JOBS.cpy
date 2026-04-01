@@ -218,5 +218,5 @@
            END-IF
            EXIT.
 
-       COPY BROWSEJOBS_SRC.
+       COPY BROWSEJOBS.
 
