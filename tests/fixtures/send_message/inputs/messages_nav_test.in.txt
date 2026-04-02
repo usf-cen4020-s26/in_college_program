@@ -33,7 +33,7 @@ Nobody Here
 2
 8
 1
-NotAConn
+NotAConn # This user does not exist, so we expect the same error message here
 3
 9
 3
