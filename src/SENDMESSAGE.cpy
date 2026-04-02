@@ -96,7 +96,7 @@
            END-PERFORM
 
            IF WS-MSG-USER-EXISTS = 0
-               MOVE "User not found in your network."
+               MOVE "You can only message users you are connected with."
                    TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
                EXIT PARAGRAPH
