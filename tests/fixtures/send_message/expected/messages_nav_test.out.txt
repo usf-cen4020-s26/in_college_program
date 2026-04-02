@@ -107,7 +107,7 @@ View My Messages is under construction.
 1
 Enter recipient's username (must be a connection):
 NotAConn
-User not found in your network.
+You can only message users you are connected with.
 {{MESSAGES_MENU}}
 3
 {{MAIN_MENU}}
