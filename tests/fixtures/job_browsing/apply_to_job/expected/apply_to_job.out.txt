@@ -1,12 +1,5 @@
 {{WELCOME_BANNER}}
 {{LOGIN_SCREEN}}
-2
-{{CREATE_ACCOUNT_HEADER}}
-applyuser1
-{{PASSWORD_PROMPT}}
-********
-{{ACCOUNT_CREATED}}
-{{LOGIN_SCREEN}}
 1
 {{LOGIN_HEADER}}
 applyuser1
@@ -68,7 +61,7 @@ Total Applications: 1
 {{JOB_MENU}}
 4
 {{MAIN_MENU}}
-8
+9
 {{LOGIN_SCREEN}}
 3
 {{EXIT_MESSAGE}}

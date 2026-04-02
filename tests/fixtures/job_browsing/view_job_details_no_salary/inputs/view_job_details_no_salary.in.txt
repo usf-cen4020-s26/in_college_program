@@ -1,6 +1,5 @@
-2
-nosalaryuser
-Password1!
+@seed_user username=nosalaryuser password=Password1! with_profile=false
+
 1
 nosalaryuser
 Password1!
@@ -16,5 +15,5 @@ NONE
 2
 0
 4
-8
+9
 3

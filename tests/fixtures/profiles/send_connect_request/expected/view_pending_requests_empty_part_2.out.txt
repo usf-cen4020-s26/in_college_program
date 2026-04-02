@@ -1,53 +1,17 @@
-========================================
-     WELCOME TO INCOLLEGE
-========================================
-
-Please select an option:
-1. Login with existing account
-2. Create new account
-3. Exit
-Enter choice (1-3):
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
 1
-
-=== LOGIN ===
-Enter username:
+{{LOGIN_HEADER}}
 ViewEmptyUser
 Enter password:
 ********
-You have successfully logged in
-
-=== MAIN MENU ===
-1. Create/Edit My Profile
-2. View My Profile
-3. Search for a job
-4. Find someone you know
-5. View Pending Connection Requests
-6. Learn a new skill
-7. View My Network
-8. Logout
-Enter choice (1-8):
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
 5
---- Pending Connection Requests ---
-You have no pending connection requests at this time.
------------------------------------
-
-=== MAIN MENU ===
-1. Create/Edit My Profile
-2. View My Profile
-3. Search for a job
-4. Find someone you know
-5. View Pending Connection Requests
-6. Learn a new skill
-7. View My Network
-8. Logout
-Enter choice (1-8):
-8
-
-Please select an option:
-1. Login with existing account
-2. Create new account
-3. Exit
-Enter choice (1-3):
+{{PENDING_REQUESTS_HEADER}}
+{{NO_PENDING_REQUESTS}}
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
 3
-
-Thank you for using InCollege!
+{{EXIT_MESSAGE}}

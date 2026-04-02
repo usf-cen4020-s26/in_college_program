@@ -1,6 +1,5 @@
-2
-UserA
-Pass123!
+@seed_user username=UserA password=Pass123! with_profile=false
+
 1
 UserA
 Pass123!
@@ -12,5 +11,5 @@ DataCo Inc
 New York, NY
 $50,000/year
 4
-8
+9
 3

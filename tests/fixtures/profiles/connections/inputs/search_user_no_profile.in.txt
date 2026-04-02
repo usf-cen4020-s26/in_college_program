@@ -7,5 +7,5 @@ alice
 Alice1!
 4       # Find someone you know
 Bob Jones   # Bob has no profile, search by name won't match
-8       # Logout
+9       # Logout
 3       # Exit

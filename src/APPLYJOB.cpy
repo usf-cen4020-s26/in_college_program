@@ -48,9 +48,9 @@
            OPEN INPUT APPLICATIONS-FILE
 
            EVALUATE WS-APPS-STATUS
-               WHEN "00"
+               WHEN WS-CONST-FS-OK
                    CONTINUE
-               WHEN "35"
+               WHEN WS-CONST-FS-NOT-FOUND
                    EXIT PARAGRAPH
                WHEN OTHER
                    MOVE SPACES TO WS-OUTPUT-LINE
@@ -95,13 +95,13 @@
 
            OPEN EXTEND APPLICATIONS-FILE
 
-           IF WS-APPS-STATUS = "35"
+           IF WS-APPS-STATUS = WS-CONST-FS-NOT-FOUND
                OPEN OUTPUT APPLICATIONS-FILE
                CLOSE APPLICATIONS-FILE
                OPEN EXTEND APPLICATIONS-FILE
            END-IF
 
-           IF WS-APPS-STATUS NOT = "00"
+           IF WS-APPS-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not open APPLICATIONS.DAT. STATUS="
                    WS-APPS-STATUS
@@ -113,7 +113,7 @@
 
            WRITE APP-RECORD
 
-           IF WS-APPS-STATUS NOT = "00"
+           IF WS-APPS-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not write to APPLICATIONS.DAT. STATUS="
                    WS-APPS-STATUS

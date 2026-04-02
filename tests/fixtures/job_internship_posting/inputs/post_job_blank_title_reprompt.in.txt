@@ -1,6 +1,5 @@
-2   # Create account
-carol
-Carol12!
+@seed_user username=carol password=Carol12! with_profile=false
+
 1           # Log in
 carol
 Carol12!
@@ -14,4 +13,4 @@ DesignStudio
 Tampa, FL
 $45/hour
 4           # Back to Main Menu
-8           # Logout
+9           # Logout

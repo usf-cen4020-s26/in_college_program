@@ -1,6 +1,5 @@
-2
-lisa01
-Lisa1234!
+@seed_user username=lisa01 password=Lisa1234! with_profile=false
+
 1           # Log in
 lisa01
 Lisa1234!
@@ -18,4 +17,4 @@ WebDev Inc
 Remote
 $80000/year
 4           # Back to Main Menu
-8           # Logout
+9           # Logout

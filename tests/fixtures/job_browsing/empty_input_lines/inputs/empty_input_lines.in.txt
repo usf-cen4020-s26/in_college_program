@@ -1,6 +1,5 @@
-2
-applyuser1
-Password1!
+@seed_user username=applyuser1 password=Password1! with_profile=false
+
 1
 applyuser1
 Password1!
@@ -17,5 +16,5 @@ $25/hr
 
 0
 4
-8
+9
 3

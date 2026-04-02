@@ -195,7 +195,7 @@
            PERFORM 5330-WRITE-JOB-TO-FILE
            IF WS-JOB-WRITE-SUCCESS = 1
                MOVE JOB-ID TO WS-JOB-ID-COUNTER
-               IF WS-JOB-COUNT < WS-MAX-JOBS
+               IF WS-JOB-COUNT < WS-CONST-MAX-JOBS
                    ADD 1 TO WS-JOB-COUNT
                    MOVE JOB-ID          TO WS-JT-ID(WS-JOB-COUNT)
                    MOVE JOB-POSTER      TO WS-JT-POSTER(WS-JOB-COUNT)
@@ -218,5 +218,5 @@
            END-IF
            EXIT.
 
-       COPY BROWSEJOBS_SRC.
+       COPY BROWSEJOBS.
 

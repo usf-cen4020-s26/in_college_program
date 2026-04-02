@@ -1,18 +1,8 @@
-2       # Create account
-alice
-Alice15!
+@seed_user username=alice password=Alice15! first_name=Alice last_name=Smith university="University of South Florida" major="Computer Science" grad_year=2026
+
 1       # Log in
 alice
 Alice15!
-1       # Create basic profile
-Alice
-Smith
-University of South Florida
-Computer Science
-2026
-
-DONE
-DONE
 3           # Enter Job Search/Internship submenu
 1           # Select Post a Job/Internship
 Nav Test Job
@@ -23,5 +13,5 @@ NONE
 2           # Select Browse Jobs/Internships - now shows real listing
 0           # Exit browse (enter 0 to go back)
 4           # Return to Main Menu
-8           # Logout
+9           # Logout
 3

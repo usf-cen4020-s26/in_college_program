@@ -1,11 +1,10 @@
-2       # Create Account
-hank01
-Hank1234!
+@seed_user username=hank01 password=Hank1234! with_profile=false
+
 1           # Log in
 hank01
 Hank1234!
 3           # Search for a job
-9           # Invalid menu choice
+10           # Invalid menu choice
 X           # Invalid menu choice
 4           # Back to Main Menu
-8           # Logout
+9           # Logout

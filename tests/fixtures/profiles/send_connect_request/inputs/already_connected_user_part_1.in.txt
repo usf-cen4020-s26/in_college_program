@@ -1,47 +1,26 @@
-2
-UserC
-Pass123!
+@seed_user username=UserC password=Pass123! first_name=John last_name=Sanders university=UF major="Computer Science" grad_year=2027 about_me="Coding enthusiast and aspiring software engineer."
+@seed_user username=UserD password=Pass123! first_name=Alice last_name=Smith university=UF major=IT grad_year=2027 about_me="Vivid IT student with a passion for cybersecurity and network administration."
+
 1
 UserC
 Pass123!
-1
-John
-Sanders
-UF
-Computer Science
-2027
-Coding enthusiast and aspiring software engineer.
-DONE
-DONE
-8
-2
-UserD
-Pass123!
+9
 1
 UserD
 Pass123!
-1
-Alice
-Smith
-UF
-IT
-2027
-Vivid IT student with a passion for cybersecurity and network administration.
-DONE
-DONE
-8
+9
 1
 UserC
 Pass123!
 4
 Alice Smith
 1
-8
+9
 1
 UserD
 Pass123!
 5
-8
+9
 3
 
 

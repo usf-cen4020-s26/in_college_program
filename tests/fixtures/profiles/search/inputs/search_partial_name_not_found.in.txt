@@ -1,19 +1,9 @@
-2
-testuser
-Pass123!
+@seed_user username=testuser password=Pass123! first_name=John last_name=Doe university="Example University" major="Computer Science" grad_year=2025 about_me="Passionate CS student interested in software engineering."
+
 1
 testuser
 Pass123!
-1
-John
-Doe
-Example University
-Computer Science
-2025
-Passionate CS student interested in software engineering.
-DONE
-DONE
 4
 John
-8
+9
 3

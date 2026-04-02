@@ -1,20 +1,8 @@
-2
-SearcherUser
-Pass123!
-2
-TargetUser
-Pass123!
+@seed_user username=SearcherUser password=Pass123! with_profile=false
+@seed_user username=TargetUser password=Pass123! first_name=Alice last_name=Brown university=USF major=IT grad_year=2026 about_me="Original profile for Alice Brown."
+
 1
 TargetUser
 Pass123!
-1
-Alice
-Brown
-USF
-IT
-2026
-Original profile for Alice Brown.
-DONE
-DONE
-8
+9
 3

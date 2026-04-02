@@ -1,6 +1,5 @@
-2
-dupuser
-Password1!
+@seed_user username=dupuser password=Password1! with_profile=false
+
 1
 dupuser
 Password1!
@@ -16,5 +15,5 @@ $25/hour
 1
 0
 4
-8
+9
 3

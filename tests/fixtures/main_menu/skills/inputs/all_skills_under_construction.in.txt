@@ -1,6 +1,5 @@
-2
-TestUser1
-Password1!
+@seed_user username=TestUser1 password=Password1! with_profile=false
+
 1
 TestUser1
 Password1!
@@ -12,5 +11,5 @@ Password1!
 5
 10
 6
-8
+9
 3

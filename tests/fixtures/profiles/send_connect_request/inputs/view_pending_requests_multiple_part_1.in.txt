@@ -1,63 +1,31 @@
-2
-MultiReqA
-Pass123!
-2
-MultiReqB
-Pass123!
-2
-MultiReqC
-Pass123!
+@seed_user username=MultiReqA password=Pass123! first_name=Amy last_name=Wilson university=USF major=Biology grad_year=2027 about_me="Research and lab work."
+@seed_user username=MultiReqB password=Pass123! first_name=Ben last_name=Taylor university=UCF major=Chemistry grad_year=2026 about_me="Organic chemistry focus."
+@seed_user username=MultiReqC password=Pass123! first_name=Carol last_name=Martinez university=UF major=Physics grad_year=2027 about_me="Quantum mechanics enthusiast."
+
 1
 MultiReqA
 Pass123!
-1
-Amy
-Wilson
-USF
-Biology
-2027
-Research and lab work.
-DONE
-DONE
-8
+9
 1
 MultiReqB
 Pass123!
-1
-Ben
-Taylor
-UCF
-Chemistry
-2026
-Organic chemistry focus.
-DONE
-DONE
-8
+9
 1
 MultiReqC
 Pass123!
-1
-Carol
-Martinez
-UF
-Physics
-2027
-Quantum mechanics enthusiast.
-DONE
-DONE
-8
+9
 1
 MultiReqB
 Pass123!
 4
 Amy Wilson
 1
-8
+9
 1
 MultiReqC
 Pass123!
 4
 Amy Wilson
 1
-8
+9
 3

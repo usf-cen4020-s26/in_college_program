@@ -9,7 +9,7 @@ User2!
 4 # Find someone you know
 Alice Smith # Search for user1
 1 # Send connection request
-8 # Log out
+9 # Log out
 
 # user3 sends connection request to user1
 1 # Log in
@@ -18,4 +18,4 @@ User3!
 4 # Find someone you know
 Alice Smith # Search for user1
 1 # Send connection request
-8 # Log out
+9 # Log out

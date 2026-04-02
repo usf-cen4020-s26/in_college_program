@@ -11,10 +11,10 @@
            OPEN INPUT JOBS-FILE
 
            EVALUATE WS-JOBS-STATUS
-               WHEN "00"
+               WHEN WS-CONST-FS-OK
                    PERFORM 5355-READ-JOBS-LOOP
                    CLOSE JOBS-FILE
-               WHEN "35"
+               WHEN WS-CONST-FS-NOT-FOUND
                    CONTINUE
                WHEN OTHER
                    MOVE SPACES TO WS-OUTPUT-LINE
@@ -35,7 +35,7 @@
                AT END
                    MOVE "Y" TO WS-JOBS-EOF
                NOT AT END
-                   IF WS-JOB-COUNT < WS-MAX-JOBS
+                   IF WS-JOB-COUNT < WS-CONST-MAX-JOBS
                        ADD 1 TO WS-JOB-COUNT
                        MOVE JOB-ID          TO WS-JT-ID(WS-JOB-COUNT)
                        MOVE JOB-POSTER      TO WS-JT-POSTER(WS-JOB-COUNT)
@@ -63,13 +63,13 @@
            MOVE 0 TO WS-JOB-WRITE-SUCCESS
            OPEN EXTEND JOBS-FILE
 
-           IF WS-JOBS-STATUS = "35"
+           IF WS-JOBS-STATUS = WS-CONST-FS-NOT-FOUND
                OPEN OUTPUT JOBS-FILE
                CLOSE JOBS-FILE
                OPEN EXTEND JOBS-FILE
            END-IF
 
-           IF WS-JOBS-STATUS NOT = "00"
+           IF WS-JOBS-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not open JOBS.DAT. STATUS="
                    WS-JOBS-STATUS
@@ -81,7 +81,7 @@
 
            WRITE JOB-RECORD
 
-           IF WS-JOBS-STATUS NOT = "00"
+           IF WS-JOBS-STATUS NOT = WS-CONST-FS-OK
                MOVE SPACES TO WS-OUTPUT-LINE
                STRING "ERROR: Could not write to JOBS.DAT. STATUS="
                    WS-JOBS-STATUS

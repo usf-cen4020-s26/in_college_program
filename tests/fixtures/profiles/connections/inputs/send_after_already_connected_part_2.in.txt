@@ -5,5 +5,5 @@ Bob123!
 4       # Find someone you know
 Alice Smith
 1       # Try to send connection request again
-8       # Logout
+9       # Logout
 3       # Exit

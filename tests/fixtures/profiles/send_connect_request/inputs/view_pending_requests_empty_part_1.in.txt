@@ -1,17 +1,7 @@
-2
-ViewEmptyUser
-Pass123!
+@seed_user username=ViewEmptyUser password=Pass123! first_name=Sam last_name=Jones university=USF major=Biology grad_year=2026 about_me="Nature lover and lab enthusiast."
+
 1
 ViewEmptyUser
 Pass123!
-1
-Sam
-Jones
-USF
-Biology
-2026
-Nature lover and lab enthusiast.
-DONE
-DONE
-8
+9
 3

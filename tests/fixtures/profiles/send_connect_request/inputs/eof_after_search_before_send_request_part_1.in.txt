@@ -1,33 +1,12 @@
-2
-UserA
-Pass123!
-2
-UserB
-Pass123!
+@seed_user username=UserA password=Pass123! first_name=Victoria last_name=Kirkland university=USF major="Biomedical Engineering" grad_year=2027 about_me="I love biomed and am passionate about engineering research."
+@seed_user username=UserB password=Pass123! first_name=Mason last_name=Russell university=UCF major="Computer Science" grad_year=2026 about_me="I'm CS but I love other majors, only if they're engineering related."
+
 1
 UserA
 Pass123!
-1
-Victoria
-Kirkland
-USF
-Biomedical Engineering
-2027
-I love biomed and am passionate about engineering research.
-DONE
-DONE
-8
+9
 1
 UserB
 Pass123!
-1
-Mason
-Russell
-UCF
-Computer Science
-2026
-I'm CS but I love other majors, only if they're engineering related.
-DONE
-DONE
-8
+9
 3
