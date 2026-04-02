@@ -11,13 +11,9 @@
                PERFORM 8000-WRITE-OUTPUT
                EXIT PARAGRAPH
            END-IF
-           ADD 1 TO WS-CONNECTIONS-COUNT
-           MOVE WS-USERNAME(WS-CURRENT-USER-INDEX)
-               TO WS-CONN-USER-A(WS-CONNECTIONS-COUNT)
-           MOVE WS-VIEWREQ-SENDER-USERNAME
-               TO WS-CONN-USER-B(WS-CONNECTIONS-COUNT)
-           MOVE WS-CONN-USER-A(WS-CONNECTIONS-COUNT) TO CONN-USER-A
-           MOVE WS-CONN-USER-B(WS-CONNECTIONS-COUNT) TO CONN-USER-B
+      *>   Set up file record BEFORE updating in-memory table
+           MOVE WS-USERNAME(WS-CURRENT-USER-INDEX) TO CONN-USER-A
+           MOVE WS-VIEWREQ-SENDER-USERNAME TO CONN-USER-B
            OPEN EXTEND CONNECTIONS-FILE
            IF WS-CONNECTIONS-STATUS = WS-CONST-FS-NOT-FOUND
                OPEN OUTPUT CONNECTIONS-FILE
@@ -41,6 +37,14 @@
                    DELIMITED BY SIZE INTO WS-OUTPUT-LINE
                END-STRING
                PERFORM 8000-WRITE-OUTPUT
+               CLOSE CONNECTIONS-FILE
+               EXIT PARAGRAPH
            END-IF
            CLOSE CONNECTIONS-FILE
+      *>   Only update in-memory table after successful persist
+           ADD 1 TO WS-CONNECTIONS-COUNT
+           MOVE CONN-USER-A
+               TO WS-CONN-USER-A(WS-CONNECTIONS-COUNT)
+           MOVE CONN-USER-B
+               TO WS-CONN-USER-B(WS-CONNECTIONS-COUNT)
            EXIT.
