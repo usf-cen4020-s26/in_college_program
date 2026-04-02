@@ -1,5 +1,5 @@
       *> ============================================================
-      *> SKILLS_SRC.cpy - Skills menu (under construction)
+      *> SKILLS.cpy - Skills menu (under construction)
       *> Paragraphs: 6000-SKILLS-MENU
       *> ============================================================
        6000-SKILLS-MENU.
