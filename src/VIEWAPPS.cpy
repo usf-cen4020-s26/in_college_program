@@ -25,10 +25,10 @@
            OPEN INPUT APPLICATIONS-FILE
 
            EVALUATE WS-APPS-STATUS
-               WHEN "00"
+               WHEN WS-CONST-FS-OK
                    PERFORM 5341-READ-APPS-LOOP
                    CLOSE APPLICATIONS-FILE
-               WHEN "35"
+               WHEN WS-CONST-FS-NOT-FOUND
                    CONTINUE
                WHEN OTHER
                    MOVE SPACES TO WS-OUTPUT-LINE
@@ -115,9 +115,9 @@
            OPEN INPUT APPLICATIONS-FILE
 
            EVALUATE WS-APPS-STATUS
-               WHEN "00"
+               WHEN WS-CONST-FS-OK
                    CLOSE APPLICATIONS-FILE
-               WHEN "35"
+               WHEN WS-CONST-FS-NOT-FOUND
                    CONTINUE
                WHEN OTHER
                    MOVE SPACES TO WS-OUTPUT-LINE
