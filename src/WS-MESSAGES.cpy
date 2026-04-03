@@ -12,3 +12,7 @@
       01  WS-MSG-USER-EXISTS          PIC 9 VALUE 0.
       01  WS-MSG-CURRENT-DATE         PIC X(21).
       01  WS-MSG-NEXT-ID              PIC 9(5) VALUE 0.
+
+      *> ===== View messages variables =====
+      01  WS-VIEW-MSG-FOUND           PIC 9 VALUE 0.
+      01  WS-VIEW-MSG-EOF             PIC X VALUE "N".

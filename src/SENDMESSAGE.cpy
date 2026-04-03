@@ -51,9 +51,7 @@
                    WHEN "1"
                        PERFORM 7810-SEND-MESSAGE
                    WHEN "2"
-                       MOVE "View My Messages is under construction."
-                           TO WS-OUTPUT-LINE
-                       PERFORM 8000-WRITE-OUTPUT
+                       PERFORM 7840-VIEW-MESSAGES
                    WHEN "3"
                        EXIT PERFORM
                    WHEN OTHER
