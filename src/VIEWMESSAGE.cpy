@@ -19,7 +19,7 @@
            MOVE "--- Your Messages ---" TO WS-OUTPUT-LINE
            PERFORM 8000-WRITE-OUTPUT
 
-           MOVE 0 TO WS-VIEW-MSG-FOUND
+           MOVE 0 TO WS-MSG-FOUND
            MOVE "N" TO WS-VIEW-MSG-EOF
 
            OPEN INPUT MESSAGES-FILE
@@ -39,7 +39,7 @@
                    PERFORM 8000-WRITE-OUTPUT
            END-EVALUATE
 
-           IF WS-VIEW-MSG-FOUND = 0
+           IF WS-MSG-FOUND = 0
                MOVE "You have no messages at this time."
                    TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
@@ -64,7 +64,7 @@
                        = FUNCTION TRIM(
                            WS-USERNAME(WS-CURRENT-USER-INDEX))
 
-                       MOVE 1 TO WS-VIEW-MSG-FOUND
+                       MOVE 1 TO WS-MSG-FOUND
 
                        MOVE SPACES TO WS-OUTPUT-LINE
                        STRING "From: "
