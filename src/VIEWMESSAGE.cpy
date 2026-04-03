@@ -16,8 +16,6 @@
       *>   in chronological order (oldest first), then closes the file.
       *>*****************************************************************
        7840-VIEW-MESSAGES.
-           MOVE "--- Your Messages ---" TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
 
            MOVE 0 TO WS-MSG-FOUND
            MOVE "N" TO WS-VIEW-MSG-EOF
@@ -45,8 +43,10 @@
                PERFORM 8000-WRITE-OUTPUT
            END-IF
 
-           MOVE "---------------------" TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT.
+           IF WS-MSG-FOUND = 1
+               MOVE "---------------------" TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+           END-IF.
            EXIT.
 
       *>*****************************************************************
@@ -64,6 +64,11 @@
                        = FUNCTION TRIM(
                            WS-USERNAME(WS-CURRENT-USER-INDEX))
 
+                       IF WS-MSG-FOUND = 0
+                           MOVE "--- Your Messages ---"
+                               TO WS-OUTPUT-LINE
+                           PERFORM 8000-WRITE-OUTPUT
+                       END-IF
                        MOVE 1 TO WS-MSG-FOUND
 
                        MOVE SPACES TO WS-OUTPUT-LINE
