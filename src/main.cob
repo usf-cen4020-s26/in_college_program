@@ -1,3 +1,65 @@
+*>*****************************************************************
+      *> PROGRAM:     INCOLLEGE
+      *> DESCRIPTION: LinkedIn-style college networking application.
+      *>              Supports account creation, login, profiles, job
+      *>              search, connections, skills, messaging, and more.
+      *>              Completed through Epic 9 (Messaging).
+      *>
+      *> FILES:
+      *>   INPUT.TXT        - Sequential input commands (test/automation)
+      *>   OUTPUT.TXT       - Sequential output log (test verification)
+      *>   ACCOUNTS.DAT     - User credentials (username + password)
+      *>   PROFILES.DAT     - User profiles (bio, experience, education)
+      *>   PENDING.DAT      - Pending connection requests
+      *>   CONNECTIONS.DAT  - Established connections between users
+      *>   JOBS.DAT         - Job postings
+      *>   APPLICATIONS.DAT - Job applications submitted by users
+      *>   MESSAGES.DAT     - Messages sent between connected users
+      *>
+      *> WORKING-STORAGE COPYBOOKS:
+      *>   WS-CONSTANTS     - File status codes and app-wide constants
+      *>   WS-IO-CONTROL    - Input/output control flags and buffers
+      *>   WS-ACCOUNTS      - In-memory accounts table (up to 10 users)
+      *>   WS-PROFILES      - In-memory profiles table
+      *>   WS-CONNECTIONS   - In-memory connections table
+      *>   WS-JOBS          - In-memory jobs table and counters
+      *>   WS-MESSAGES      - Messaging state variables and flags
+      *>
+      *> PROCEDURE COPYBOOKS:
+      *>   DATALOAD         - Load all DAT files into working storage
+      *>   AUTH             - Login and account creation (3000, 4000)
+      *>   PROFILE          - Create/edit/view profile (7000, 7100)
+      *>   SEARCH           - Job search menu (5300)
+      *>   SKILLS           - Skills menu (6000)
+      *>   CONNMGMT         - Connection management (7500)
+      *>   CONNWRITE        - Write connections to file
+      *>   NETWORK          - View network list (7700)
+      *>   SENDREQ          - Send connection requests
+      *>   JOBS             - Job posting and management (5350)
+      *>   SENDMESSAGE      - Messages menu and send message (7800, 7810)
+      *>   VIEWMESSAGE      - View messages (7840, 7841)
+      *>   APPLYJOB         - Apply to jobs
+      *>   VIEWAPPS         - View applications
+      *>   JOBSIO           - Jobs file I/O
+      *>   VIEWREQ          - View connection requests
+      *>
+      *> MAIN PROGRAM FLOW (0000-MAIN-PROGRAM):
+      *>   1000-INITIALIZE        - Open files, load data, show banner
+      *>   2000-PROCESS-APPLICATION - Pre-login menu (Login/Create/Exit)
+      *>     3000-LOGIN-PROCESS   - Authenticate user
+      *>     4000-CREATE-ACCOUNT  - Register new user
+      *>     5000-POST-LOGIN-MENU - Main menu (options 1-9):
+      *>       1. Create/Edit My Profile  -> 7000-CREATE-EDIT-PROFILE
+      *>       2. View My Profile         -> 7100-VIEW-PROFILE
+      *>       3. Search for a job        -> 5300-JOB-SEARCH-MENU
+      *>       4. Find someone you know   -> 7500-FIND-SOMEONE-YOU-KNOW
+      *>       5. View Pending Requests   -> 7500-VIEW-PENDING-REQUESTS
+      *>       6. Learn a new skill       -> 6000-SKILLS-MENU
+      *>       7. View My Network         -> 7700-VIEW-NETWORK-LIST
+      *>       8. Messages                -> 7800-MESSAGES-MENU
+      *>       9. Logout
+      *>   9000-TERMINATE         - Close files, display goodbye
+      *>*****************************************************************
 IDENTIFICATION DIVISION.
 PROGRAM-ID. INCOLLEGE.
 
