@@ -1,0 +1,16 @@
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=bob password=Bob1Pass! first_name=Bob last_name=Jones university=USF major=IT grad_year=2027
+@seed_user username=carol password=Carol1!! first_name=Carol last_name=White university=USF major=EE grad_year=2026
+@seed_connection user_a=alice user_b=bob
+@seed_connection user_a=carol user_b=bob
+@seed_message sender=alice recipient=bob content="Hey Bob, it is Alice!" timestamp=2026-01-15 08:00:00
+@seed_message sender=carol recipient=bob content="Hey Bob, it is Carol!" timestamp=2026-01-15 08:30:00
+
+1
+bob
+Bob1Pass!
+8
+2
+3
+9
+3
