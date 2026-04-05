@@ -1,0 +1,25 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+alice
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+8
+{{MESSAGES_MENU}}
+1
+Enter recipient's username (must be a connection):
+bob
+Enter your message (max 200 chars):
+Hello Bob, this message persists across restarts
+Message sent to bob successfully!
+---------------------
+{{MESSAGES_MENU}}
+3
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}
