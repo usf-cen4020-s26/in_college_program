@@ -1,0 +1,40 @@
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=bob password=Bob1Pass! first_name=Bob last_name=Jones university=USF major=IT grad_year=2027
+@seed_connection user_a=alice user_b=bob
+
+1
+alice
+Alice1!
+8
+1
+bob
+First cycle message A
+1
+bob
+First cycle message B
+3
+9
+1
+bob
+Bob1Pass!
+8
+2
+3
+9
+1
+alice
+Alice1!
+8
+1
+bob
+Second cycle message
+3
+9
+1
+bob
+Bob1Pass!
+8
+2
+3
+9
+3
