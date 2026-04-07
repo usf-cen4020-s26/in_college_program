@@ -1,60 +1,87 @@
-"""Input file preprocessing: ``@seed_user`` macros and comment stripping.
+"""Input file preprocessing: seed macros and comment stripping.
 
-Before a test input file is fed to the COBOL executable its header macros
-(``@seed_user``) are parsed and removed, and inline ``#`` comments are
-stripped from body lines.
+Header macros ``@seed_user``, ``@seed_connection``, and ``@seed_message`` are
+removed before execution. Inline ``#`` comments are stripped from body lines.
 """
 
 from __future__ import annotations
 
+import re
 import shlex
 from pathlib import Path
 
 from incollege_tests.constants import ACCOUNT_PASSWORD_WIDTH, ACCOUNT_USERNAME_WIDTH
-from incollege_tests.models import SeedUserMacro
+from incollege_tests.models import (
+    SeedConnectionMacro,
+    SeedMessageMacro,
+    SeedUserMacro,
+)
+
+# Fixtures use: sender=… recipient=… content="…" timestamp=YYYY-MM-DD hh:mm:ss
+# (timestamp may be unquoted and contain spaces — shlex alone cannot parse that.)
+_SEED_MESSAGE_BODY_RE = re.compile(
+    r"^sender=(?P<sender>\S+)\s+recipient=(?P<recipient>\S+)\s+"
+    r'content="(?P<content>[^"]*)"\s+timestamp=(?P<ts>.+)$'
+)
 
 
-def preprocess_input_file(input_file: Path) -> tuple[str, list[SeedUserMacro]]:
+def preprocess_input_file(
+    input_file: Path,
+) -> tuple[
+    str,
+    list[SeedUserMacro],
+    list[SeedConnectionMacro],
+    list[SeedMessageMacro],
+]:
     """Parse seed macros from the top of a test input file and return executable input.
 
     Macros must appear at the top of the file and are removed from the final
     ``INPUT.TXT``.  Inline ``#`` comments are stripped from body lines (use
     ``\\#`` for a literal ``#``).  Whole-line comments are removed entirely.
 
-    Args:
-        input_file: Path to the ``.in.txt`` test fixture.
-
     Returns:
-        A tuple of ``(executable_input_text, seed_users)``.
+        ``(executable_input_text, seed_users, seed_connections, seed_messages)``.
     """
     lines = input_file.read_text().splitlines(keepends=True)
     seed_users: list[SeedUserMacro] = []
+    seed_connections: list[SeedConnectionMacro] = []
+    seed_messages: list[SeedMessageMacro] = []
 
     body_start = 0
-    in_header = False
+    saw_any_macro = False
 
     for index, line in enumerate(lines):
         stripped = line.strip()
+        directive = _strip_leading_hash_comment(stripped)
 
-        is_seed_directive = (
-            stripped.startswith("@seed_user")
-            or stripped.startswith("# @seed_user")
-            or stripped.startswith("#@seed_user")
-        )
+        if directive is not None:
+            if directive.startswith("@seed_user"):
+                seed_users.append(_parse_seed_user_macro(directive))
+                body_start = index + 1
+                saw_any_macro = True
+                continue
+            if directive.startswith("@seed_connection"):
+                seed_connections.append(_parse_seed_connection_macro(directive))
+                body_start = index + 1
+                saw_any_macro = True
+                continue
+            if directive.startswith("@seed_message"):
+                seed_messages.append(_parse_seed_message_macro(directive))
+                body_start = index + 1
+                saw_any_macro = True
+                continue
 
-        if is_seed_directive:
-            seed_users.append(_parse_seed_user_macro(stripped))
+        if saw_any_macro and (stripped == "" or stripped.startswith("#")):
             body_start = index + 1
-            in_header = True
             continue
 
-        if in_header and (stripped == "" or stripped.startswith("#")):
+        if not saw_any_macro and stripped == "":
             body_start = index + 1
             continue
 
+        body_start = index
         break
 
-    # Strip inline comments from body lines and remove whole-line comments
     body_lines: list[str] = []
     for line in lines[body_start:]:
         processed = _strip_inline_comment(line)
@@ -64,21 +91,25 @@ def preprocess_input_file(input_file: Path) -> tuple[str, list[SeedUserMacro]]:
         body_lines.append(processed)
 
     executable_input = "".join(body_lines)
-    return executable_input, seed_users
+    return executable_input, seed_users, seed_connections, seed_messages
+
+
+def _strip_leading_hash_comment(stripped: str) -> str | None:
+    """Return ``@seed_*`` directive text, or ``None`` if not a seed line."""
+    s = stripped
+    if s.startswith("#"):
+        s = s[1:].lstrip()
+    if s.startswith("@seed_user"):
+        return s
+    if s.startswith("@seed_connection"):
+        return s
+    if s.startswith("@seed_message"):
+        return s
+    return None
 
 
 def _parse_macro_key_values(macro_args: str) -> dict[str, str]:
-    """Parse ``key=value`` tokens from a macro line.
-
-    Args:
-        macro_args: The argument portion of a macro directive.
-
-    Returns:
-        Mapping of lowercase keys to their string values.
-
-    Raises:
-        ValueError: If a token is not in ``key=value`` format.
-    """
+    """Parse ``key=value`` tokens from a macro line."""
     tokens = shlex.split(macro_args)
     parsed: dict[str, str] = {}
 
@@ -98,17 +129,7 @@ def _parse_macro_key_values(macro_args: str) -> dict[str, str]:
 
 
 def _to_bool(value: str) -> bool:
-    """Convert a string to ``bool`` for macro parameters.
-
-    Args:
-        value: String value such as ``"true"``, ``"1"``, ``"yes"``.
-
-    Returns:
-        The boolean interpretation.
-
-    Raises:
-        ValueError: If the value is not a recognised boolean string.
-    """
+    """Convert a string to ``bool`` for macro parameters."""
     lowered = value.strip().lower()
     if lowered in {"1", "true", "yes", "y", "on"}:
         return True
@@ -120,17 +141,7 @@ def _to_bool(value: str) -> bool:
 
 
 def _parse_seed_user_macro(macro_line: str) -> SeedUserMacro:
-    """Parse one ``@seed_user`` macro line into a :class:`SeedUserMacro`.
-
-    Args:
-        macro_line: The raw (stripped) macro line text.
-
-    Returns:
-        A populated :class:`SeedUserMacro` instance.
-
-    Raises:
-        ValueError: On validation failures (missing fields, width overflow, etc.).
-    """
+    """Parse one ``@seed_user`` macro line into a :class:`SeedUserMacro`."""
     stripped = macro_line.strip()
     if stripped.startswith("#"):
         stripped = stripped[1:].strip()
@@ -203,21 +214,56 @@ def _parse_seed_user_macro(macro_line: str) -> SeedUserMacro:
     )
 
 
+def _parse_seed_connection_macro(macro_line: str) -> SeedConnectionMacro:
+    """Parse ``@seed_connection user_a=... user_b=...``."""
+    stripped = macro_line.strip()
+    if stripped.startswith("#"):
+        stripped = stripped[1:].strip()
+
+    parts = stripped.split(maxsplit=1)
+    if len(parts) < 1 or parts[0].lower() != "@seed_connection":
+        raise ValueError("Expected @seed_connection directive.")
+
+    macro_args = parts[1] if len(parts) > 1 else ""
+    parsed = _parse_macro_key_values(macro_args)
+    user_a = parsed.get("user_a", "").strip()
+    user_b = parsed.get("user_b", "").strip()
+    if not user_a or not user_b:
+        raise ValueError("@seed_connection requires user_a= and user_b=.")
+    return SeedConnectionMacro(user_a=user_a, user_b=user_b)
+
+
+def _parse_seed_message_macro(macro_line: str) -> SeedMessageMacro:
+    """Parse ``@seed_message`` with double-quoted ``content`` and ``timestamp`` rest-of-line."""
+    stripped = macro_line.strip()
+    if stripped.startswith("#"):
+        stripped = stripped[1:].strip()
+
+    parts = stripped.split(maxsplit=1)
+    if len(parts) < 1 or parts[0].lower() != "@seed_message":
+        raise ValueError("Expected @seed_message directive.")
+
+    rest = parts[1].strip() if len(parts) > 1 else ""
+    m = _SEED_MESSAGE_BODY_RE.match(rest)
+    if not m:
+        raise ValueError(
+            f"Could not parse @seed_message line. Expected: "
+            f'sender=… recipient=… content="…" timestamp=…  Got: {rest!r}'
+        )
+
+    timestamp = m.group("ts").strip()
+
+    return SeedMessageMacro(
+        sender=m.group("sender").strip(),
+        recipient=m.group("recipient").strip(),
+        content=m.group("content"),
+        timestamp=timestamp,
+        msg_id=0,
+    )
+
+
 def _strip_inline_comment(line: str) -> str:
-    """Strip an inline ``#`` comment from a line, preserving the line ending.
-
-    Rules:
-
-    * ``#`` at column 0 or preceded by whitespace starts a comment.
-    * ``\\#`` is an escape sequence that produces a literal ``#``.
-    * Trailing whitespace between the content and the ``#`` is removed.
-
-    Args:
-        line: A single line of input text.
-
-    Returns:
-        The line with any inline comment removed.
-    """
+    """Strip an inline ``#`` comment from a line, preserving the line ending."""
     ending = ""
     if line.endswith("\n"):
         ending = "\n"

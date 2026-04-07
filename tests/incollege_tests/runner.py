@@ -8,13 +8,32 @@ Uses :class:`~incollege_tests.persistence.PersistenceManager` via composition.
 from __future__ import annotations
 
 import difflib
+import re
 import subprocess
 from pathlib import Path
 from typing import Optional
 
 from incollege_tests.macros import expand_macros, load_macros
-from incollege_tests.models import SeedUserMacro, TestResult, TestStatus
+from incollege_tests.models import (
+    SeedConnectionMacro,
+    SeedMessageMacro,
+    SeedUserMacro,
+    TestResult,
+    TestStatus,
+)
 from incollege_tests.persistence import PersistenceManager
+
+# Normalize volatile "Sent:" lines so runtime timestamps match expected placeholders.
+_SENT_TIMESTAMP_LINE: re.Pattern[str] = re.compile(
+    r"^Sent: \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\s*$",
+    re.MULTILINE,
+)
+
+
+def _normalize_sent_timestamp_lines(text: str) -> str:
+    """Replace ``Sent: YYYY-MM-DD hh:mm:ss`` lines with a stable placeholder."""
+    t = _SENT_TIMESTAMP_LINE.sub("Sent: |NORM|", text)
+    return t.replace("Sent: {{SENT_TIMESTAMP}}", "Sent: |NORM|")
 
 
 class CobolTestRunner:
@@ -111,6 +130,14 @@ class CobolTestRunner:
         """Delegate to persistence manager."""
         self.persistence.seed_users(users)
 
+    def seed_connections(self, connections: list[SeedConnectionMacro]) -> None:
+        """Delegate to persistence manager."""
+        self.persistence.seed_connections(connections)
+
+    def seed_messages(self, messages: list[SeedMessageMacro]) -> None:
+        """Delegate to persistence manager."""
+        self.persistence.seed_messages(messages)
+
     def clear_persistence(self) -> None:
         """Delegate to persistence manager."""
         self.persistence.clear_persistence()
@@ -131,8 +158,10 @@ class CobolTestRunner:
         Expands macros in the expected output before comparison.
         """
         expanded_expected = expand_macros(expected_output, self._macros)
+        exp_cmp = _normalize_sent_timestamp_lines(expanded_expected)
+        act_cmp = _normalize_sent_timestamp_lines(actual_output)
 
-        if actual_output.strip() == expanded_expected.strip():
+        if act_cmp.strip() == exp_cmp.strip():
             return TestResult(
                 test_name=test_name,
                 status=TestStatus.PASSED,
@@ -140,7 +169,7 @@ class CobolTestRunner:
                 actual_output=actual_output,
             )
 
-        diff = self._generate_diff(expanded_expected, actual_output, test_name)
+        diff = self._generate_diff(exp_cmp, act_cmp, test_name)
         return TestResult(
             test_name=test_name,
             status=TestStatus.FAILED,

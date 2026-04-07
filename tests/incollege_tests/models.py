@@ -13,6 +13,25 @@ from typing import Optional
 
 
 @dataclass
+class SeedConnectionMacro:
+    """Established connection pair for ``CONNECTIONS.DAT``."""
+
+    user_a: str
+    user_b: str
+
+
+@dataclass
+class SeedMessageMacro:
+    """One row in ``MESSAGES.DAT`` (``msg_id`` 0 = auto 1, 2, 3 … in file order)."""
+
+    sender: str
+    recipient: str
+    content: str
+    timestamp: str
+    msg_id: int = 0
+
+
+@dataclass
 class SeedUserMacro:
     """Top-of-file test macro describing a user to seed before execution.
 

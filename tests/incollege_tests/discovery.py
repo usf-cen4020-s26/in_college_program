@@ -43,6 +43,12 @@ def discover_tests(test_root: Path) -> list[list[TestCase]]:
                 if len(parts) == 2 and parts[1].isdigit():
                     base_name = parts[0]
                     part_number = int(parts[1])
+            elif test_base_name.endswith("_run1"):
+                base_name = test_base_name[: -len("_run1")]
+                part_number = 1
+            elif test_base_name.endswith("_run2"):
+                base_name = test_base_name[: -len("_run2")]
+                part_number = 2
 
             expected_file = expected_dir / f"{test_base_name}.out.txt"
 

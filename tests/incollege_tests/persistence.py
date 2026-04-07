@@ -13,6 +13,11 @@ from incollege_tests.constants import (
     ACCOUNT_PASSWORD_WIDTH,
     ACCOUNT_RECORD_WIDTH,
     ACCOUNT_USERNAME_WIDTH,
+    CONNECTION_USERNAME_WIDTH,
+    MESSAGE_CONTENT_WIDTH,
+    MESSAGE_RECORD_WIDTH,
+    MESSAGE_TIMESTAMP_WIDTH,
+    MESSAGE_USERNAME_WIDTH,
     PROFILE_ABOUT_ME_WIDTH,
     PROFILE_COUNT_WIDTH,
     PROFILE_EDU_DEGREE_WIDTH,
@@ -33,7 +38,12 @@ from incollege_tests.constants import (
     PROFILE_UNIVERSITY_WIDTH,
     PROFILE_USERNAME_WIDTH,
 )
-from incollege_tests.models import ProfileRecordData, SeedUserMacro
+from incollege_tests.models import (
+    ProfileRecordData,
+    SeedConnectionMacro,
+    SeedMessageMacro,
+    SeedUserMacro,
+)
 
 
 class PersistenceManager:
@@ -50,6 +60,7 @@ class PersistenceManager:
         self.profiles_dat: Path = work_dir / "PROFILES.DAT"
         self.pending_dat: Path = work_dir / "PENDING.DAT"
         self.connections_dat: Path = work_dir / "CONNECTIONS.DAT"
+        self.messages_dat: Path = work_dir / "MESSAGES.DAT"
         self.jobs_dat: Path = work_dir / "JOBS.DAT"
 
     # ------------------------------------------------------------------
@@ -124,6 +135,77 @@ class PersistenceManager:
         self._write_accounts(updated_accounts)
         self._write_profiles(updated_profiles)
 
+    def seed_connections(self, connections: list[SeedConnectionMacro]) -> None:
+        """Replace ``CONNECTIONS.DAT`` with seeded pairs (deduplicated, undirected key)."""
+        if not connections:
+            return
+
+        lines: list[str] = []
+        seen: set[tuple[str, str]] = set()
+        for conn in connections:
+            a = conn.user_a.strip()
+            b = conn.user_b.strip()
+            if not a or not b:
+                raise ValueError("@seed_connection requires user_a and user_b.")
+            if len(a) > CONNECTION_USERNAME_WIDTH or len(b) > CONNECTION_USERNAME_WIDTH:
+                raise ValueError(
+                    f"@seed_connection usernames exceed {CONNECTION_USERNAME_WIDTH} characters."
+                )
+            key = (a, b) if a <= b else (b, a)
+            if key in seen:
+                continue
+            seen.add(key)
+            lines.append(
+                self._fit(a, CONNECTION_USERNAME_WIDTH)
+                + self._fit(b, CONNECTION_USERNAME_WIDTH)
+            )
+
+        self.connections_dat.write_text("\n".join(lines) + "\n")
+
+    def seed_messages(self, messages: list[SeedMessageMacro]) -> None:
+        """Replace ``MESSAGES.DAT`` with seeded message rows."""
+        if not messages:
+            return
+
+        lines: list[str] = []
+        auto_id = 1
+        for msg in messages:
+            sid = msg.msg_id if msg.msg_id > 0 else auto_id
+            if msg.msg_id <= 0:
+                auto_id += 1
+
+            sender = msg.sender.strip()
+            recipient = msg.recipient.strip()
+            if not sender or not recipient:
+                raise ValueError("@seed_message requires sender and recipient.")
+            if len(sender) > MESSAGE_USERNAME_WIDTH or len(recipient) > MESSAGE_USERNAME_WIDTH:
+                raise ValueError(
+                    f"@seed_message sender/recipient exceed {MESSAGE_USERNAME_WIDTH} chars."
+                )
+            if len(msg.content) > MESSAGE_CONTENT_WIDTH:
+                raise ValueError(
+                    f"@seed_message content exceeds {MESSAGE_CONTENT_WIDTH} characters."
+                )
+            if len(msg.timestamp) > MESSAGE_TIMESTAMP_WIDTH:
+                raise ValueError(
+                    f"@seed_message timestamp exceeds {MESSAGE_TIMESTAMP_WIDTH} characters."
+                )
+
+            line = (
+                f"{sid:05d}"
+                + self._fit(sender, MESSAGE_USERNAME_WIDTH)
+                + self._fit(recipient, MESSAGE_USERNAME_WIDTH)
+                + self._fit(msg.content, MESSAGE_CONTENT_WIDTH)
+                + self._fit(msg.timestamp, MESSAGE_TIMESTAMP_WIDTH)
+            )
+            if len(line) != MESSAGE_RECORD_WIDTH:
+                raise ValueError(
+                    f"Internal error: message record length {len(line)} != {MESSAGE_RECORD_WIDTH}."
+                )
+            lines.append(line)
+
+        self.messages_dat.write_text("\n".join(lines) + "\n")
+
     def clear_persistence(self) -> None:
         """Delete all ``.DAT`` files to ensure a clean test state."""
         for dat in (
@@ -133,6 +215,7 @@ class PersistenceManager:
             self.connections_dat,
             self.jobs_dat,
             self.work_dir / "APPLICATIONS.DAT",
+            self.work_dir / "MESSAGES.DAT",
         ):
             if dat.exists():
                 dat.unlink()
@@ -146,6 +229,7 @@ class PersistenceManager:
             "PROFILES.DAT",
             "PENDING.DAT",
             "CONNECTIONS.DAT",
+            "MESSAGES.DAT",
             "JOBS.DAT",
             "APPLICATIONS.DAT",
         ):
