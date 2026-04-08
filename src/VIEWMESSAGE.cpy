@@ -1,11 +1,28 @@
-      *>*****************************************************************
-      *> VIEWMESSAGE_SRC - View Messages Copybook
-      *> Implements the View My Messages flow for the Messages menu.
-      *> All output via 8000-WRITE-OUTPUT, all input via 8100-READ-INPUT.
+*>*****************************************************************
+      *> FILE:    VIEWMESSAGE.cpy
+      *> PURPOSE: View received messages for the logged-in user (Epic 9).
+      *>          Opens MESSAGES.DAT and displays all records where
+      *>          MSG-RECIPIENT matches the current user, in file order
+      *>          (oldest first). Gracefully handles missing file.
       *>
-      *> Paragraphs:
-      *>   7840-VIEW-MESSAGES       - Entry point: open, iterate, close
-      *>   7841-VIEW-MESSAGES-LOOP  - Read each record, filter, display
+      *> PARAGRAPHS:
+      *>   7840-VIEW-MESSAGES      - Entry point; open MESSAGES.DAT, call
+      *>                             7841 loop, close file; print "no messages"
+      *>                             if WS-MSG-FOUND = 0; handles status 35
+      *>   7841-VIEW-MESSAGES-LOOP - Recursive read; for each record where
+      *>                             MSG-RECIPIENT = current user, print
+      *>                             "From:", "Message:", "Sent:", "---";
+      *>                             recurse until EOF
+      *>
+      *> DEPENDENCIES:
+      *>   WS-MESSAGES.cpy   - WS-MSG-FOUND, WS-VIEW-MSG-EOF,
+      *>                        WS-MESSAGES-STATUS
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME
+      *>   WS-CONSTANTS.cpy  - WS-CONST-FS-OK, WS-CONST-FS-NOT-FOUND
+      *>   WS-IO-CONTROL.cpy - WS-OUTPUT-LINE
+      *>   main.cob          - 8000-WRITE-OUTPUT, MESSAGES-FILE,
+      *>                        MSG-RECORD (MSG-RECIPIENT, MSG-SENDER,
+      *>                        MSG-CONTENT, MSG-TIMESTAMP)
       *>*****************************************************************
 
       *>*****************************************************************

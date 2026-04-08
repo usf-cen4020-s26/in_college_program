@@ -355,18 +355,7 @@ PROCEDURE DIVISION.
                    MOVE SPACES TO INPUT-RECORD
            END-READ.
            EXIT.
-*> *      *> 8105-PUSHBACK-INPUT: Put a line back for next 8100-READ-INPUT *
-*> *      *> Normalize CR/LF to space so comparison with "8" etc. works.   *
-       8105-PUSHBACK-INPUT.
-           MOVE INPUT-RECORD TO WS-INPUT-PUSHBACK-LINE
-           INSPECT WS-INPUT-PUSHBACK-LINE
-               REPLACING ALL X"0D" BY SPACE
-                         ALL X"0A" BY SPACE
-           MOVE FUNCTION TRIM(WS-INPUT-PUSHBACK-LINE)
-               TO WS-INPUT-PUSHBACK-TEMP
-           MOVE WS-INPUT-PUSHBACK-TEMP TO WS-INPUT-PUSHBACK-LINE
-           MOVE "Y" TO WS-INPUT-PUSHBACK-FLAG
-           EXIT.
+
 
        COPY DATALOAD.
        COPY AUTH.

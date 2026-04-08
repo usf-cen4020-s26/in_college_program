@@ -1,6 +1,35 @@
-      *> ============================================================
-      *> WS-JOBS.cpy - Job table, temp job fields, application vars
-      *> ============================================================
+*>*****************************************************************
+      *> FILE:    WS-JOBS.cpy
+      *> PURPOSE: In-memory job postings table, application table, and
+      *>          all working-storage for job/application flows.
+      *>          Populated from JOBS.DAT and APPLICATIONS.DAT at
+      *>          startup by JOBSIO.cpy.
+      *>
+      *> VARIABLES:
+      *>   --- Job Postings ---
+      *>   WS-JOBS-STATUS          - File status for JOBS.DAT
+      *>   WS-JOBS-EOF             - "Y" when JOBS.DAT read is done
+      *>   WS-JOB-COUNT            - Number of job postings loaded
+      *>   WS-JOB-ID-COUNTER       - Highest JOB-ID seen; next post = +1
+      *>   WS-JOB-WRITE-SUCCESS    - 1 if last job write succeeded
+      *>   WS-TEMP-JOB-TITLE/DESC/EMPLOYER/LOCATION/SALARY - Input buffers
+      *>   WS-JOB-TABLE            - In-memory table (OCCURS 25)
+      *>     WS-JT-ID(n)           - Job ID (PIC 9(5))
+      *>     WS-JT-POSTER(n)       - Posting username (PIC X(20))
+      *>     WS-JT-TITLE(n)        - Job title (PIC X(50))
+      *>     WS-JT-DESCRIPTION(n)  - Description (PIC X(200))
+      *>     WS-JT-EMPLOYER(n)     - Employer (PIC X(50))
+      *>     WS-JT-LOCATION(n)     - Location (PIC X(50))
+      *>     WS-JT-SALARY(n)       - Salary string (PIC X(20))
+      *>   WS-SELECTED-JOB-IDX     - Index of job chosen in browse view
+      *>   WS-BROWSE-CHOICE        - User's numeric choice in browse loop
+      *>
+      *>   --- Job Applications ---
+      *>   WS-APPS-STATUS          - File status for APPLICATIONS.DAT
+      *>   WS-APPS-EOF             - "Y" when APPLICATIONS.DAT read is done
+      *>   WS-APP-COUNT            - Number of applications loaded
+      *>   WS-APP-FOUND            - 1 if duplicate application detected
+      *>*****************************************************************
 
       *> ===== Job Postings working-storage =====
       01  WS-JOBS-STATUS              PIC XX.

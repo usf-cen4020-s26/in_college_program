@@ -1,7 +1,24 @@
-      *>*****************************************************************
-      *> 5350-LOAD-JOBS: Load existing jobs from JOBS.DAT at startup
-      *> 1) Reads file so WS-JOB-COUNT reflects existing data
-      *> 2) Sets WS-JOB-ID-COUNTER to highest ID found
+*>*****************************************************************
+      *> FILE:    JOBSIO.cpy
+      *> PURPOSE: Startup I/O for jobs and applications data files.
+      *>          Loads JOBS.DAT and APPLICATIONS.DAT into working-storage
+      *>          at program initialization.
+      *>
+      *> PARAGRAPHS:
+      *>   5350-LOAD-JOBS              - Open JOBS.DAT, call read loop, close;
+      *>                                 sets WS-JOB-COUNT and WS-JOB-ID-COUNTER
+      *>   5355-READ-JOBS-LOOP         - Recursive read; populate WS-JOB-TABLE
+      *>   5360-LOAD-APPLICATIONS      - Open APPLICATIONS.DAT, call read loop
+      *>   5365-READ-APPLICATIONS-LOOP - Recursive read; populate WS-APP-TABLE
+      *>
+      *> DEPENDENCIES:
+      *>   WS-JOBS.cpy       - WS-JOB-COUNT, WS-JOB-ID-COUNTER, WS-JOBS-EOF,
+      *>                        WS-JOB-TABLE, WS-APP-COUNT, WS-APPS-EOF,
+      *>                        WS-APP-TABLE, WS-JOBS-STATUS, WS-APPS-STATUS
+      *>   WS-CONSTANTS.cpy  - WS-CONST-MAX-JOBS, WS-CONST-MAX-APPLICATIONS,
+      *>                        WS-CONST-FS-OK, WS-CONST-FS-NOT-FOUND
+      *>   WS-IO-CONTROL.cpy - WS-OUTPUT-LINE
+      *>   main.cob          - 8000-WRITE-OUTPUT, JOBS-FILE, APPLICATIONS-FILE
       *>*****************************************************************
        5350-LOAD-JOBS.
            MOVE 0   TO WS-JOB-COUNT

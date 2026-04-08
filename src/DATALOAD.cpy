@@ -1,7 +1,33 @@
-      *> ============================================================
-      *> DATALOAD_SRC.cpy - Startup data loading from all .DAT files
-      *> Paragraphs: 1100-1162 (accounts/profiles), 9200-9275 (pending/connections/messages)
-      *> ============================================================
+*>*****************************************************************
+      *> FILE:    DATALOAD.cpy
+      *> PURPOSE: Startup data loading — reads all persistent DAT files
+      *>          into working-storage tables before the application loop
+      *>          begins. Called once from 1000-INITIALIZE in main.cob.
+      *>
+      *> PARAGRAPHS:
+      *>   1100-LOAD-ACCOUNTS          - Open ACCOUNTS.DAT, call read loop, close
+      *>   1110-READ-ACCOUNT-LOOP      - Recursive read; populate WS-USER-ACCOUNTS
+      *>   1150-LOAD-PROFILES          - Open PROFILES.DAT, call read loop, close
+      *>   1160-READ-PROFILE-LOOP      - Recursive read; populate WS-USER-PROFILES
+      *>   1162-LOAD-ONE-PROFILE       - Copy one file record into profile table slot
+      *>   9200-LOAD-PENDING-REQUESTS  - Open PENDING.DAT, call read loop, close
+      *>   9210-READ-PENDING-LOOP      - Recursive read; populate WS-PENDING-TABLE
+      *>   9250-LOAD-CONNECTIONS       - Open CONNECTIONS.DAT, call read loop, close
+      *>   9260-READ-CONNECTIONS-LOOP  - Recursive read; populate WS-CONNECTIONS-TABLE
+      *>   9270-LOAD-NEXT-MSG-ID       - Scan MESSAGES.DAT for highest MSG-ID,
+      *>                                 set WS-MSG-NEXT-ID = max + 1
+      *>   9275-READ-MSG-ID-LOOP       - Recursive read loop used by 9270
+      *>
+      *> DEPENDENCIES:
+      *>   WS-ACCOUNTS.cpy    - WS-USER-ACCOUNTS, WS-ACCOUNT-COUNT
+      *>   WS-PROFILES.cpy    - WS-USER-PROFILES, WS-PROFILE-COUNT
+      *>   WS-CONNECTIONS.cpy - WS-PENDING-TABLE, WS-PENDING-COUNT,
+      *>                         WS-CONNECTIONS-TABLE, WS-CONNECTIONS-COUNT
+      *>   WS-MESSAGES.cpy    - WS-MSG-NEXT-ID, WS-MESSAGES-STATUS
+      *>   WS-CONSTANTS.cpy   - WS-CONST-MAX-*, WS-CONST-FS-*
+      *>   WS-IO-CONTROL.cpy  - WS-EOF-FLAG
+      *>   main.cob           - все DAT файлы и их статусные переменные
+      *>*****************************************************************
        1100-LOAD-ACCOUNTS.
            OPEN INPUT ACCOUNTS-FILE.
            IF WS-ACCOUNTS-STATUS = WS-CONST-FS-OK OR WS-ACCOUNTS-STATUS = WS-CONST-FS-OPEN-OK
@@ -31,7 +57,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 1150-LOAD-PROFILES: Load all profiles from PROFILES.dat       *
-*> *      *> USER STORY (Epic 2): Profile persistence                      *
 *> *      *>*****************************************************************
        1150-LOAD-PROFILES.
            OPEN INPUT PROFILES-FILE.

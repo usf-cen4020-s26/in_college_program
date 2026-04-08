@@ -1,7 +1,25 @@
-      *> ============================================================
-      *> NETWORK_SRC.cpy - View network connections and messages menu
-      *> Paragraphs: 7700-7710 (network list), 7800 (messages menu)
-      *> ============================================================
+*>*****************************************************************
+      *> FILE:    NETWORK.cpy
+      *> PURPOSE: Display the logged-in user's network of accepted
+      *>          connections. Shows "First Last" if the connected user
+      *>          has a profile, otherwise falls back to their username.
+      *>
+      *> PARAGRAPHS:
+      *>   7700-VIEW-NETWORK-LIST  - Entry point; iterate WS-CONNECTIONS-TABLE,
+      *>                             print each connection where current user
+      *>                             appears as CONN-USER-A or CONN-USER-B
+      *>   7710-PRINT-NETWORK-ENTRY - Format and print one connection line
+      *>                              as "First Last" or username fallback
+      *>
+      *> DEPENDENCIES:
+      *>   WS-CONNECTIONS.cpy - WS-CONNECTIONS-TABLE, WS-CONNECTIONS-COUNT,
+      *>                        WS-CONN-USER-A/B, WS-NETWORK-* vars, WS-CONN-IDX
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME
+      *>   WS-PROFILES.cpy   - WS-PROF-USERNAME, WS-FIRST-NAME, WS-LAST-NAME,
+      *>                        WS-HAS-PROFILE, WS-PROFILE-COUNT
+      *>   WS-IO-CONTROL.cpy - WS-OUTPUT-LINE
+      *>   main.cob          - 8000-WRITE-OUTPUT
+      *>*****************************************************************
 *>*****************************************************************
 *> 7700-VIEW-NETWORK-LIST
 *>   - Displays all accepted connections for the current user
