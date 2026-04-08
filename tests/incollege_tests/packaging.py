@@ -95,7 +95,7 @@ def _seed_users_to_creation_input(users: list[SeedUserMacro]) -> str:
     When ``with_profile`` is ``True`` the sequence continues with:
     ``1`` (Login), username, password, ``1`` (Create/Edit Profile),
     first_name, last_name, university, major, grad_year, about_me,
-    ``DONE`` (skip experience), ``DONE`` (skip education), ``8`` (Logout).
+    ``DONE`` (skip experience), ``DONE`` (skip education), ``9`` (Logout).
 
     Args:
         users: Seed-user macro objects.
@@ -111,19 +111,23 @@ def _seed_users_to_creation_input(users: list[SeedUserMacro]) -> str:
 
         if user.with_profile:
             # Login, create profile, then logout back to login screen
-            lines.extend([
-                "1", user.username, user.password,  # Login
-                "1",  # Create/Edit Profile from main menu
-                user.first_name or user.username,
-                user.last_name or user.username,
-                user.university or "University",
-                user.major or "Major",
-                user.grad_year or "2025",
-                user.about_me or " ",  # blank to skip about-me
-                "DONE",  # skip experience
-                "DONE",  # skip education
-                "8",  # Logout (back to login screen)
-            ])
+            lines.extend(
+                [
+                    "1",
+                    user.username,
+                    user.password,  # Login
+                    "1",  # Create/Edit Profile from main menu
+                    user.first_name or user.username,
+                    user.last_name or user.username,
+                    user.university or "University",
+                    user.major or "Major",
+                    user.grad_year or "2025",
+                    user.about_me or " ",  # blank to skip about-me
+                    "DONE",  # skip experience
+                    "DONE",  # skip education
+                    "9",  # Logout (back to login screen)
+                ]
+            )
     return "\n".join(lines) + "\n" if lines else ""
 
 
