@@ -178,7 +178,10 @@ class PersistenceManager:
             recipient = msg.recipient.strip()
             if not sender or not recipient:
                 raise ValueError("@seed_message requires sender and recipient.")
-            if len(sender) > MESSAGE_USERNAME_WIDTH or len(recipient) > MESSAGE_USERNAME_WIDTH:
+            if (
+                len(sender) > MESSAGE_USERNAME_WIDTH
+                or len(recipient) > MESSAGE_USERNAME_WIDTH
+            ):
                 raise ValueError(
                     f"@seed_message sender/recipient exceed {MESSAGE_USERNAME_WIDTH} chars."
                 )
