@@ -24,6 +24,8 @@ _SEED_MESSAGE_BODY_RE = re.compile(
     r'content="(?P<content>[^"]*)"\s+timestamp=(?P<ts>.+)$'
 )
 
+_PASSWORD_SPECIAL_CHARS = "!@#$%^&*"
+
 
 def preprocess_input_file(
     input_file: Path,
@@ -140,6 +142,35 @@ def _to_bool(value: str) -> bool:
     )
 
 
+def _validate_seed_password(password: str, username: str) -> None:
+    """Validate password using the same policy as COBOL account creation.
+
+    COBOL requires all of the following:
+    - length 8-12 characters
+    - at least one uppercase letter
+    - at least one digit
+    - at least one special character in ``!@#$%^&*``
+    """
+    trimmed = password.strip()
+
+    if len(trimmed) < 8 or len(trimmed) > ACCOUNT_PASSWORD_WIDTH:
+        raise ValueError(
+            "@seed_user password for "
+            f"'{username}' must be 8-{ACCOUNT_PASSWORD_WIDTH} characters."
+        )
+
+    has_upper = any("A" <= ch <= "Z" for ch in trimmed)
+    has_digit = any("0" <= ch <= "9" for ch in trimmed)
+    has_special = any(ch in _PASSWORD_SPECIAL_CHARS for ch in trimmed)
+
+    if not (has_upper and has_digit and has_special):
+        raise ValueError(
+            "@seed_user password for "
+            f"'{username}' must include at least one uppercase letter, "
+            "one digit, and one special character from !@#$%^&*."
+        )
+
+
 def _parse_seed_user_macro(macro_line: str) -> SeedUserMacro:
     """Parse one ``@seed_user`` macro line into a :class:`SeedUserMacro`."""
     stripped = macro_line.strip()
@@ -171,6 +202,8 @@ def _parse_seed_user_macro(macro_line: str) -> SeedUserMacro:
         raise ValueError(
             f"@seed_user password for '{username}' exceeds {ACCOUNT_PASSWORD_WIDTH} characters."
         )
+
+    _validate_seed_password(password, username)
 
     first_name = parsed.get("first_name", "")
     last_name = parsed.get("last_name", "")

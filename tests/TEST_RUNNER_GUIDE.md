@@ -83,7 +83,7 @@ You can also write directives as comments:
 ### Supported Parameters
 
 - `username` (required, max 20 chars)
-- `password` (required, max 12 chars)
+- `password` (required, 8-12 chars, must include uppercase, digit, and one of `!@#$%^&*`)
 - `with_profile` (optional, default `true`)
 - `first_name` (required when `with_profile=true`)
 - `last_name` (required when `with_profile=true`)
