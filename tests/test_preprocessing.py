@@ -39,8 +39,7 @@ def test_seed_user_valid_password_passes(tmp_path: Path) -> None:
 def test_seed_user_short_password_rejected(tmp_path: Path) -> None:
     fixture = _write_fixture(
         tmp_path,
-        "@seed_user username=alice password=Alice1! with_profile=false\n"
-        "1\n",
+        "@seed_user username=alice password=Alice1! with_profile=false\n1\n",
     )
 
     with pytest.raises(ValueError, match="must be 8-12 characters"):
@@ -50,8 +49,7 @@ def test_seed_user_short_password_rejected(tmp_path: Path) -> None:
 def test_seed_user_missing_required_character_classes_rejected(tmp_path: Path) -> None:
     fixture = _write_fixture(
         tmp_path,
-        "@seed_user username=alice password=alice123! with_profile=false\n"
-        "1\n",
+        "@seed_user username=alice password=alice123! with_profile=false\n1\n",
     )
 
     with pytest.raises(
@@ -64,8 +62,7 @@ def test_seed_user_missing_required_character_classes_rejected(tmp_path: Path) -
 def test_seed_user_invalid_special_character_rejected(tmp_path: Path) -> None:
     fixture = _write_fixture(
         tmp_path,
-        "@seed_user username=alice password=Alice12+ with_profile=false\n"
-        "1\n",
+        "@seed_user username=alice password=Alice12+ with_profile=false\n1\n",
     )
 
     with pytest.raises(
