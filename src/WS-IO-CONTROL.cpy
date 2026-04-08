@@ -26,6 +26,10 @@
       *>   WS-CURRENT-USER-INDEX     - Index of logged-in user in accounts table
       *>   WS-VALID                  - 1 = valid, 0 = invalid; used by
       *>                               SENDREQ duplicate checking
+      *>   WS-CURRENT-PROFILE-INDEX  - Index of logged-in user's profile slot
+      *>   WS-PROFILE-FOUND          - 1 if profile found during login
+      *>   WS-INPUT-VALID            - 1 = valid input received in prompt loops
+      *>   WS-EOF-REACHED            - 1 = EOF hit inside a prompt loop
       *>
       *> USED BY: All procedure copybooks and main.cob
       *>*****************************************************************
@@ -51,6 +55,14 @@
       01  WS-INPUT-PUSHBACK-LINE      PIC X(200).
 
       01  WS-CURRENT-USER-INDEX       PIC 9 VALUE 0.
+
+      01  WS-CURRENT-PROFILE-INDEX    PIC 9 VALUE 0.
+
+      01  WS-PROFILE-FOUND            PIC 9 VALUE 0.
+
+      01  WS-INPUT-VALID              PIC 9 VALUE 0.
+
+      01  WS-EOF-REACHED              PIC 9 VALUE 0.
 
 
 
