@@ -18,6 +18,7 @@ Request from: User1 FirstUser
 1. Accept
 2. Reject
 Enter your choice for User1 FirstUser:
+1
 Connection request from User1 FirstUser accepted!
 -----------------------------------
 {{MAIN_MENU}}
@@ -32,6 +33,7 @@ Request from: User2 SecondUser
 1. Accept
 2. Reject
 Enter your choice for User2 SecondUser:
+1
 Connection request from User2 SecondUser accepted!
 -----------------------------------
 {{MAIN_MENU}}
@@ -47,6 +49,7 @@ Request from: User3 ThirdUser
 1. Accept
 2. Reject
 Enter your choice for User3 ThirdUser:
+1
 Connection request from User3 ThirdUser accepted!
 -----------------------------------
 {{MAIN_MENU}}
@@ -63,6 +66,7 @@ Request from: User4 FourthUser
 1. Accept
 2. Reject
 Enter your choice for User4 FourthUser:
+1
 Connection request from User4 FourthUser accepted!
 -----------------------------------
 {{MAIN_MENU}}

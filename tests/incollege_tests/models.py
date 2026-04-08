@@ -6,10 +6,29 @@ test cases, and test results.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Optional
+
+
+@dataclass
+class SeedConnectionMacro:
+    """Established connection pair for ``CONNECTIONS.DAT``."""
+
+    user_a: str
+    user_b: str
+
+
+@dataclass
+class SeedMessageMacro:
+    """One row in ``MESSAGES.DAT`` (``msg_id`` 0 = auto 1, 2, 3 … in file order)."""
+
+    sender: str
+    recipient: str
+    content: str
+    timestamp: str
+    msg_id: int = 0
 
 
 @dataclass

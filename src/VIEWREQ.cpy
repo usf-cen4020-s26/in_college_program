@@ -57,6 +57,9 @@
                PERFORM 8000-WRITE-OUTPUT
                PERFORM 7513-OUTPUT-ENTER-CHOICE-FOR
 
+               MOVE WS-MENU-CHOICE TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
+
                EVALUATE WS-MENU-CHOICE
                    WHEN "1"
                        PERFORM 9305-REMOVE-PENDING-ENTRY

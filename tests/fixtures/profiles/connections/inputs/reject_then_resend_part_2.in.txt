@@ -1,7 +1,7 @@
 # After rejection, Bob sends a new request to Alice (should succeed)
 1       # Login as bob
 bob
-Bob123!
+Bob123!1
 4       # Find someone you know
 Alice Smith
 1       # Send connection request again

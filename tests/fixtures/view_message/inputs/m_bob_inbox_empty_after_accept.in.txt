@@ -1,0 +1,24 @@
+@seed_user username=inbx_u1 password=Inbx1Pass! first_name=Ina last_name=One university=USF major=CS grad_year=2027
+@seed_user username=inbx_u2 password=Inbx2Pass! first_name=Inb last_name=Two university=USF major=IT grad_year=2027
+
+1
+inbx_u2
+Inbx2Pass!
+4
+Ina One
+1
+9
+1
+inbx_u1
+Inbx1Pass!
+5
+1
+9
+1
+inbx_u2
+Inbx2Pass!
+8
+2
+3
+9
+3

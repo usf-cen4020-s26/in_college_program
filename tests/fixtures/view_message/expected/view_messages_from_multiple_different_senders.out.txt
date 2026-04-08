@@ -1,0 +1,29 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+bob
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+8
+{{MESSAGES_MENU}}
+2
+--- Your Messages ---
+From: alice
+Message: Hey Bob, it is Alice!
+Sent: 2026-01-15 08:00:00
+---
+From: carol
+Message: Hey Bob, it is Carol!
+Sent: 2026-01-15 08:30:00
+---
+---------------------
+{{MESSAGES_MENU}}
+3
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

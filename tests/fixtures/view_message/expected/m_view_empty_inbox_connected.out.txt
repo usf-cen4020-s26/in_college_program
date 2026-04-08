@@ -1,0 +1,69 @@
+{{WELCOME_BANNER}}
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+bob
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+4
+
+{{SEARCH_PROMPT}}
+Alice Smith
+--- Found User Profile ---
+Name: Alice Smith
+University: USF
+Major: CS
+Graduation Year: 2027
+About Me: None
+Experience: None
+Education: None
+-------------------------
+
+=== SEND CONNECTION REQUEST ===
+1. Send Connection Request
+2. Back to Main Menu
+Enter your choice:
+1
+Connection request sent!
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+alice
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+5
+{{PENDING_REQUESTS_HEADER}}
+Request from: Bob Jones
+1. Accept
+2. Reject
+Enter your choice for Bob Jones:
+1
+Connection request from Bob Jones accepted!
+-----------------------------------
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
+1
+{{LOGIN_HEADER}}
+alice
+Enter password:
+********
+{{LOGIN_SUCCESS}}
+{{MAIN_MENU}}
+8
+{{MESSAGES_MENU}}
+2
+You have no messages at this time.
+{{MESSAGES_MENU}}
+3
+{{MAIN_MENU}}
+9
+{{LOGIN_SCREEN}}
+3
+{{EXIT_MESSAGE}}

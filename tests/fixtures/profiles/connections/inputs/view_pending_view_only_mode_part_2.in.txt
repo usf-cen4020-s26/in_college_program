@@ -2,7 +2,7 @@
 # The 8 gets consumed as logout after displaying the pending list
 1       # Login as alice
 alice
-Alice1!
+Alice1!1
 5       # View pending requests
 9       # This is peeked: not 1 or 2, so view-only mode; then used as menu choice = logout
 3       # Exit

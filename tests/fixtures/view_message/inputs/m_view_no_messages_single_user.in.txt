@@ -1,0 +1,10 @@
+@seed_user username=quinn password=Quinn1Pass! first_name=Quinn last_name=Reed university=USF major=CS grad_year=2027
+
+1
+quinn
+Quinn1Pass!
+8
+2
+3
+9
+3
