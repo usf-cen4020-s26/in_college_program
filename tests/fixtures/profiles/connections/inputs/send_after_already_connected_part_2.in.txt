@@ -1,7 +1,7 @@
 # Bob tries to send another request to Alice after already connected
 1       # Login
 bob
-Bob123!
+Bob123!1
 4       # Find someone you know
 Alice Smith
 1       # Try to send connection request again

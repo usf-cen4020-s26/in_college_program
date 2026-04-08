@@ -1,10 +1,10 @@
-@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
-@seed_user username=bob password=Bob123! first_name=Bob last_name=Jones university=UCF major=Math grad_year=2026
+@seed_user username=alice password=Alice1!1 first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=bob password=Bob123!1 first_name=Bob last_name=Jones university=UCF major=Math grad_year=2026
 
 # Bob sends request to Alice
 1       # Login
 bob
-Bob123!
+Bob123!1
 4       # Find someone you know
 Alice Smith
 1       # Send connection request
@@ -13,7 +13,7 @@ Alice Smith
 # Alice accepts Bob's request
 1       # Login
 alice
-Alice1!
+Alice1!1
 5       # View pending requests
 1       # Accept
 9       # Logout

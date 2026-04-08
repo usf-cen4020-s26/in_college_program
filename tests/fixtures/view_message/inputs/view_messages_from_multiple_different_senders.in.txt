@@ -1,4 +1,4 @@
-@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=alice password=Alice1!1 first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
 @seed_user username=bob password=Bob1Pass! first_name=Bob last_name=Jones university=USF major=IT grad_year=2027
 @seed_user username=carol password=Carol1!! first_name=Carol last_name=White university=USF major=EE grad_year=2026
 @seed_connection user_a=alice user_b=bob
