@@ -13,6 +13,7 @@ Request from: Bob Jones
 1. Accept
 2. Reject
 Enter your choice for Bob Jones:
+1
 Connection request from Bob Jones accepted!
 -----------------------------------
 {{MAIN_MENU}}

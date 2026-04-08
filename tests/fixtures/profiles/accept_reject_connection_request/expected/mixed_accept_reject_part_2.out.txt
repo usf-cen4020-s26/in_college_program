@@ -13,6 +13,7 @@ Request from: Bob Jones
 1. Accept
 2. Reject
 Enter your choice for Bob Jones:
+1
 Connection request from Bob Jones accepted!
 -----------------------------------
 {{MAIN_MENU}}
@@ -22,6 +23,7 @@ Request from: Carol Davis
 1. Accept
 2. Reject
 Enter your choice for Carol Davis:
+2
 Connection request from Carol Davis rejected!
 -----------------------------------
 {{MAIN_MENU}}

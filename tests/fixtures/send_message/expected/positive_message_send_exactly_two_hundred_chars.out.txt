@@ -110,6 +110,7 @@ Request from: Other User
 1. Accept
 2. Reject
 Enter your choice for Other User:
+1
 Connection request from Other User accepted!
 -----------------------------------
 {{MAIN_MENU}}

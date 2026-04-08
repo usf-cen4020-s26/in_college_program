@@ -92,6 +92,7 @@ Request from: Inb Two
 1. Accept
 2. Reject
 Enter your choice for Inb Two:
+1
 Connection request from Inb Two accepted!
 -----------------------------------
 

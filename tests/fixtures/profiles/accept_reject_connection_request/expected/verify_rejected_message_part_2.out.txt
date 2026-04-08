@@ -13,6 +13,7 @@ Request from: Mason Russell
 1. Accept
 2. Reject
 Enter your choice for Mason Russell:
+2
 Connection request from Mason Russell rejected!
 -----------------------------------
 {{MAIN_MENU}}
