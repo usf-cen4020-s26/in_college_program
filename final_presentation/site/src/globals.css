@@ -1,0 +1,139 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ */
+/* Theme tokens (mirrors src/theme.ts — edit both).                    */
+/* ------------------------------------------------------------------ */
+
+@theme {
+  --color-bg-base: #050814;
+  --color-bg-panel: #0c1327;
+  --color-bg-elevated: #131c37;
+  --color-bg-code: #0b1222;
+  --color-bg-code-border: #1e293b;
+
+  --color-brand-primary: #0a66c2;
+  --color-brand-accent: #70b5f9;
+  --color-brand-sky: #38bdf8;
+  --color-brand-deep: #082f5c;
+
+  --color-text-primary: #f5f7fa;
+  --color-text-muted: #9ca3b4;
+  --color-text-dim: #5f6b82;
+
+  --color-state-success: #22c55e;
+  --color-state-warn: #f59e0b;
+  --color-state-danger: #ef4444;
+
+  --font-display: 'IBM Plex Sans', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+  --spacing-page: 96px;
+  --spacing-gap: 48px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base resets                                                         */
+/* ------------------------------------------------------------------ */
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ */
+/* Deck-scoped helpers                                                 */
+/* ------------------------------------------------------------------ */
+
+.deck-root {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse 1400px 700px at 50% -100px, rgba(10, 102, 194, 0.32) 0%, rgba(10, 102, 194, 0) 70%),
+    linear-gradient(180deg, #050814 0%, #050814 50%, #070b1c 100%);
+}
+
+.deck-stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: min(100vw, calc(100vh * 16 / 9));
+  max-width: 1920px;
+  max-height: 1080px;
+  background: var(--color-bg-base);
+  overflow: hidden;
+  box-shadow: 0 60px 120px -40px rgba(10, 102, 194, 0.35);
+}
+
+.deck-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-primary);
+}
+
+/* Headline gradient used on title slides */
+.text-gradient {
+  background: linear-gradient(135deg, #0a66c2 0%, #38bdf8 55%, #70b5f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Terminal-style code blocks */
+.code-panel {
+  background: var(--color-bg-code);
+  border: 1px solid var(--color-bg-code-border);
+  border-radius: 12px;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  line-height: 1.55;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.code-panel pre {
+  margin: 0;
+  padding: 28px 32px;
+  color: var(--color-text-primary);
+  background: transparent !important;
+}
+
+.code-panel code {
+  font-family: var(--font-mono);
+  font-variant-ligatures: none;
+}
+
+/* Subtle brand underline used on section titles */
+.accent-rule {
+  display: inline-block;
+  width: 72px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #0a66c2 0%, #38bdf8 100%);
+}
