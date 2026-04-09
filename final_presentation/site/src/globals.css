@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
 /* Theme tokens (mirrors src/theme.ts — edit both).                    */
@@ -24,9 +24,9 @@
   --color-state-warn: #f59e0b;
   --color-state-danger: #ef4444;
 
-  --font-display: 'IBM Plex Sans', 'Inter', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: "IBM Plex Sans", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
 
   --spacing-page: 96px;
   --spacing-gap: 48px;
@@ -73,7 +73,11 @@ button {
   display: grid;
   place-items: start center;
   background:
-    radial-gradient(ellipse 1400px 700px at 50% -100px, rgba(10, 102, 194, 0.32) 0%, rgba(10, 102, 194, 0) 70%),
+    radial-gradient(
+      ellipse 1400px 700px at 50% -100px,
+      rgba(10, 102, 194, 0.32) 0%,
+      rgba(10, 102, 194, 0) 70%
+    ),
     linear-gradient(180deg, #050814 0%, #050814 50%, #070b1c 100%);
 }
 
@@ -113,7 +117,8 @@ button {
   font-size: 18px;
   line-height: 1.55;
   overflow: hidden;
-  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.7),
+  box-shadow:
+    0 20px 40px -20px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
