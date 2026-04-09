@@ -2,7 +2,7 @@
 # Bob also logs in to verify bidirectional network and empty pending
 1       # Login as alice
 alice
-Alice1!
+Alice1!1
 5       # View pending requests
 1       # Accept Bob's request
 7       # View network (should show Bob)
@@ -12,7 +12,7 @@ Alice1!
 # Bob checks his network and pending
 1       # Login as bob
 bob
-Bob123!
+Bob123!1
 7       # View network (should show Alice)
 5       # View pending (should be empty)
 9       # Logout

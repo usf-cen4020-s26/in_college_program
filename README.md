@@ -45,7 +45,7 @@ InCollege is a career networking platform implemented in COBOL using GNU COBOL. 
 - Exact name matching with informative feedback
 - Search results display all profile information
 
-### Connection Requests & Network
+### Connection Requests & Network (Epics 4 & 5)
 
 - Send connection requests to other users
 - View pending connection requests
@@ -81,10 +81,28 @@ InCollege is a career networking platform implemented in COBOL using GNU COBOL. 
   - Only shows applications belonging to the logged-in user
 
 **Job Search/Internship Menu options:**
+
 1. Post a Job/Internship
 2. Browse Jobs/Internships
 3. View My Applications
 4. Back to Main Menu
+
+### Messaging — Send Messages (Epic 8)
+
+- Messages submenu from main menu option 8
+- Send a message to any established connection
+- Recipient must exist AND be a confirmed connection (two-step validation)
+- Message content: non-empty, max 200 characters, re-prompt on violation
+- Messages persisted to `MESSAGES.DAT` with auto-generated timestamp (`YYYY-MM-DD HH:MM:SS`)
+
+### Messaging — View Messages (Epic 9)
+
+- View My Messages shows all messages received by the logged-in user
+- Displayed in chronological order (oldest first)
+- Each message shows: sender username, message body, timestamp
+- "You have no messages at this time." shown when inbox is empty
+- Graceful handling when `MESSAGES.DAT` doesn't exist yet
+- Users only see messages addressed to them (recipient isolation)
 
 ### Additional Features
 
@@ -169,7 +187,7 @@ This input would:
 6. Select "Exit" (3) from the main welcome screen
 
 **Data Persistence:**
-User accounts are stored in `ACCOUNTS.DAT`, profiles in `PROFILES.DAT`, job/internship postings in `JOBS.DAT`, and job applications in `APPLICATIONS.DAT`. These files persist between program executions.
+User accounts are stored in `ACCOUNTS.DAT`, profiles in `PROFILES.DAT`, job/internship postings in `JOBS.DAT`, job applications in `APPLICATIONS.DAT`, and messages in `MESSAGES.DAT`. These files persist between program executions.
 
 ### Epic 6 Input Example (Post Job/Internship)
 
@@ -231,6 +249,43 @@ Flow mapping:
 6. Return to job list (option `0`)
 7. Choose `View My Applications` (option `3`) to generate the report
 8. Return to main menu, logout, then exit
+
+### Epic 8 & 9 Input Example (Send and View Messages)
+
+This example assumes two users (`alice` and `bob`) already exist and are connected. It shows alice sending a message to bob, then bob viewing his inbox:
+
+```text
+1
+alice
+Alice1!Pass
+8
+1
+bob
+Hello Bob, great to connect!
+3
+9
+1
+bob
+Bob1!Pass1
+8
+2
+3
+9
+3
+```
+
+Flow mapping:
+
+1. Login as `alice`
+2. Open `Messages` (option `8` from main menu)
+3. Choose `Send a New Message` (option `1`)
+4. Enter recipient `bob`
+5. Enter message content
+6. Return to main menu (option `3`), then logout (option `9`)
+7. Login as `bob`
+8. Open `Messages` (option `8`)
+9. Choose `View My Messages` (option `2`) — displays alice's message with sender, content, and timestamp
+10. Return to main menu, logout, then exit
 
 ### Live Replay CLI (Interactive Simulation)
 
@@ -294,6 +349,8 @@ Tests are organized by feature category under `tests/fixtures/`:
 - `main_menu/` - Post-login menu navigation tests
 - `job_internship_posting/` - Job posting and submenu behavior tests
 - `job_browsing/` - Job browsing, full detail view, applying to jobs, and application report tests
+- `send_message/` - Send message flows and validation tests
+- `view_message/` - View messages, empty inbox, persistence, and recipient isolation tests
 - `eof_tests/` - End-of-file handling validation
 
 The test suite also supports:
@@ -317,7 +374,7 @@ Some features require testing persistence across multiple program executions. Fo
 The test runner automatically detects these multi-part tests and:
 
 - Executes parts sequentially in numerical order
-- Maintains `ACCOUNTS.DAT`, `PROFILES.DAT`, `JOBS.DAT`, and `APPLICATIONS.DAT` between parts
+- Maintains `ACCOUNTS.DAT`, `PROFILES.DAT`, `JOBS.DAT`, `APPLICATIONS.DAT`, and `MESSAGES.DAT` between parts
 - Clears persistent storage between different test groups
 
 ### Running Tests
@@ -416,6 +473,16 @@ The project uses GitHub Actions for automated testing. On each push or pull requ
 - Uploads artifacts for review
 
 Results appear in the GitHub Actions tab with test summaries and downloadable reports.
+
+## Team
+
+| Name                     | Role         |
+| ------------------------ | ------------ |
+| Trevor Flahardy          | Scrum Master |
+| Aaron Fraze              | Coder #1     |
+| Olga Druzhkova           | Coder #2     |
+| Melaine Fernandez Sarduy | Tester #1    |
+| Victoria Field           | Tester #2    |
 
 ## License
 

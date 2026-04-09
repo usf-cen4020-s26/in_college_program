@@ -1,11 +1,38 @@
-      *> ============================================================
-      *> PROFILE_SRC.cpy - Profile create/view/edit and persistence
-      *> Paragraphs: 4650-4652 (persistence), 7000-7400 (profile CRUD)
-      *> ============================================================
+*>*****************************************************************
+      *> FILE:    PROFILE.cpy
+      *> PURPOSE: User profile creation, editing, viewing, and persistence.
+      *>          Supports up to 3 work experience and 3 education entries.
+      *>
+      *> PARAGRAPHS:
+      *>   4650-WRITE-PROFILES-FILE   - Rewrite entire PROFILES.DAT from table
+      *>   4651-WRITE-ONE-PROFILE     - Write one profile entry to file
+      *>   4652-SAVE-PROFILE-ENTRY    - Copy temp fields into profile table slot
+      *>   7000-CREATE-EDIT-PROFILE   - Entry point; prompt all profile fields
+      *>   7010-PROMPT-REQUIRED-FIELDS - Collect name, uni, major, grad year
+      *>   7020-VALIDATE-GRAD-YEAR    - Ensure year is 4 digits, 1950-2050
+      *>   7030-PROMPT-ABOUT-ME       - Optional bio (up to 200 chars)
+      *>   7040-PROMPT-EXPERIENCE     - Loop for up to 3 experience blocks
+      *>   7050-PROMPT-ONE-EXPERIENCE - Collect title, employer, dates, desc
+      *>   7060-PROMPT-EDUCATION      - Loop for up to 3 education blocks
+      *>   7070-PROMPT-ONE-EDUCATION  - Collect degree, school, years
+      *>   7100-VIEW-PROFILE          - Display logged-in user's full profile
+      *>   7110-DISPLAY-EXPERIENCE    - Print all experience entries
+      *>   7120-DISPLAY-EDUCATION     - Print all education entries
+      *>   7200-VIEW-OTHER-PROFILE    - Display another user's profile (from search)
+      *>   7300-VIEW-OTHER-EXPERIENCE - Print experience for a found user
+      *>   7400-VIEW-OTHER-EDUCATION  - Print education for a found user
+      *>
+      *> DEPENDENCIES:
+      *>   WS-PROFILES.cpy   - WS-USER-PROFILES, WS-TEMP-* fields,
+      *>                        WS-SEARCH-FOUND-INDEX, WS-PROFILE-COUNT
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-ACCOUNT-INDEX
+      *>   WS-CONSTANTS.cpy  - WS-CONST-MAX-EXPERIENCES, WS-CONST-MAX-EDUCATIONS
+      *>   WS-IO-CONTROL.cpy - WS-EOF-FLAG, WS-PROGRAM-RUNNING, WS-OUTPUT-LINE
+      *>   main.cob          - 8000-WRITE-OUTPUT, 8100-READ-INPUT, PROFILES-FILE
+      *>*****************************************************************
 
 *> *      *>*****************************************************************
 *> *      *> 4650-WRITE-PROFILES-FILE: Persist all profiles to file        *
-*> *      *> USER STORY (Epic 2): Profile persistence                      *
 *> *      *>*****************************************************************
        4650-WRITE-PROFILES-FILE.
            OPEN OUTPUT PROFILES-FILE.
@@ -66,7 +93,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 7000-CREATE-EDIT-PROFILE: Create or edit user profile         *
-*> *      *> USER STORY (Epic 2): Profile creation and editing             *
 *> *      *>*****************************************************************
        7000-CREATE-EDIT-PROFILE.
            MOVE " " TO WS-OUTPUT-LINE.
@@ -100,7 +126,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 7100-VIEW-PROFILE: Display user's profile                     *
-*> *      *> USER STORY (Epic 2): View profile information                 *
 *> *      *>*****************************************************************
        7100-VIEW-PROFILE.
            MOVE " " TO WS-OUTPUT-LINE.

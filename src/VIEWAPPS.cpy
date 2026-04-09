@@ -1,7 +1,25 @@
-      *>*****************************************************************
-      *> 5340-VIEW-MY-APPLICATIONS: Generate job application summary report
-      *> for the currently logged-in user.
-      *> Reads APPLICATIONS.DAT, filters by username, prints report.
+*>*****************************************************************
+      *> FILE:    VIEWAPPS.cpy
+      *> PURPOSE: Generate a Job Application Summary Report for the
+      *>          currently logged-in user. Reads APPLICATIONS.DAT,
+      *>          filters by username, prints title/employer/location
+      *>          per row and total count at the end.
+      *>
+      *> PARAGRAPHS:
+      *>   5340-VIEW-MY-APPLICATIONS - Entry point; open APPLICATIONS.DAT,
+      *>                               call read loop, print report, close file
+      *>   5342-READ-APPS-LOOP       - Recursive read; for each record matching
+      *>                               current user, print one report row;
+      *>                               recurse until EOF
+      *>
+      *> DEPENDENCIES:
+      *>   WS-JOBS.cpy       - WS-APP-COUNT, WS-APPS-EOF, WS-APPS-STATUS
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME
+      *>   WS-CONSTANTS.cpy  - WS-CONST-FS-OK, WS-CONST-FS-NOT-FOUND
+      *>   WS-IO-CONTROL.cpy - WS-OUTPUT-LINE
+      *>   main.cob          - 8000-WRITE-OUTPUT, APPLICATIONS-FILE,
+      *>                        APP-RECORD (APP-USERNAME, APP-JOB-TITLE,
+      *>                        APP-JOB-EMPLOYER, APP-JOB-LOCATION)
       *>*****************************************************************
        5340-VIEW-MY-APPLICATIONS.
            MOVE 0   TO WS-APP-COUNT

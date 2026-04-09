@@ -1,9 +1,25 @@
-      *> ============================================================
-      *> CONNWRITE_SRC.cpy - Add established connection to file
-      *> ============================================================
-      *>*****************************************************************
-      *> 9400-ADD-CONNECTION
-      *>   Adds a new connection to memory + appends to CONNECTIONS.DAT
+*>*****************************************************************
+      *> FILE:    CONNWRITE.cpy
+      *> PURPOSE: Persist a newly accepted connection. Appends one record
+      *>          to CONNECTIONS.DAT and adds the pair to the in-memory
+      *>          WS-CONNECTIONS-TABLE. Called by VIEWREQ.cpy when a user
+      *>          accepts an incoming request.
+      *>
+      *> PARAGRAPHS:
+      *>   9400-ADD-CONNECTION - Validate table capacity, set CONN-USER-A
+      *>                         (current user) and CONN-USER-B (sender),
+      *>                         append to CONNECTIONS.DAT, update in-memory
+      *>                         WS-CONNECTIONS-TABLE and WS-CONNECTIONS-COUNT
+      *>
+      *> DEPENDENCIES:
+      *>   WS-CONNECTIONS.cpy - WS-CONNECTIONS-TABLE, WS-CONNECTIONS-COUNT,
+      *>                        WS-CONN-USER-A/B, WS-CONNECTIONS-STATUS,
+      *>                        WS-VIEWREQ-SENDER-USERNAME
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME
+      *>   WS-CONSTANTS.cpy  - WS-CONST-MAX-CONNECTIONS, WS-CONST-FS-OK,
+      *>                        WS-CONST-FS-NOT-FOUND
+      *>   WS-IO-CONTROL.cpy - WS-OUTPUT-LINE
+      *>   main.cob          - 8000-WRITE-OUTPUT, CONNECTIONS-FILE
       *>*****************************************************************
        9400-ADD-CONNECTION.
            IF WS-CONNECTIONS-COUNT >= WS-CONST-MAX-CONNECTIONS

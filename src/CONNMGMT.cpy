@@ -1,14 +1,28 @@
-      *> ============================================================
-      *> CONNMGMT_SRC.cpy - Connection file writes and request status updates
-      *> ============================================================
-       7528-ECHO-REQUEST-INPUT.
-           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-           EXIT.
-       7529-ECHO-ACCEPT-REJECT-INPUT.
-           MOVE INPUT-RECORD TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-           EXIT.
+*>*****************************************************************
+      *> FILE:    CONNMGMT.cpy
+      *> PURPOSE: Manage pending connection request state — adding new
+      *>          requests, removing resolved ones, and rewriting PENDING.DAT.
+      *>          Also contains echo helpers used by VIEWREQ.cpy.
+      *>
+      *> PARAGRAPHS:
+      *>   9300-WRITE-PENDING-REQUEST    - Add new pending request to in-memory
+      *>                                   table and append to PENDING.DAT
+      *>   9305-REMOVE-PENDING-ENTRY     - Remove one entry from WS-PENDING-TABLE
+      *>                                   by index, then calls 9310 to rewrite file
+      *>   9310-REWRITE-PENDING-FILE     - Truncate and rewrite entire PENDING.DAT
+      *>                                   from current WS-PENDING-TABLE
+      *>
+      *> DEPENDENCIES:
+      *>   WS-CONNECTIONS.cpy - WS-PENDING-TABLE, WS-PENDING-COUNT, WS-PEND-IDX,
+      *>                        WS-PEND-SENDER/RECIPIENT-USERNAME, WS-PEND-STATUS,
+      *>                        WS-VIEWREQ-SELECTED-PEND-IDX
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME
+      *>   WS-PROFILES.cpy   - WS-PROF-USERNAME
+      *>   WS-CONSTANTS.cpy  - WS-CONST-FS-OK, WS-CONST-MAX-PENDING
+      *>   WS-IO-CONTROL.cpy - WS-OUTPUT-LINE
+      *>   main.cob          - 8000-WRITE-OUTPUT, PENDING-FILE, WS-PENDING-STATUS
+      *>*****************************************************************
+
       *>*****************************************************************
       *> 9305-REMOVE-PENDING-ENTRY
       *>   Remove one pending request from the table and rewrite file.

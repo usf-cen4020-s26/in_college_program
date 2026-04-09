@@ -1,0 +1,11 @@
+@seed_user username=alice password=Alice1!1 first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+
+1
+alice
+Alice1!1
+8
+9
+2
+3
+9
+3

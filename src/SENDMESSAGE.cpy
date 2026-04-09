@@ -1,13 +1,35 @@
-      *>*****************************************************************
-      *> SENDMESSAGE_SRC - Send Message Copybook
-      *> Implements the Messages menu and Send a New Message flow.
-      *> All output via 8000-WRITE-OUTPUT, all input via 8100-READ-INPUT.
+*>*****************************************************************
+      *> FILE:    SENDMESSAGE.cpy
+      *> PURPOSE: Messages submenu (Epic 8) and send-message flow.
+      *>          Validates that the recipient both exists in the system
+      *>          and is an accepted connection before accepting content.
       *>
-      *> Paragraphs:
-      *>   7800-MESSAGES-MENU       - Messages sub-menu (Send/View/Back)
-      *>   7810-SEND-MESSAGE        - Orchestrate send message flow
-      *>   7820-VALIDATE-RECIPIENT  - Check recipient is a connection
-      *>   7830-WRITE-MESSAGE       - Persist message to MESSAGES.DAT
+      *> PARAGRAPHS:
+      *>   7800-MESSAGES-MENU      - Entry point; loop Send/View/Back menu
+      *>                             until option 3 (Back to Main Menu)
+      *>   7810-SEND-MESSAGE       - Prompt recipient, validate existence
+      *>                             and connection, validate content,
+      *>                             call 7830-WRITE-MESSAGE on success
+      *>   7820-VALIDATE-RECIPIENT - Scan WS-CONNECTIONS-TABLE to confirm
+      *>                             recipient is a connection (bidirectional);
+      *>                             sets WS-MSG-CONN-FOUND = 1 if valid
+      *>   7830-WRITE-MESSAGE      - Generate timestamp via FUNCTION CURRENT-DATE,
+      *>                             assign WS-MSG-NEXT-ID, append MSG-RECORD
+      *>                             to MESSAGES.DAT, increment WS-MSG-NEXT-ID
+      *>
+      *> DEPENDENCIES:
+      *>   WS-MESSAGES.cpy   - WS-MSG-MENU-CHOICE, WS-MSG-RECIPIENT,
+      *>                        WS-MSG-CONTENT, WS-MSG-TIMESTAMP,
+      *>                        WS-MSG-CONN-FOUND, WS-MSG-USER-EXISTS,
+      *>                        WS-MSG-CURRENT-DATE, WS-MSG-NEXT-ID
+      *>   WS-CONNECTIONS.cpy - WS-CONNECTIONS-TABLE, WS-CONNECTIONS-COUNT,
+      *>                        WS-CONN-IDX, WS-CONN-USER-A/B
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME,
+      *>                        WS-ACCOUNT-COUNT, WS-ACCOUNT-INDEX
+      *>   WS-CONSTANTS.cpy  - WS-CONST-FS-OK, WS-CONST-FS-NOT-FOUND
+      *>   WS-IO-CONTROL.cpy - WS-EOF-FLAG, WS-PROGRAM-RUNNING, WS-OUTPUT-LINE
+      *>   VIEWMESSAGE.cpy   - 7840-VIEW-MESSAGES (option 2 in menu)
+      *>   main.cob          - 8000-WRITE-OUTPUT, 8100-READ-INPUT, MESSAGES-FILE
       *>*****************************************************************
 
       *>*****************************************************************
@@ -51,9 +73,7 @@
                    WHEN "1"
                        PERFORM 7810-SEND-MESSAGE
                    WHEN "2"
-                       MOVE "View My Messages is under construction."
-                           TO WS-OUTPUT-LINE
-                       PERFORM 8000-WRITE-OUTPUT
+                       PERFORM 7840-VIEW-MESSAGES
                    WHEN "3"
                        EXIT PERFORM
                    WHEN OTHER

@@ -1,7 +1,7 @@
 # Login to user 5 and then accept all network requests (users 1-4)
 1
 user5
-User5!
+User5!11
 7 # View network (empty)
 5
 1 # Accept user 1's request

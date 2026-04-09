@@ -1,7 +1,30 @@
-      *>*****************************************************************
-      *> SENDREQ_SRC - Send Connection Request Sub-Menu (Scaffold)
-      *> All output must go through 8000-WRITE-OUTPUT
-      *> All input reads must use 8100-READ-INPUT (INPUT.TXT)
+*>*****************************************************************
+      *> FILE:    SENDREQ.cpy
+      *> PURPOSE: Send a connection request to a user found via search.
+      *>          Validates that no duplicate request or existing connection
+      *>          exists before writing to PENDING.DAT via CONNMGMT.cpy.
+      *>
+      *> PARAGRAPHS:
+      *>   7600-SEND-REQUEST-MENU    - Entry point; display menu, read choice,
+      *>                               dispatch to send or return to caller
+      *>   7610-DISPLAY-SENDREQ-MENU - Print "Send Connection Request" submenu
+      *>   7620-READ-SENDREQ-CHOICE  - Read and echo user's menu choice
+      *>   7630-SEND-REQUEST-LOGIC   - Validate target index, check duplicates,
+      *>                               call 9300-WRITE-PENDING-REQUEST on success
+      *>   7640-CHECK-EXISTING-REQUEST - Scan CONNECTIONS and PENDING tables;
+      *>                               set WS-VALID = 0 and display error if found
+      *>
+      *> DEPENDENCIES:
+      *>   WS-CONNECTIONS.cpy - WS-SENDREQ-TARGET-INDEX, WS-SENDREQ-CHOICE,
+      *>                        WS-PENDING-TABLE, WS-PENDING-COUNT, WS-PEND-IDX,
+      *>                        WS-CONNECTIONS-TABLE, WS-CONNECTIONS-COUNT,
+      *>                        WS-CONN-IDX
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME
+      *>   WS-PROFILES.cpy   - WS-PROF-USERNAME
+      *>   WS-IO-CONTROL.cpy - WS-EOF-FLAG, WS-PROGRAM-RUNNING, WS-OUTPUT-LINE,
+      *>                        WS-VALID
+      *>   CONNMGMT.cpy      - 9300-WRITE-PENDING-REQUEST
+      *>   main.cob          - 8000-WRITE-OUTPUT, 8100-READ-INPUT
       *>*****************************************************************
 
 

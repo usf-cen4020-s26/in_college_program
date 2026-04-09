@@ -99,7 +99,7 @@ Nobody Here
 8
 {{MESSAGES_MENU}}
 2
-View My Messages is under construction.
+You have no messages at this time.
 {{MESSAGES_MENU}}
 8
 {{INVALID_CHOICE}}

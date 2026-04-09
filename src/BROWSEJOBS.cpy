@@ -1,8 +1,26 @@
 >>SOURCE FORMAT FREE
-      *>*****************************************************************
-      *> 5320-BROWSE-JOBS: Display numbered job list, let user select one.
-      *> Loops until user enters 0 to go back to job menu.
-      *> Uses WS-JOB-TABLE populated at startup by 5355-READ-JOBS-LOOP.
+*>*****************************************************************
+      *> FILE:    BROWSEJOBS.cpy
+      *> PURPOSE: Browse all job/internship postings and view full details.
+      *>          Displays a numbered list from WS-JOB-TABLE; user selects
+      *>          a number to see full details and is offered the option to
+      *>          apply. Enter 0 to return to the Job Search menu.
+      *>
+      *> PARAGRAPHS:
+      *>   5320-BROWSE-JOBS      - Entry point; loop listing all jobs until
+      *>                           user enters 0; on valid selection call
+      *>                           5321-VIEW-JOB-DETAIL
+      *>   5321-VIEW-JOB-DETAIL  - Display full details for selected job
+      *>                           (title, description, employer, location,
+      *>                           salary); prompt to apply or go back;
+      *>                           call 5325-APPLY-FOR-JOB if user chooses 1
+      *>
+      *> DEPENDENCIES:
+      *>   WS-JOBS.cpy       - WS-JOB-TABLE (WS-JT-*), WS-JOB-COUNT,
+      *>                        WS-SELECTED-JOB-IDX, WS-BROWSE-CHOICE
+      *>   WS-IO-CONTROL.cpy - WS-EOF-FLAG, WS-PROGRAM-RUNNING, WS-OUTPUT-LINE
+      *>   APPLYJOB.cpy      - 5325-APPLY-FOR-JOB
+      *>   main.cob          - 8000-WRITE-OUTPUT, 8100-READ-INPUT
       *>*****************************************************************
        5320-BROWSE-JOBS.
            MOVE 1 TO WS-BROWSE-CHOICE

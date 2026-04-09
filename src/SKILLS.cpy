@@ -1,7 +1,18 @@
-      *> ============================================================
-      *> SKILLS.cpy - Skills menu (under construction)
-      *> Paragraphs: 6000-SKILLS-MENU
-      *> ============================================================
+*>*****************************************************************
+      *> FILE:    SKILLS.cpy
+      *> PURPOSE: "Learn a New Skill" submenu — placeholder framework.
+      *>          Displays a 5-item skill menu; each option currently
+      *>          prints a placeholder message. Reserved for a future epic.
+      *>
+      *> PARAGRAPHS:
+      *>   6000-SKILLS-MENU - Entry point; loop menu until option 6 (Back);
+      *>                      options 1-5 each print a placeholder message
+      *>
+      *> DEPENDENCIES:
+      *>   WS-IO-CONTROL.cpy - WS-SKILL-CHOICE, WS-EOF-FLAG,
+      *>                        WS-PROGRAM-RUNNING, WS-OUTPUT-LINE
+      *>   main.cob          - 8000-WRITE-OUTPUT, 8100-READ-INPUT
+      *>*****************************************************************
        6000-SKILLS-MENU.
            MOVE "1" TO WS-SKILL-CHOICE.
 

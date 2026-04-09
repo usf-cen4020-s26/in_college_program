@@ -1,7 +1,37 @@
-      *>*****************************************************************
-      *> VIEWREQ_SRC - View Pending Connection Requests (Epic 5)
-      *> Peek next input: if "1" or "2" = interactive (one accept/reject then return).
-      *> Else = view-only: list names, push back line, return.
+*>*****************************************************************
+      *> FILE:    VIEWREQ.cpy
+      *> PURPOSE: View and respond to pending incoming connection requests.
+      *>          Uses a peek-ahead strategy on the next input line:
+      *>          "1" or "2" triggers interactive accept/reject for the
+      *>          first pending request; any other value triggers view-only
+      *>          mode (lists all pending names, pushes line back).
+      *>
+      *> PARAGRAPHS:
+      *>   7500-VIEW-PENDING-REQUESTS   - Entry point; count pending requests,
+      *>                                  peek next input, dispatch to mode
+      *>   7509-FIND-SENDER-INDEX       - Resolve sender username to profile
+      *>                                  index (sets WS-VIEWREQ-SENDER-IDX)
+      *>   7510-LOOKUP-SENDER-NAME      - Look up and print "First Last" or
+      *>                                  "(Unknown user: X)"
+      *>   7512-OUTPUT-REQUEST-FROM     - Print "Request from: First Last"
+      *>   7513-OUTPUT-ENTER-CHOICE-FOR - Print "Enter your choice for X:"
+      *>   7525-PRINT-ACCEPTED-CONFIRMATION - Print "...accepted!" message
+      *>   7526-PRINT-REJECTED-CONFIRMATION - Print "...rejected!" message
+      *>
+      *> DEPENDENCIES:
+      *>   WS-CONNECTIONS.cpy - WS-PENDING-TABLE, WS-PENDING-COUNT,
+      *>                        WS-PEND-*, WS-VIEWREQ-* variables
+      *>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME,
+      *>                        WS-ACCOUNT-INDEX
+      *>   WS-PROFILES.cpy   - WS-PROF-USERNAME, WS-FIRST/LAST-NAME,
+      *>                        WS-HAS-PROFILE, WS-PROFILE-COUNT
+      *>   WS-IO-CONTROL.cpy - WS-EOF-FLAG, WS-PROGRAM-RUNNING,
+      *>                        WS-OUTPUT-LINE, WS-MENU-CHOICE,
+      *>                        WS-SKIP-NEXT-MENU-READ,
+      *>                        WS-PRELOADED-MENU-CHOICE
+      *>   CONNMGMT.cpy      - 9305-REMOVE-PENDING-ENTRY
+      *>   CONNWRITE.cpy     - 9400-ADD-CONNECTION
+      *>   main.cob          - 8000-WRITE-OUTPUT, 8100-READ-INPUT
       *>*****************************************************************
 
        7500-VIEW-PENDING-REQUESTS.
@@ -56,6 +86,9 @@
                MOVE "2. Reject" TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
                PERFORM 7513-OUTPUT-ENTER-CHOICE-FOR
+
+               MOVE WS-MENU-CHOICE TO WS-OUTPUT-LINE
+               PERFORM 8000-WRITE-OUTPUT
 
                EVALUATE WS-MENU-CHOICE
                    WHEN "1"
@@ -129,37 +162,6 @@
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
 
-      *> Prints one pending request line like: "1) First Last"
-       7515-PRINT-ONE-PENDING-LINE.
-           MOVE 0 TO WS-VIEWREQ-SENDER-IDX
-           PERFORM VARYING WS-ACCOUNT-INDEX FROM 1 BY 1
-               UNTIL WS-ACCOUNT-INDEX > WS-PROFILE-COUNT
-                   OR WS-VIEWREQ-SENDER-IDX > 0
-               IF FUNCTION TRIM(WS-PROF-USERNAME(WS-ACCOUNT-INDEX))
-                    = FUNCTION TRIM(WS-VIEWREQ-SENDER-USERNAME)
-                  AND WS-HAS-PROFILE(WS-ACCOUNT-INDEX) = 1
-                   MOVE WS-ACCOUNT-INDEX TO WS-VIEWREQ-SENDER-IDX
-               END-IF
-           END-PERFORM
-           MOVE SPACES TO WS-OUTPUT-LINE
-           IF WS-VIEWREQ-SENDER-IDX > 0
-               STRING WS-VIEWREQ-DISP-COUNT
-                      ") "
-                      FUNCTION TRIM(WS-FIRST-NAME(WS-VIEWREQ-SENDER-IDX))
-                      " "
-                      FUNCTION TRIM(WS-LAST-NAME(WS-VIEWREQ-SENDER-IDX))
-                      DELIMITED BY SIZE INTO WS-OUTPUT-LINE
-               END-STRING
-           ELSE
-               STRING WS-VIEWREQ-DISP-COUNT
-                      ") (Unknown user: "
-                      FUNCTION TRIM(WS-VIEWREQ-SENDER-USERNAME)
-                      ")"
-                      DELIMITED BY SIZE INTO WS-OUTPUT-LINE
-               END-STRING
-           END-IF
-           PERFORM 8000-WRITE-OUTPUT
-           EXIT.
 
       *> 7509-FIND-SENDER-INDEX: Set WS-VIEWREQ-SENDER-IDX from sender username (no output)
        7509-FIND-SENDER-INDEX.
@@ -195,10 +197,6 @@
            PERFORM 8000-WRITE-OUTPUT
            EXIT.
       *> "Connection request rejected." (reject_single test)
-       7526-PRINT-REJECTED-SHORT.
-           MOVE "Connection request rejected." TO WS-OUTPUT-LINE
-           PERFORM 8000-WRITE-OUTPUT
-           EXIT.
       *> "Connection request from X rejected!"
        7526-PRINT-REJECTED-CONFIRMATION.
            MOVE SPACES TO WS-OUTPUT-LINE

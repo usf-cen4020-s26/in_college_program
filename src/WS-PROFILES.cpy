@@ -1,6 +1,38 @@
-      *> ============================================================
-      *> WS-PROFILES.cpy - Profile table, temp fields, search vars
-      *> ============================================================
+*>*****************************************************************
+      *> FILE:    WS-PROFILES.cpy
+      *> PURPOSE: In-memory user profiles table, temporary input buffers
+      *>          for profile editing, and user search variables.
+      *>          Populated from PROFILES.DAT at startup by DATALOAD.cpy.
+      *>
+      *> VARIABLES:
+      *>   WS-USER-PROFILES           - Table of up to 5 profiles (OCCURS 5)
+      *>     WS-PROF-USERNAME(n)      - Username key (PIC X(20))
+      *>     WS-HAS-PROFILE(n)        - 1 = filled, 0 = empty
+      *>     WS-FIRST-NAME(n)         - First name (PIC X(30))
+      *>     WS-LAST-NAME(n)          - Last name (PIC X(30))
+      *>     WS-UNIVERSITY(n)         - University (PIC X(50))
+      *>     WS-MAJOR(n)              - Major (PIC X(50))
+      *>     WS-GRAD-YEAR(n)          - Graduation year (PIC X(4))
+      *>     WS-ABOUT-ME(n)           - Optional bio (PIC X(200))
+      *>     WS-EXP-COUNT(n)          - Experience entry count (0-3)
+      *>     WS-EXPERIENCE(n,m)       - Experience sub-table (OCCURS 3):
+      *>       WS-EXP-TITLE/COMPANY/DATES/DESC
+      *>     WS-EDU-COUNT(n)          - Education entry count (0-3)
+      *>     WS-EDUCATION(n,m)        - Education sub-table (OCCURS 3):
+      *>       WS-EDU-DEGREE/UNIVERSITY/YEARS
+      *>   WS-TEMP-FIRST/LAST/UNIVERSITY/MAJOR/GRAD-YEAR - Edit input buffers
+      *>   WS-TEMP-ABOUT-ME           - About Me input buffer
+      *>   WS-TEMP-EXP-TITLE/COMPANY/DATES/DESC - Experience input buffers
+      *>   WS-TEMP-EDU-DEGREE/UNIVERSITY/YEARS  - Education input buffers
+      *>   WS-SEARCH-NAME             - Full name entered in user search
+      *>   WS-SEARCH-FIRST-NAME       - First name parsed from search
+      *>   WS-SEARCH-LAST-NAME        - Last name parsed from search
+      *>   WS-USER-FOUND              - 1 if search found a match
+      *>   WS-SEARCH-FOUND-INDEX      - Profile table index of found user
+      *>
+      *> NOTE: OCCURS 5 is governed by WS-CONST-MAX-PROFILES in
+      *>       WS-CONSTANTS.cpy — both must be kept in sync.
+      *>*****************************************************************
       01  WS-USER-PROFILES.
           05  WS-PROFILE OCCURS 5 TIMES.
               10  WS-PROF-USERNAME    PIC X(20).
@@ -53,7 +85,6 @@
       01  WS-YEAR-INDEX               PIC 9.
 
       01  WS-DISPLAY-INDEX            PIC 9.
-      01  WS-PROFILE-EXISTS           PIC 9 VALUE 0.
 
       01  WS-SEARCH-NAME              PIC X(80).
       01  WS-SEARCH-FIRST-NAME        PIC X(30).

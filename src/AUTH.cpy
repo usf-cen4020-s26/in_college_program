@@ -1,7 +1,30 @@
-      *> ============================================================
-      *> AUTH_SRC.cpy - Login, account creation, password validation
-      *> Paragraphs: 3000-3210 (login flow), 4000-4600 (account CRUD)
-      *> ============================================================
+*>*****************************************************************
+      *> FILE:    AUTH.cpy
+      *> PURPOSE: User authentication — login and account creation.
+      *>          Validates credentials against in-memory accounts table
+      *>          and enforces password complexity rules on registration.
+      *>
+      *> PARAGRAPHS:
+      *>   3000-LOGIN-PROCESS        - Entry point; loops 3100 until success
+      *>   3100-ATTEMPT-LOGIN        - Prompt username/password, check table
+      *>   3200-LOGIN-SUCCESS-MSG    - Display "successfully logged in" message
+      *>   3210-SET-CURRENT-USER     - Set WS-CURRENT-USER-INDEX after login
+      *>   4000-CREATE-ACCOUNT       - Entry point for new account flow
+      *>   4100-PROMPT-USERNAME      - Read and validate new username
+      *>   4200-CHECK-USERNAME-TAKEN - Reject duplicate usernames
+      *>   4300-PROMPT-PASSWORD      - Read and validate password complexity
+      *>   4400-VALIDATE-PASSWORD    - Check length, uppercase, digit, special
+      *>   4500-SAVE-ACCOUNT         - Write new account to table + ACCOUNTS.DAT
+      *>   4600-WRITE-ACCOUNTS-FILE  - Rewrite entire ACCOUNTS.DAT from table
+      *>
+      *> DEPENDENCIES:
+      *>   WS-ACCOUNTS.cpy  - WS-USER-ACCOUNTS, WS-ACCOUNT-COUNT,
+      *>                       WS-LOGIN-USERNAME/PASSWORD, WS-LOGIN-SUCCESS,
+      *>                       WS-ACCOUNT-INDEX, WS-PASSWORD-*, WS-CURRENT-CHAR
+      *>   WS-CONSTANTS.cpy - WS-CONST-MAX-ACCOUNTS, WS-CONST-FS-*
+      *>   WS-IO-CONTROL.cpy - WS-EOF-FLAG, WS-PROGRAM-RUNNING, WS-OUTPUT-LINE
+      *>   main.cob         - 8000-WRITE-OUTPUT, 8100-READ-INPUT, ACCOUNTS-FILE
+      *>*****************************************************************
        3000-LOGIN-PROCESS.
            MOVE 0 TO WS-LOGIN-SUCCESS.
 
@@ -10,9 +33,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 3100-ATTEMPT-LOGIN: Single Login Attempt                      *
-*> *      *> USER STORY 2, TASK 1: Display success/failure messages        *
-*> *      *> USER STORY 2, TASK 2: Read from file, output to both          *
-*> *      *> USER STORY 2, TASK 3: Test with valid/invalid credentials     *
 *> *      *>*****************************************************************
        3100-ATTEMPT-LOGIN.
            MOVE " " TO WS-OUTPUT-LINE.
@@ -87,7 +107,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 3210-FIND-USER-PROFILE: Find user's profile in profiles array *
-*> *      *> USER STORY (Epic 2): Link profile to logged-in user           *
 *> *      *>*****************************************************************
        3210-FIND-USER-PROFILE.
            MOVE 0 TO WS-CURRENT-PROFILE-INDEX.
@@ -106,11 +125,9 @@
 
 *> *      *>*****************************************************************
 *> *      *> 4000-CREATE-ACCOUNT: Check capacity and create new account    *
-*> *      *> USER STORY 4: New account creation with limits                *
 *> *      *>*****************************************************************
        4000-CREATE-ACCOUNT.
            IF WS-ACCOUNT-COUNT >= WS-CONST-MAX-ACCOUNTS
-*> *      *> USER STORY 4, TASK 2: Notify user of account limit            *
 *> *      *>*****************************************************************
                MOVE " " TO WS-OUTPUT-LINE
                PERFORM 8000-WRITE-OUTPUT
@@ -125,7 +142,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 4100-GET-NEW-ACCOUNT-INFO: Collect new account details        *
-*> *      *> USER STORY 1, TASK 1: New user account management setup       *
 *> *      *>*****************************************************************
        4100-GET-NEW-ACCOUNT-INFO.
            MOVE " " TO WS-OUTPUT-LINE.
@@ -176,7 +192,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 4300-GET-VALID-PASSWORD: Password input and validation        *
-*> *      *> USER STORY 1, TASK 1: Password requirements enforcement       *
 *> *      *>*****************************************************************
        4300-GET-VALID-PASSWORD.
            MOVE 0 TO WS-PASSWORD-VALID.
@@ -211,7 +226,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 4400-VALIDATE-PASSWORD: Check password requirements           *
-*> *      *> USER STORY 1, TASK 1: Password validation logic               *
 *> *      *>*****************************************************************
        4400-VALIDATE-PASSWORD.
            MOVE 0 TO WS-PASSWORD-VALID.
@@ -262,7 +276,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 4500-SAVE-NEW-ACCOUNT: Store account in memory and file       *
-*> *      *> USER STORY 3, TASK 1: File persistence implementation         *
 *> *      *>*****************************************************************
        4500-SAVE-NEW-ACCOUNT.
            ADD 1 TO WS-ACCOUNT-COUNT.
@@ -277,7 +290,6 @@
 
 *> *      *>*****************************************************************
 *> *      *> 4600-WRITE-ACCOUNTS-FILE: Persist all accounts to file        *
-*> *      *> USER STORY 3, TASK 1: Write accounts to persistence file      *
 *> *      *>*****************************************************************
        4600-WRITE-ACCOUNTS-FILE.
            OPEN OUTPUT ACCOUNTS-FILE.

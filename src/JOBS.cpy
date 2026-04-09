@@ -1,8 +1,28 @@
 >>SOURCE FORMAT FREE
-*> *      *>*****************************************************************
-*> *      *> 5300-JOB-SEARCH-MENU: Job Search/Internship submenu loop
-*> *      *> Displays submenu and handles user input for job search/internship options
-*> *      *>*****************************************************************
+*>*****************************************************************
+*> FILE:    JOBS.cpy
+*> PURPOSE: Job Search/Internship submenu and job posting flow.
+*>          Presents the 4-option submenu and handles the "Post a
+*>          Job/Internship" flow including required-field validation
+*>          and optional salary entry.
+*>
+*> PARAGRAPHS:
+*>   5300-JOB-SEARCH-MENU   - Entry point; loop submenu until "4" (Back)
+*>   5310-POST-JOB          - Prompt and validate title, description,
+*>                            employer, location, salary; call 5315
+*>   5315-WRITE-JOB-TO-FILE - Assign next JOB-ID, append to JOBS.DAT,
+*>                            update WS-JOB-TABLE and WS-JOB-COUNT
+*>
+*> DEPENDENCIES:
+*>   WS-JOBS.cpy       - WS-JOB-MENU-CHOICE, WS-TEMP-JOB-*, WS-JOB-COUNT,
+*>                        WS-JOB-ID-COUNTER, WS-JOB-TABLE
+*>   WS-ACCOUNTS.cpy   - WS-CURRENT-USER-INDEX, WS-USERNAME
+*>   WS-CONSTANTS.cpy  - WS-CONST-MAX-JOBS, WS-CONST-FS-*
+*>   WS-IO-CONTROL.cpy - WS-EOF-FLAG, WS-PROGRAM-RUNNING, WS-OUTPUT-LINE
+*>   BROWSEJOBS.cpy    - 5320-BROWSE-JOBS
+*>   VIEWAPPS.cpy      - 5340-VIEW-MY-APPLICATIONS
+*>   main.cob          - 8000-WRITE-OUTPUT, 8100-READ-INPUT, JOBS-FILE
+*>*****************************************************************
        5300-JOB-SEARCH-MENU.
            MOVE "1" TO WS-JOB-MENU-CHOICE
 

@@ -49,9 +49,15 @@ def run_single_fixture(
     runner = CobolTestRunner(executable_path, timeout=timeout)
     runner.clear_persistence()
 
-    input_text, seed_users = preprocess_input_file(input_file)
+    input_text, seed_users, seed_connections, seed_messages = preprocess_input_file(
+        input_file
+    )
     if seed_users:
         runner.seed_users(seed_users)
+    if seed_connections:
+        runner.seed_connections(seed_connections)
+    if seed_messages:
+        runner.seed_messages(seed_messages)
 
     test_name = input_file.stem.replace(".in", "")
 
@@ -172,9 +178,15 @@ def run_test_suite(
             print(f"\n--- Multi-part test: {group[0].name.rsplit('_part_', 1)[0]} ---")
 
         for test_case in group:
-            input_text, seed_users = preprocess_input_file(test_case.input_file)
+            input_text, seed_users, seed_connections, seed_messages = (
+                preprocess_input_file(test_case.input_file)
+            )
             if seed_users:
                 runner.seed_users(seed_users)
+            if seed_connections:
+                runner.seed_connections(seed_connections)
+            if seed_messages:
+                runner.seed_messages(seed_messages)
 
             if dump_only:
                 try:

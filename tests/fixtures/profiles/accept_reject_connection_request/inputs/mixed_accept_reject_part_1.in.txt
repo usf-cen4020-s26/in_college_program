@@ -1,11 +1,11 @@
-@seed_user username=user1 password=User1! first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
-@seed_user username=user2 password=User2! first_name=Bob last_name=Jones university=UCF major=Math grad_year=2026
-@seed_user username=user3 password=User3! first_name=Carol last_name=Davis university=UF major=Physics grad_year=2028
+@seed_user username=user1 password=User1!11 first_name=Alice last_name=Smith university=USF major=CS grad_year=2027
+@seed_user username=user2 password=User2!11 first_name=Bob last_name=Jones university=UCF major=Math grad_year=2026
+@seed_user username=user3 password=User3!11 first_name=Carol last_name=Davis university=UF major=Physics grad_year=2028
 
 # user2 sends connection request to user1
 1 # Log in
 user2
-User2!
+User2!11
 4 # Find someone you know
 Alice Smith # Search for user1
 1 # Send connection request
@@ -14,7 +14,7 @@ Alice Smith # Search for user1
 # user3 sends connection request to user1
 1 # Log in
 user3
-User3!
+User3!11
 4 # Find someone you know
 Alice Smith # Search for user1
 1 # Send connection request
