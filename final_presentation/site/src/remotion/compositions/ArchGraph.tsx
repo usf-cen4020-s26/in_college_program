@@ -10,14 +10,14 @@ import { palette, typography } from '../../theme';
 export type ArchGraphCluster = {
   label: string;
   color: string;
-  nodes: string[];
+  nodes: readonly string[];
 };
 
 export type ArchGraphProps = {
   /** Center label — typically 'main.cob'. */
   center: string;
   /** Orbiting copybook node labels, grouped by cluster. */
-  clusters: ArchGraphCluster[];
+  clusters: readonly ArchGraphCluster[];
 };
 
 const VIEWBOX = { w: 1920, h: 1080 };

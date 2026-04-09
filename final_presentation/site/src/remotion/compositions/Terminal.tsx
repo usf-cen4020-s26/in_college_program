@@ -16,7 +16,7 @@ export type TerminalEvent =
   | { type: 'clear' };
 
 export type TerminalProps = {
-  script: TerminalEvent[];
+  script: readonly TerminalEvent[];
   promptLabel?: string;
   title?: string;
   accent?: 'brand' | 'success' | 'warn';
@@ -246,7 +246,7 @@ function LineRow({
  *   - `clear` resets the buffer instantly (no time cost).
  */
 function renderScript(
-  script: TerminalEvent[],
+  script: readonly TerminalEvent[],
   elapsedMs: number,
   _promptLabel: string,
 ): RenderedLine[] {

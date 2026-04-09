@@ -71,7 +71,7 @@ button {
   position: fixed;
   inset: 0;
   display: grid;
-  place-items: center;
+  place-items: start center;
   background:
     radial-gradient(ellipse 1400px 700px at 50% -100px, rgba(10, 102, 194, 0.32) 0%, rgba(10, 102, 194, 0) 70%),
     linear-gradient(180deg, #050814 0%, #050814 50%, #070b1c 100%);
