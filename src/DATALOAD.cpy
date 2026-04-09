@@ -26,7 +26,7 @@
       *>   WS-MESSAGES.cpy    - WS-MSG-NEXT-ID, WS-MESSAGES-STATUS
       *>   WS-CONSTANTS.cpy   - WS-CONST-MAX-*, WS-CONST-FS-*
       *>   WS-IO-CONTROL.cpy  - WS-EOF-FLAG
-      *>   main.cob           - все DAT файлы и их статусные переменные
+      *>   main.cob           - all DAT files and their status parameters
       *>*****************************************************************
        1100-LOAD-ACCOUNTS.
            OPEN INPUT ACCOUNTS-FILE.

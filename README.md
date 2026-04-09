@@ -8,7 +8,7 @@ InCollege is a career networking platform implemented in COBOL using GNU COBOL. 
 
 - Create new user accounts with secure password validation
 - Login with existing credentials
-- Account limit enforcement (maximum 10 accounts)
+- Account limit enforcement (maximum 5 accounts)
 - Unlimited login attempts until successful
 - Persistent storage of user credentials across program runs
 
