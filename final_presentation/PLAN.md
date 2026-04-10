@@ -1,423 +1,987 @@
-# Final Presentation Plan — InCollege COBOL VC Pitch (Website Edition)
+# InCollege Final Presentation — Master Plan
+
+> **Purpose:** This document is the authoritative outline for building the final presentation slides. Every section maps to a slide group. Commit hashes, dates, file paths, and code patterns are cited so that downstream agents can reconstruct the narrative without re-exploring the repo.
 
 ---
 
-## 1. Context
+## Table of Contents
 
-**The ask.** The class handed us two documents that set the constraints:
-
-1. **`final_presentation/Final Presentation Guidelines.pdf`** — reframes the talk as a **25-minute VC pitch** (strictly enforced). VCs want to see the product work, hear how we built it, and see a team that works together. The prof has explicitly confirmed we do **not** need to submit a PowerPoint — a **link to a hosted website is acceptable**.
-2. **`Lectures/CEN 4020 - Lesson 24.pdf`** — the original Epic #9 rubric that asks for stories, owners, burndowns, and a tour of prior epics. Still in force as background color; the new guidelines are the primary rubric.
-
-**The rubric has drifted since our codebase was scoped.** The guidelines list 15 demo features but 5 of them aren't in our program (pre-login search, English/Spanish, saved jobs, plus/standard tiers, system-wide notifications). Those bullets are outdated content and we don't demo them, apologize for them, or roadmap them. We present what we've built.
-
-**Team** (`README.md:477-485`, `.dev/local/epic_9_submission/Roles.txt`):
-
-| # | Name | Role |
-|---|---|---|
-| 1 | **Trevor Flahardy** | Scrum Master |
-| 2 | **Aaron Fraze** (`fraze-dev`) | Coder #1 — implemented `7840-VIEW-MESSAGES` |
-| 3 | **Olga Druzhkova** (Оля Дружкова) | Coder #2 — display formatting (MSW-466/467), docs audit |
-| 4 | **Melaine Fernandez Sarduy** | Tester #1 — seed harness, fixture packaging |
-| 5 | **Victoria Field** | Tester #2 — positive/negative/edge/persistence fixtures |
-
-**Why this plan exists.** We want a presentation artifact that is genuinely stunning — modern, animated, cohesive — that both lands as a VC pitch *and* shows off our engineering taste. A hosted website built with React + Remotion clears the ceiling a rasterized PowerPoint cannot. Everything lives in `final_presentation/`; the rest of the repo is untouched.
+1. [Part A — How We Work: Agile at a Glance](#part-a--how-we-work-agile-at-a-glance)
+2. [Part B — Building InCollege: A Chronological Story](#part-b--building-incollege-a-chronological-story)
+   - [Milestone 1: Project Bootstrap & Epic 1 — Authentication](#milestone-1-project-bootstrap--epic-1--authentication-jan-21--jan-27)
+   - [Milestone 2: Epic 2 — User Profiles](#milestone-2-epic-2--user-profiles-feb-1)
+   - [Milestone 3: Epic 3 — User Search & Profile Viewing](#milestone-3-epic-3--user-search--profile-viewing-feb-12)
+   - [Interlude A: The Test Runner](#interlude-a-the-test-runner-jan-23--feb-19)
+   - [Milestone 4: Epic 4 — Connection Requests](#milestone-4-epic-4--connection-requests-feb-19)
+   - [Milestone 5: Epic 5 — Accept/Reject Connections & Network](#milestone-5-epic-5--acceptreject-connections--network-mar-5)
+   - [Interlude B: Macros, Seed Directives & Packaging](#interlude-b-macros-seed-directives--packaging-mar-5--mar-25)
+   - [Milestone 6: Epic 6 — Job Posting](#milestone-6-epic-6--job-posting-mar-12)
+   - [Milestone 7: Epic 7 — Job Browsing & Applications](#milestone-7-epic-7--job-browsing--applications-mar-25)
+   - [Interlude C: The Great Modularization](#interlude-c-the-great-modularization-apr-2)
+   - [Milestone 8: Epic 8 — Send Messages](#milestone-8-epic-8--send-messages-apr-2)
+3. [Part C — Epic 9 Deep Dive: View Messages](#part-c--epic-9-deep-dive-view-messages)
+4. [Part D — Architecture & Design Patterns](#part-d--architecture--design-patterns)
+5. [Part E — Closing](#part-e--closing)
+6. [Appendix — Diagrams](#appendix--diagrams)
 
 ---
 
-## 2. Deliverable Strategy — A Hosted React + Remotion Website
+## Part A — How We Work: Agile at a Glance
 
-The artifact is a **single-page React app** with a custom 25-slide deck experience, embedded Remotion compositions for every animated moment, and Tailwind CSS v4 for the layout shell. It's deployed to **GitHub Pages** via a GitHub Actions workflow. The URL is what gets submitted to Canvas.
+**Slide Group: 2–3 slides**
+
+### Content
+
+1. **Epics, Stories, Subtasks** — Define the hierarchy used throughout the semester.
+   - **Epic** = a major capability (e.g., "Job Posting", "Messaging").
+   - **Story** = a user-visible feature within an epic (e.g., "As a user, I can post a job with a title, description, employer, location, and optional salary").
+   - **Subtask** = an implementation or testing unit (e.g., "Implement salary validation", "Write test for blank description re-prompt").
+
+2. **Rotating Scrum Master** — Every epic had a different Scrum Master. Show the rotation:
+
+   | Epic | Scrum Master | Coder 1 | Coder 2 | Tester 1 | Tester 2 |
+   |------|-------------|---------|---------|----------|----------|
+   | 1 | Trevor | Aaron | Olga | Melaine | Victoria |
+   | 2 | Melaine | Victoria | Trevor | Aaron | Olga |
+   | 3 | Victoria | Trevor | Aaron | Olga | Melaine |
+   | 4 | Trevor | Aaron | Olga | Melaine | Victoria |
+   | 5 | Aaron | Olga | Melaine | Victoria | Trevor |
+   | 6 | Olga | Melaine | Victoria | Trevor | Aaron |
+   | 7 | Melaine | Victoria | Trevor | Aaron | Olga |
+   | 8 | Victoria | Trevor | Aaron | Olga | Melaine |
+   | 9 | *(entire team — final epic)* | | | | |
+
+3. **Branching Strategy** — Feature branches per epic:
+   - `impl/<feature>` for implementation
+   - `test/<feature>` for test development
+   - PRs merge test → impl → main
+   - Example from Epic 5: `impl/connection_management`, `test/connection_management` → PR #18 → `main`
+
+4. **How we tackled new features** — For each epic the coders would branch off `main`, implement features, while testers simultaneously wrote test fixtures on a parallel branch. Test branches merged into impl branches, impl branches merged into main via PR. CI ran on every push.
+
+### Key Artifacts to Show
+- The role rotation table above
+- A screenshot or diagram of the branching model
+- The PR merge pattern (test → impl → main)
+
+---
+
+## Part B — Building InCollege: A Chronological Story
+
+This is the heart of the presentation. Each milestone tells what was built, cites the commits, and briefly touches on testing — but testing is NOT the focus of every milestone. Instead, test infrastructure improvements are called out as dedicated **Interludes** between milestones.
+
+---
+
+### Milestone 1: Project Bootstrap & Epic 1 — Authentication (Jan 21 – Jan 27)
+
+**Slide Group: 2–3 slides**
+
+#### What Was Built
+
+The foundation of the entire application:
+- **DevContainer & CI** — Dockerfile with GnuCOBOL, GitHub Actions build workflow
+- **Core COBOL Program** (`src/main.cob`) — The monolithic starting point
+- **Account Creation** — Username + password with validation rules:
+  - 8–12 characters, at least 1 uppercase, 1 digit, 1 special character (`!@#$%^&*`)
+- **Login** — Credential matching against `ACCOUNTS.DAT`, unlimited retry on failure
+- **Account Limit** — Maximum 5 accounts enforced
+- **Persistence** — `ACCOUNTS.DAT` file survives across program runs
+- **Skills Menu** — Placeholder "Learn a New Skill" submenu
+- **EOF Handling** — Graceful termination when input stream exhausts
+
+#### Key Commits (chronological)
+
+| Hash | Date | Description |
+|------|------|-------------|
+| `8d19aed` | Jan 21 | **Initial commit** — Dockerfile, devcontainer, build.yml, main.cob skeleton (8 files, 172 lines) |
+| `f5dc321` | Jan 21 | Add Epic #1 deliverable PDF |
+| `53c053a` | Jan 21 | Fix Ubuntu-related COBOL compiler issues for GH workflow |
+| `5ba8fc9` | Jan 23 | **Add test infrastructure** — test_runner.py, fixtures, run_tests.sh (26 files, 1875 lines) |
+| `b2f3763` | Jan 24 | **Epic #1 stories 1–4 implementation** — The core COBOL program by Viktoria (516 lines added to main.cob) |
+| `59e8dea` | Jan 25 | **Refactor test runner for file-based I/O** — GH Actions CI, expected output files (52 files, 1179 insertions) |
+| `23ea1d4` | Jan 26 | Password validation, menu text, infinite loop fix — all 18 tests pass |
+| `4c1b395` | Jan 26 | **Merge PR #3** — Stable Epic #1 into main |
+| `e8ad1db` | Jan 26 | **Merge PR #4** — EOF handling fixes |
+
+#### How It Was Tested
+
+This is where testing is introduced for the first time in the presentation:
+- **18 test fixtures** covering: login success/failure, account creation, password validation, EOF at every menu point
+- Tests are simple `.in.txt` / `.out.txt` file pairs — input is piped into the COBOL binary via `INPUT.TXT`, output compared line-by-line against expected `OUTPUT.TXT`
+- The test runner (`test_runner.py`) was born here — a Python script that discovers fixtures, runs the binary, and diffs output
+
+#### Architecture at This Point
 
 ```
-Vite + React + TypeScript + Tailwind v4
-   │
-   ├── Deck shell (arrow-key nav, slide counter, URL sync, fullscreen)
-   │        │
-   │        └── renders one <Slide> component per visible slide
-   │
-   ├── <Slide> mounts a Remotion <Player> for animated content
-   │        │
-   │        └── Player plays a composition at 1920×1080, 30fps
-   │
-   └── Shiki (browser bundle) for COBOL syntax highlighting
-
-   vite build → dist/   →   GitHub Actions → gh-pages branch
-                                                 │
-                                                 ▼
-                 https://<org>.github.io/<repo>/  ← Canvas link
+src/main.cob          (~520 lines, monolithic)
+ACCOUNTS.DAT          (persistent storage)
+tests/test_runner.py  (basic runner)
+tests/fixtures/       (18 test pairs)
 ```
 
-**Why a website beats a rasterized pptx for this specific pitch:**
+---
 
-- **Real motion survives.** Entry animations, typewriter terminal playbacks, code reveal-line-by-line, counter-up stats, chart grow-in — they all play live instead of being flattened to a PNG.
-- **Unified codebase.** One repo, one design system, one build. No dual-output pipeline, no PNG → pptx rasterization step, no drift.
-- **Shareable after the talk.** The VCs in the room and anyone else can visit the URL later. Much better leave-behind than a zipped pptx.
-- **Update in seconds.** Fix a typo → `git push` → GitHub Actions redeploys in under a minute. No re-rendering stills, no rebuilding pptx.
-- **Deep linking.** `?slide=14` jumps straight to the fixture matrix. Great for rehearsal, Q&A backtracking, and fixing issues on the fly.
-- **Prof explicitly approved this route.** The only hard constraint from Lesson 24 ("download and have them waiting") was dropped when he said a link is fine. Nothing to work around.
+### Milestone 2: Epic 2 — User Profiles (Feb 1)
 
-**Fallback plan** (genuinely free, no extra engineering): the whole site runs locally via `bun run preview` against the built `dist/` folder. If classroom wifi dies, we plug a team laptop into the projector and serve the same build offline from `localhost`. No separate artifact required.
+**Slide Group: 1–2 slides**
+
+#### What Was Built
+
+- **Profile Creation** — Required fields: first name, last name, university, major, graduation year
+- **Optional Fields** — About Me (max 200 chars), up to 3 work experiences, up to 3 education entries
+- **Profile Viewing** — Display complete profile with all fields
+- **Profile Editing** — Update existing profile data
+- **Profile Persistence** — `PROFILES.DAT` file (fixed-width records, 1206 bytes each)
+- **Graduation Year Validation** — Must be 4 digits, 1950–2050
+
+#### Key Commits
+
+| Hash | Date | Description |
+|------|------|-------------|
+| `9a2e4f8` | Jan 27 | Move epics to `/epics`, add Epic #2 PDF |
+| `c7a84cb` | Feb 1 | **Major commit** — About Me, missing fields validation, profile CRUD (91 files, 4749 insertions). `main.cob` grows to ~1220 lines |
+| `2c25938` | Feb 1 | Fix About Me to actually enforce 200-char max |
+| `1b5225c` | Feb 1 | Update all 28 test fixtures for new education/experience prompts |
+| `275594b` | Feb 1 | Increase OUTPUT-RECORD to 500 chars for long profile fields |
+
+#### How It Was Tested (brief)
+- Existing 18 tests updated for new menu structure
+- New fixtures for: profile creation, editing, viewing, graduation year validation, long text, persistence across logins, special characters
+- Still using basic `.in.txt` / `.out.txt` pairs — no macros yet
+
+#### Architecture Growth
+
+`main.cob` is now **~1220 lines** — still monolithic. Two `.DAT` files: `ACCOUNTS.DAT` + `PROFILES.DAT`.
 
 ---
 
-## 3. Assets We Already Have (Reuse, Don't Recreate)
+### Milestone 3: Epic 3 — User Search & Profile Viewing (Feb 12)
 
-`.dev/local/epic_9_submission/` already holds the Canvas-submission artifacts. They become direct slide content:
+**Slide Group: 1–2 slides**
 
-| File | Used On Slide | Purpose |
-|---|---|---|
-| `burndown_start.png` | Slide: Burndown (Monday) | Apr 3 — ~26 story points, "Today" marker at sprint start |
-| `burndown_end.png` | Slide: Burndown (Sprint End) | Apr 9 — staircase descent, zero at deadline |
-| `Jira.png` | Slide: Jira Board / Stories | Full Jira board — stories, tasks, owners |
-| `Github.png` | Slide: Sprint Timeline | Chronological GitHub commit list |
-| `Roles.txt` | Slide: Team | Authoritative role list |
-| `InCollege-Input.txt` | Feature demo fallback | Sample input for live replay during demos |
-| `InCollege-Output.txt` | Feature demo fallback | Matching expected output |
+#### What Was Built
 
-These files get copied into `final_presentation/site/public/assets/` so React components resolve them via `/assets/burndown_end.png`.
+- **Find Someone You Know** — Search for users by full name (first + last)
+- **Search Results** — Display found user's complete profile
+- **Not Found Handling** — Informative message when no match
+- **Menu Integration** — Accessible as main menu option #4
 
----
+#### Key Commits
 
-## 4. The 25-Minute VC Pitch Narrative
+| Hash | Date | Description |
+|------|------|-------------|
+| `40ee37d` | Feb 3 | Add Epic #3 requirements PDF |
+| `c5cad5e` | ~Feb 10 | Implement basic user search by full name |
+| `0e521ba` | ~Feb 10 | Enhance search with first and last name support |
+| `4e82b98` | Feb 12 | **Merge PR #7** — Epic #3 into main (42 files, 2399 insertions) |
+| `5429c98` | Feb 12 | Streamline test execution, enhance test directory discovery |
 
-25 minutes (strictly enforced) across **25 slides** ≈ **60 seconds per slide**. Five speakers × roughly 5 minutes each. Every role gets the mic twice.
-
-### Act I — The Pitch (Trevor) — ~3 min
-
-| # | Slide | Purpose | Visual |
-|---|---|---|---|
-| 01 | **Title** | "InCollege — A career-networking platform, in COBOL." Team name, date. | Dark gradient, animated InCollege wordmark, team city codename drifting in |
-| 02 | **Meet the Team** | Five people, five roles, ~10 seconds each | 5 person cards with avatar monograms, role chip, staggered entry animation |
-| 03 | **The Product** | 30-second pitch: what it is, who it's for, why it matters | Big serif headline ("Where college meets career"), subtle particle background, three supporting phrases that fade in |
-| 04 | **By the Numbers** | Counter-up stats on entry | **9** Epics · **25** modules · **2,200+** LOC · **195** tests · **7** persistence files. Each number animates from 0 on slide enter. |
-
-### Act II — Product Demo (Aaron, Olga, Victoria, Melaine) — ~11 min
-
-This is the core of the pitch. Each slide is one or two features shown as an **animated terminal playback** — a styled mock console that types inputs character-by-character and prints the program's responses with realistic timing. It feels like watching a real session at 2× speed. The playbacks are driven by Remotion sequences reading from recorded `.in.txt` / `.out.txt` pairs already committed to the tests/fixtures tree.
-
-| # | Slide | Speaker | Feature(s) Shown | How It's Built |
-|---|---|---|---|---|
-| 05 | **Create Your Account** | Aaron | Password policy enforcement, account cap, persistence | Terminal playback of `tests/fixtures/login/*.in.txt` for a happy path; right-side card with the 4 password rules from `AUTH.cpy:218-280` |
-| 06 | **Build Your Profile** | Aaron | Required + optional fields, experience, education | Terminal playback creating a profile with the full form, then jumping to "View My Profile" |
-| 07 | **Find Someone You Know** | Olga | Full-name search, exact match, found-vs-not-found | Terminal playback searching for a user, then opening their profile card on the right of the slide |
-| 08 | **Connect → Accept → Network** | Olga | Send request, accept on another account, list network — three-step arc | Split-screen terminal: Alice's session on the left sends a request, Bob's session on the right accepts, Alice sees Bob in `View My Network` |
-| 09 | **Post a Job** | Victoria | Required-field re-prompting, optional salary | Terminal playback of `tests/fixtures/job_internship_posting/*.in.txt`; on-slide callout showing the re-prompt loop kicking in when the title is blank |
-| 10 | **Browse & Apply** | Victoria | List view → detail view → apply → confirmation | Terminal playback walking through the Job Search submenu, picking a posting, applying, seeing the confirmation line |
-| 11 | **My Applications** | Victoria | Per-user application report | Terminal playback of `View My Applications`; on-slide comparison showing the report filters by logged-in user |
-| 12 | **Messaging: The Full Arc** | Melaine | Connection-gated send + chronological view + recipient isolation | Split-screen: left session (Alice) sends a message to Bob; right session (Bob) logs in, opens `View My Messages`, sees it. Bottom band calls out: "Alice's inbox stays empty — recipient isolation." This slide is Epic #9's *demo*. |
-
-### Act III — How We Built It (Trevor + Olga) — ~8 min
-
-| # | Slide | Speaker | Purpose | Visual |
-|---|---|---|---|---|
-| 13 | **Architecture: 25 Modules** | Trevor | Answer "What modules / functions / classes?" | Animated graph: `main.cob` in the center, 24 copybooks orbiting in 5 colored clusters (Core, Auth, Profiles/Discovery, Jobs, Messaging, Data Models). Hovering / entry-animation highlights each cluster in turn. |
-| 14 | **Copybook Deep Dive** | Trevor | Show what "modular" means in COBOL terms | Three-column list of the 24 copybooks grouped by concern (Feature / Working Storage / I/O). One-line description each, Shiki-highlighted. |
-| 15 | **Data Storage** | Olga | Answer "How is data stored and retrieved?" | Seven file cards (ACCOUNTS, PROFILES, PENDING, CONNECTIONS, JOBS, APPLICATIONS, MESSAGES) each with record layout, capacity, and rewrite-vs-append strategy. Cards flip in on entry. |
-| 16 | **Code Gem #1 — Recursive Message Read** | Olga | Show engineering taste | Shiki-highlighted snippet of `src/VIEWMESSAGE.cpy:75-120` (`7841-VIEW-MESSAGES-LOOP`) with lines revealing top-to-bottom. Callouts on `AT END`, the recipient filter, and the tail recurse. |
-| 17 | **Code Gem #2 — Bidirectional Connection Check** | Olga | Graph-theory matters even in COBOL | Snippet of `src/SENDMESSAGE.cpy:205-224` with two arrows highlighting the (A→B) and (B→A) branches. Beneath: a tiny animated graph showing the undirected edge being validated. |
-| 18 | **Security Features** | Trevor | Answer "What security features?" | Six cards with file:line evidence: password policy (`AUTH.cpy:218-280`), account cap, masked echo, recipient isolation, connection-gated messaging, duplicate guards on applications. |
-| 19 | **Testing at Scale** | Trevor | Answer "How many test cases?" | Big **195** counter-up, then a 3×3 grid of test categories with their counts. Beneath: "**Zero mocks. Real COBOL binary. Deterministic diffs.**" |
-| 20 | **How the Harness Works** | Trevor | How we *know* everything works | Flow diagram: `*.in.txt` → preprocessor (seed macros) → `INPUT.TXT` → `bin/main` → `OUTPUT.TXT` → macro expansion + timestamp normalization → `difflib` → ✅/❌. Arrows animate left-to-right. |
-
-### Act IV — Team & Process (Trevor) — ~2 min
-
-| # | Slide | Purpose | Visual |
-|---|---|---|---|
-| 21 | **How We Ran the Sprint** | Branching, PRs #35 + #36, daily cadence | Vertical timeline Apr 1 → Apr 9 with commit density heatmap on the left and `Github.png` as a subtle background on the right |
-| 22 | **Burndown — Start** | Required rubric deliverable | Full-bleed `burndown_start.png` with a soft glow; one-line annotation at the top |
-| 23 | **Burndown — End** | Required rubric deliverable | Full-bleed `burndown_end.png` with callouts on the big drop Apr 6→7 (impl merge), Apr 7→8 (test merge), and the zero on Apr 9 |
-
-### Act V — Close (all 5 speakers) — ~1 min
-
-| # | Slide | Speaker | Purpose | Visual |
-|---|---|---|---|---|
-| 24 | **What's Next** | Aaron + Olga + Victoria + Melaine (one line each) | Each teammate names one thing they learned or one thing they're proudest of | Five cards, one teammate's quote each, illuminated one at a time |
-| 25 | **Thank You / Q&A** | Trevor | Wrap-up | Animated team signature, repo link, QR code to the live site, "Questions?" centerpiece |
+#### Testing Note
+- 30+ new test fixtures: profile viewing (long text, blanks, persistence), search (found, not found, after edit, EOF)
+- `AGENTS.md` added (621 lines) — documented project guidelines and COBOL standards for AI-assisted development
+- `JIRA_TASK_MAPPING.md` added — maps test fixtures to JIRA stories
 
 ---
 
-## 5. Speaker Assignments
+### Interlude A: The Test Runner (Jan 23 – Feb 19)
 
-| Slides | Speaker | Runtime |
-|---|---|---|
-| 01–04 | **Trevor** (Scrum Master) — opens, introduces team, sets the pitch | ~3 min |
-| 05–06 | **Aaron** (Coder #1) — account + profile | ~2 min |
-| 07–08 | **Olga** (Coder #2) — search + connections arc | ~2 min |
-| 09–11 | **Victoria** (Tester #2) — jobs arc | ~3 min |
-| 12 | **Melaine** (Tester #1) — messaging (Epic #9's demo moment) | ~1.5 min |
-| 13–14 | **Trevor** — architecture + copybooks | ~2 min |
-| 15 | **Olga** — data storage | ~1 min |
-| 16–17 | **Olga** — code gems | ~1.5 min |
-| 18–20 | **Trevor** — security + testing + harness | ~3 min |
-| 21–23 | **Trevor** — sprint + burndown | ~2 min |
-| 24 | **Aaron + Olga + Victoria + Melaine** (one card each) | ~1 min |
-| 25 | **Trevor** — close + Q&A | ~0.5 min |
+**Slide Group: 2–3 slides — THIS IS A MAJOR DIFFERENTIATOR**
 
-Everyone speaks at least twice. Every role is represented. Scrum master opens and closes; coders and testers split the middle. Total budgeted ~22.5 min with ~2.5 min of slack.
+> *"The tests were becoming hard to manage manually. So we built a real test runner."*
 
----
+This interlude explains how the test infrastructure evolved from a simple script to a sophisticated system. It should be placed here because by Epic 3, the team had ~50+ test fixtures and the manual approach was hitting limits.
 
-## 6. Visual Design System
+#### Phase 1: Birth (Jan 23) — `5ba8fc9`
+- `test_runner.py` created — discovers test directories, runs COBOL binary, compares output
+- `run_tests.sh` shell wrapper
+- GitHub Actions CI runs tests on every push
+- Basic structure: `tests/fixtures/<category>/<test>/inputs/*.in.txt` + `expected/*.out.txt`
 
-Encoded once in `final_presentation/site/src/theme.ts` + a single `globals.css` with Tailwind v4 theme tokens. No ad-hoc styling inside individual slides.
+#### Phase 2: File-Based I/O Refactor (Jan 25) — `59e8dea`
+- Major rewrite (52 files, 1179 insertions)
+- Tests use `INPUT.TXT` → COBOL binary → `OUTPUT.TXT` pattern
+- Unified diff generation for failures (color-coded)
+- Test discovery made recursive
 
-**Palette (dark, brand-aligned):**
+#### Phase 3: Comments in Test Files (Mar 5) — `86e361d`
+- Inline comments (`# comment`) and full-line comments supported in `.in.txt` files
+- Escaped hashes (`\#`) for literal `#` in input
+- Made test files self-documenting:
+  ```
+  1        # Login
+  alice    # Username
+  Alice1!  # Password
+  4        # Find someone you know
+  ```
 
-- `bg.base` `#050814` (near-black with a hint of blue)
-- `bg.panel` `#0C1327` · `bg.elevated` `#131C37`
-- `brand.primary` `#0A66C2` (InCollege blue) · `brand.accent` `#70B5F9`
-- `brand.glow` radial gradient centered top, 40% brand.primary → transparent
-- `text.primary` `#F5F7FA` · `text.muted` `#9CA3B4` · `text.dim` `#5F6B82`
-- `success` `#22C55E` · `warn` `#F59E0B` · `danger` `#EF4444`
-- `code.bg` `#0B1222` with 1 px `#1E293B` border and subtle inner glow
-- Accent gradients: `from-[#0A66C2] via-[#38BDF8] to-[#70B5F9]` used sparingly on headlines and the wordmark
+#### Phase 4: Dump & Debug Mode (Mar 5) — `7634ef8`
+- `--dump-output` flag writes actual output to `.actual.out.txt` for debugging
+- `--dump-only` mode skips comparison entirely
 
-**Typography (via `@remotion/google-fonts`, no local file management):**
+#### Phase 5: Packaging System (Feb 19 → Mar 12) — `83e5edf`, then expanded in `7152c25`
+- `package_tests.py` creates submission-ready zip files
+- Two zips per test: Input ZIP + Output ZIP
+- Fully expands all macros and seed directives for submission
 
-- Headings — **IBM Plex Sans**, 700, −0.02em tracking, fluid sizes clamped to viewport
-- Body — **Inter**, 500
-- Code — **JetBrains Mono**, 500, ligatures off
-- Stats — **IBM Plex Mono**, 700, tabular figures
+#### Phase 6: Live Interactive CLI (Mar 12) — `378018a`
+- `live_cli.py` — REPL for debugging COBOL program interactively
+- Commands: `:help`, `:dump`, `:show`, `:undo`, `:clear`, `:rerun`, `:quit`
+- Replays full transcript after each input, shows latest output
+- Saves session to `.live_session.input.txt`
 
-**Layout language:**
-
-- 16:9 deck container, fluid to viewport, max 1920×1080
-- 96 px outer padding, 48 px grid gap, 12-column grid
-- Every slide has: top-left `NN / 25` slide index, top-right small InCollege wordmark, bottom rule with section name ("ACT II · PRODUCT DEMO")
-- All slides sit on an absolutely positioned glow layer so the brand color bleeds through corners
-- Code snippets live inside a `<CodePanel>` component with a terminal-style title bar (fake traffic lights + file path + line range, e.g., `src/VIEWMESSAGE.cpy:75-120`)
-
-**Motion policy — lean into it, we finally can:**
-
-- **Slide entry**: 14-frame ease-out fade + 12 px Y-translate for every child; sliding between slides uses `TransitionSeries` with `fade` + subtle slide-push
-- **Terminal playbacks** (the Act II centerpiece): frame-by-frame typewriter for the user input, then blocked-out response printing for the COBOL program output. One Remotion composition per demo, reading input/expected pairs from fixture files at build time. The terminal cursor blinks at a deterministic rate. Runtime ~20–30 s per demo, auto-plays on slide enter, looping forever.
-- **Code reveals** (slides 14, 16, 17, 18): lines cascade in top-to-bottom, each with an 80 ms stagger, giving the audience a beat to read each line.
-- **Counter-up stats**: `useCurrentFrame` + `interpolate` drive numbers from 0 to target over ~25 frames.
-- **Architecture graph** (slide 13): 24 copybook nodes spring out from `main.cob` using `@remotion/shapes` and `interpolate` with a stagger — feels like constellation mapping.
-- **Cross-slide transitions**: 300 ms fade-through + 16 px push, all CPU-cheap so a projector doesn't choke.
-
-Every animation is deterministic (`useCurrentFrame`) so it plays identically every time — zero "demo effect" risk.
+#### What to Show on Slides
+- Before/after comparison: raw test file vs. commented/macro'd test file
+- The test runner terminal output (color-coded pass/fail with diffs)
+- The live CLI in action (screenshot or animation)
+- Stats: from 18 tests (Epic 1) → 150+ tests (Epic 9)
 
 ---
 
-## 7. Project Layout
+### Milestone 4: Epic 4 — Connection Requests (Feb 19)
 
-```
-final_presentation/
-├── PLAN.md                      ← this document
-├── README.md                    ← one-page runbook + how to preview locally
-├── Final Presentation Guidelines.pdf   ← the new rubric (committed for reference)
-├── site/
-│   ├── package.json             ← vite, react, react-dom, @remotion/player, remotion,
-│   │                              @remotion/google-fonts, @remotion/shapes,
-│   │                              @remotion/transitions, tailwindcss@next, shiki, zod
-│   ├── vite.config.ts           ← React + Tailwind v4 plugin, base path for Pages
-│   ├── tsconfig.json
-│   ├── index.html               ← root div + font preload + meta tags
-│   ├── public/
-│   │   └── assets/              ← burndown_*.png, Jira.png, Github.png, Roles.txt,
-│   │                              sample I/O text files, favicon
-│   └── src/
-│       ├── main.tsx             ← React entry, mounts <Deck />
-│       ├── Deck.tsx             ← arrow-key nav, URL sync (?slide=N), fullscreen,
-│       │                          slide counter overlay, keyboard shortcuts (←/→/F/0-9)
-│       ├── slides/
-│       │   ├── index.ts         ← exported slide list (id + component + speaker + section)
-│       │   ├── 01-title.tsx
-│       │   ├── 02-team.tsx
-│       │   ├── 03-product.tsx
-│       │   ├── 04-by-the-numbers.tsx
-│       │   ├── 05-create-account.tsx
-│       │   ├── 06-build-profile.tsx
-│       │   ├── 07-find-someone.tsx
-│       │   ├── 08-connect-accept-network.tsx
-│       │   ├── 09-post-job.tsx
-│       │   ├── 10-browse-apply.tsx
-│       │   ├── 11-my-applications.tsx
-│       │   ├── 12-messaging-arc.tsx
-│       │   ├── 13-architecture.tsx
-│       │   ├── 14-copybook-deep-dive.tsx
-│       │   ├── 15-data-storage.tsx
-│       │   ├── 16-code-gem-view-loop.tsx
-│       │   ├── 17-code-gem-bidirectional.tsx
-│       │   ├── 18-security.tsx
-│       │   ├── 19-testing-at-scale.tsx
-│       │   ├── 20-harness-flow.tsx
-│       │   ├── 21-sprint-timeline.tsx
-│       │   ├── 22-burndown-start.tsx
-│       │   ├── 23-burndown-end.tsx
-│       │   ├── 24-whats-next.tsx
-│       │   └── 25-close.tsx
-│       ├── remotion/
-│       │   ├── compositions/
-│       │   │   ├── Terminal.tsx     ← generic animated terminal (shared by slides 05-12)
-│       │   │   ├── StatCounter.tsx  ← big-number count-up used on slide 04 + 19
-│       │   │   ├── CodeReveal.tsx   ← line-by-line Shiki reveal used on slides 14, 16, 17
-│       │   │   ├── ArchGraph.tsx    ← constellation layout for slide 13
-│       │   │   └── HarnessFlow.tsx  ← left-to-right arrow flow for slide 20
-│       │   └── index.tsx            ← composition registry for the Player
-│       ├── components/
-│       │   ├── SlideFrame.tsx       ← page number, wordmark, act label, background glow
-│       │   ├── PersonCard.tsx
-│       │   ├── StatCard.tsx
-│       │   ├── FeatureCallout.tsx
-│       │   ├── CodePanel.tsx        ← terminal-style chrome around Shiki output
-│       │   └── Wordmark.tsx
-│       ├── data/
-│       │   ├── team.ts
-│       │   ├── stats.ts             ← counts the slides reference (modules, tests, LOC)
-│       │   ├── security.ts          ← the 6 security features with file:line citations
-│       │   ├── storage.ts           ← the 7 persistence files with layouts
-│       │   ├── snippets/            ← exact file text for the code-gem slides
-│       │   │   ├── view-loop.cob           ← src/VIEWMESSAGE.cpy:75-120
-│       │   │   ├── bidirectional.cob       ← src/SENDMESSAGE.cpy:205-224
-│       │   │   └── password-policy.cob     ← src/AUTH.cpy:218-280
-│       │   └── terminals/           ← terminal playback scripts (input + expected output)
-│       │       ├── create-account.ts
-│       │       ├── build-profile.ts
-│       │       ├── find-someone.ts
-│       │       ├── connect-accept.ts
-│       │       ├── post-job.ts
-│       │       ├── browse-apply.ts
-│       │       ├── my-applications.ts
-│       │       └── messaging-arc.ts
-│       ├── shiki.ts               ← singleton highlighter, `cobol` + custom theme
-│       ├── theme.ts               ← palette, typography, spacing tokens
-│       └── globals.css            ← Tailwind v4 @theme block, font loading hooks
-├── .github/
-│   └── workflows/
-│       └── deploy-pages.yml      ← build + publish to gh-pages on push to main
-└── scripts/
-    └── verify.sh                 ← diffs snippets against real files, checks asset paths
+**Slide Group: 1–2 slides**
+
+#### What Was Built
+
+- **Send Connection Request** — From main menu, send request to another user by name
+- **View Pending Requests** — See incoming connection requests
+- **Duplicate Prevention** — Cannot re-request to same user or already-connected user
+- **New Data File** — `PENDING.DAT` for storing pending requests
+- **Menu Expansion** — Main menu grows from 4 options to 7
+
+#### Key Commits
+
+| Hash | Date | Description |
+|------|------|-------------|
+| `cab991c` | ~Feb 15 | Add Epic #4 requirements PDF |
+| `d001172` | ~Feb 15 | WIP: Start connection request implementation |
+| `d8ed330` | ~Feb 17 | Add connection request implementation + test runner updates |
+| `6d52def` | ~Feb 17 | Extend connection request to send and view requests |
+| `781c8d5` | ~Feb 18 | Update all test fixtures for Epic 4 menu changes (7-option menu) |
+| `45b408e` | Feb 19 | **Merge PR #13** — Connection requests into main (156 files, 4565 insertions) |
+
+#### Architectural Note
+- New copybooks: `SENDREQ_SRC.cpy` (135 lines), `VIEWREQ_SRC.cpy` (75 lines)
+- `main.cob` grows by ~191 lines
+- **All existing test fixtures had to be updated** for the new 7-option menu — this pain point motivates the macro system
+
+#### Testing Note
+- 100+ test fixtures added/updated
+- Connection request test categories: send success, duplicate prevention, non-existent user, already connected, persistence across sessions
+- Seed user macros (`@seed_user`) first introduced here in test branches — `d360be2`
+
+---
+
+### Milestone 5: Epic 5 — Accept/Reject Connections & Network (Mar 5)
+
+**Slide Group: 1–2 slides**
+
+#### What Was Built
+
+- **Accept Connection Request** — Bidirectional confirmation creates `CONNECTIONS.DAT` entry
+- **Reject Connection Request** — Removes pending request, no connection created
+- **View My Network** — Display all established connections
+- **New Data Files** — `CONNECTIONS.DAT` for confirmed connections
+- **Input Pushback Mechanism** — Novel pattern where `VIEWREQ` can "push back" a menu read (stored in `WS-INPUT-PUSHBACK-LINE`, checked by `8100-READ-INPUT`)
+
+#### Key Commits
+
+| Hash | Date | Description |
+|------|------|-------------|
+| `75d73d4` | ~Feb 25 | Epic #5 requirements PDF |
+| `c78aa23` | ~Mar 1 | Complete Epic 5 network features |
+| `116f51a` | ~Mar 3 | Accept/reject requests, remove from pending after processing |
+| `10b4050` | Mar 5 | **Merge PR #18** — Epic 5 into main (218 files, 6644 insertions — largest single merge) |
+
+#### Testing Highlight
+- `TEST_RUNNER_GUIDE.md` (226 lines) created — comprehensive documentation for the team on how to write and run tests
+- 80+ test fixtures for accept/reject/network scenarios
+- Multi-part tests introduced: `accept_single_part_1.in.txt` → `accept_single_part_2.in.txt` (tests persistence across program runs)
+
+---
+
+### Interlude B: Macros, Seed Directives & Packaging (Mar 5 – Mar 25)
+
+**Slide Group: 2–3 slides — ANOTHER MAJOR DIFFERENTIATOR**
+
+> *"Every time the menu changed, we had to update 100+ test files. There had to be a better way."*
+
+This interlude covers three innovations that transformed the test infrastructure:
+
+#### 1. Output Macros — `{{MACRO}}` Expansion
+
+**Problem:** The main menu text appears in nearly every expected output file. When the menu changed (from 4 to 7 to 9 options), hundreds of `.out.txt` files needed manual updates.
+
+**Solution:** `menus.yml` defines reusable output blocks:
+```yaml
+MAIN_MENU: |
+  1. Create/Edit My Profile
+  2. View My Profile
+  3. Search for a job
+  4. Find someone you know
+  5. View Pending Connection Requests
+  6. Learn a New Skill
+  7. View My Network
+  8. Messages
+  9. Logout
+  Enter your choice:
 ```
 
-**Key architectural decisions (with citations):**
+Expected output files use `{{MAIN_MENU}}` — expanded at test time. Menu changes require updating ONE file.
 
-1. **Custom React deck shell, not a generic slide framework.** We want full control over transitions, URL deep links, and slide sequencing. Remotion supplies the animation engine; the deck shell is ~150 lines of React.
-2. **`@remotion/player` mounted inside each slide.** Player is the official first-party way to embed a Remotion composition in a React app and runs every animation in the browser (`remotion.dev/docs/player`). Each slide either uses the Player to show an animated composition or renders pure React/Tailwind for the static bits.
-3. **One `<Terminal>` composition, parameterized per demo.** The animated terminal — the heart of Act II — lives in one place and consumes a script array (`{t: 200, type: "1\n"}`, `{t: 1200, print: "Welcome, Alice!"}`). Each demo slide imports a script from `data/terminals/`. Scripts are authored by diffing real fixture files in `tests/fixtures/` against their expected outputs, so the playbacks match reality.
-4. **Shiki in the browser for COBOL highlighting.** Research confirmed `cobol.json` is bundled in `shikijs/textmate-grammars-themes`, which backs Shiki. A singleton highlighter initializes once on first slide mount and reuses across all code-reveal slides. Renders run client-side — cheap, accurate, and styled to our palette via a custom Shiki theme.
-5. **Data lives outside components.** Every string, stat, file path, code snippet, terminal script, and citation lives in `src/data/`. Slide components only do layout. The five teammates can edit text without touching motion code — cleaner merge conflicts.
-6. **Snippets are exact file text.** Files under `data/snippets/` are verbatim from `src/*.cpy`. `scripts/verify.sh` diffs them against the live source at CI time — slides can't drift.
-7. **GitHub Pages deploy via Actions.** Push to `main` → `deploy-pages.yml` runs `bun install && bun run build` → publishes `site/dist/` to the `gh-pages` branch → site is live at `https://<org>.github.io/<repo>/`. Using `base: '/epic_1/'` (or whatever the repo name is) in `vite.config.ts` so asset paths resolve under the Pages subpath.
+**Key commit:** `b4634ca` — Implement macro-driven test outputs (part of Epic 6 PR)
+**Key file:** `tests/macro_defs/menus.yml` (156 lines, ~30 macros)
 
----
+**Macros include:** `{{WELCOME_BANNER}}`, `{{LOGIN_SCREEN}}`, `{{CREATE_ACCOUNT_HEADER}}`, `{{PASSWORD_PROMPT}}`, `{{MAIN_MENU}}`, `{{PROFILE_EDIT_HEADER}}`, `{{JOB_MENU}}`, `{{MESSAGES_MENU}}`, and many more.
 
-## 8. Build / Preview / Deploy Workflow
+#### 2. Seed Directives — `@seed_user`, `@seed_connection`, `@seed_message`
 
-```bash
-# 0. one-time setup
-cd final_presentation/site
-bun install                          # or pnpm
+**Problem:** Testing connection features requires creating 2+ accounts first. Every test file starts with 30+ lines of account creation keypresses.
 
-# 1. dev loop — hot-reload every slide
-bun run dev                          # → http://localhost:5173
-# use ← / → arrow keys to navigate, F to toggle fullscreen
-# use ?slide=N in the URL to jump to any slide
+**Solution:** Declarative directives at the top of `.in.txt`:
+```
+@seed_user username=alice password=Alice1! first_name=Alice last_name=Smith \
+  university=USF major=CS grad_year=2027
+@seed_user username=bob password=Bob123! first_name=Bob last_name=Jones \
+  university=USF major=IT grad_year=2026
+@seed_connection user_a=alice user_b=bob
 
-# 2. production build + local preview
-bun run build                        # → site/dist/
-bun run preview                      # → http://localhost:4173 (offline fallback)
-
-# 3. deploy via push
-git push origin main                 # Actions workflow publishes to gh-pages
-# visit https://<org>.github.io/<repo>/ after ~60 s
-
-# 4. verify that slide snippets still match the real COBOL files
-../scripts/verify.sh                 # diff-zero or exit 1
+# Actual test starts here — Alice views messages
+1        # Login
+alice    # Username
+Alice1!  # Password
+8        # Messages menu
+2        # View My Messages
 ```
 
-**Verification checklist before the presentation:**
+The `PersistenceManager` writes directly to `.DAT` files before execution — no interactive account creation needed.
 
-- [ ] All 25 slides render cleanly at 1920×1080 *and* at typical classroom resolutions (1280×720, 1366×768).
-- [ ] Arrow-key navigation works, URL sync holds across refresh, fullscreen toggle works.
-- [ ] All 8 terminal playbacks auto-play on slide enter and loop.
-- [ ] Shiki highlighter initializes without errors in the Network tab; no CLS on first code-reveal slide.
-- [ ] Slide 16 COBOL snippet equals the real file: `diff <(sed -n '75,120p' ../src/VIEWMESSAGE.cpy) site/src/data/snippets/view-loop.cob` → zero diff.
-- [ ] Slide 17 snippet equivalent diff against `SENDMESSAGE.cpy:205-224`.
-- [ ] Slide 18 snippet equivalent diff against `AUTH.cpy:218-280`.
-- [ ] Slide 19 stats match reality — `./run_tests.sh` from repo root shows 195 passes and per-category counts match `data/stats.ts`.
-- [ ] Slides 22 and 23 full-bleed images match `.dev/local/epic_9_submission/burndown_start.png` / `burndown_end.png`.
-- [ ] `bun run preview` serves the deck offline end-to-end — tested on a team laptop with wifi disabled.
-- [ ] GitHub Pages URL resolves and is reachable from a classroom-like network (tethered phone is fine).
-- [ ] Every teammate has rehearsed their assigned slides at least twice with a stopwatch; total rehearsed runtime is under 25 minutes.
+**Key commits:**
+- `d360be2` — First seed user macros for test input files (Epic 5)
+- `b4d45a3` — Full migration of all tests to `@seed_user` directives (30 commits across all categories)
+- `cda4374` — Add `@seed_connection` and `@seed_message` directives (Epic 9)
 
----
+**Key files:**
+- `tests/incollege_tests/preprocessing.py` — Parses seed directives, strips comments
+- `tests/incollege_tests/persistence.py` — Writes `.DAT` files with correct fixed-width formats
+- `tests/incollege_tests/constants.py` — Field width definitions matching COBOL record layouts
+- `tests/incollege_tests/models.py` — `SeedUserMacro`, `SeedConnection`, `SeedMessage` dataclasses
 
-## 9. Source-of-Truth Map
+#### 3. Syntax Highlighting for Test Files
 
-Every slide cites real files and real commits. No fabrication.
+**Problem:** Test fixture files are plain text — hard to read and edit.
 
-**COBOL sources:**
-- `src/main.cob` — menu dispatch, `COPY` directives → Slide 13
-- `src/VIEWMESSAGE.cpy` paragraphs `7840-VIEW-MESSAGES`, `7841-VIEW-MESSAGES-LOOP` → Slides 12, 16
-- `src/SENDMESSAGE.cpy` paragraphs `7820-VALIDATE-RECIPIENT`, `7830-WRITE-MESSAGE` → Slides 12, 17, 18
-- `src/AUTH.cpy` paragraphs `4000-CREATE-ACCOUNT`, `4400-VALIDATE-PASSWORD` → Slides 05, 18
-- `src/PROFILE.cpy` paragraph `7000-CREATE-EDIT-PROFILE` → Slide 06
-- `src/SEARCH.cpy` paragraph `7500-FIND-SOMEONE-YOU-KNOW` → Slide 07
-- `src/SENDREQ.cpy`, `src/VIEWREQ.cpy`, `src/NETWORK.cpy` → Slide 08
-- `src/JOBS.cpy`, `src/BROWSEJOBS.cpy`, `src/APPLYJOB.cpy`, `src/VIEWAPPS.cpy` → Slides 09, 10, 11
-- 24 copybooks + `main.cob` → Slides 13, 14
+**Solution:** VS Code language configuration for `.in.txt` and `.out.txt` files:
+- `.in.txt` mapped to `shellscript` → `#` comments render with theme comment color
+- Custom language `incollege-expected-output` for `.out.txt` with syntax highlighting
 
-**Tests:**
-- `tests/test_runner.py`, `tests/incollege_tests/runner.py` → Slide 20
-- `tests/incollege_tests/preprocessing.py`, `tests/incollege_tests/persistence.py` → Slide 20
-- `tests/fixtures/**` → Slide 19 (counts), Slides 05–12 (terminal playback source material)
-- `tests/TEST_RUNNER_GUIDE.md`, `tests/JIRA_TASK_MAPPING.md` → Slide 19
+**Key commit:** `ac216ae` — Add syntax highlighting and language configuration for InCollege Expected Output
 
-**Process evidence (already packaged as Canvas submission):**
-- `.dev/local/epic_9_submission/burndown_start.png` → Slide 22
-- `.dev/local/epic_9_submission/burndown_end.png` → Slide 23
-- `.dev/local/epic_9_submission/Jira.png` → Slide 21
-- `.dev/local/epic_9_submission/Github.png` → Slide 21
-- `.dev/local/epic_9_submission/Roles.txt` → Slide 02
-- `README.md:477-485` → Slide 02
-
-**Skills leveraged:**
-- `.agents/skills/remotion-best-practices/` — `rules/animations.md`, `rules/compositions.md`, `rules/fonts.md`, `rules/assets.md`, `rules/text-animations.md`, `rules/charts.md`
-- `.claude/skills/tailwind-v4-shadcn/` — Tailwind v4 setup reference
-- `.claude/skills/frontend-design/` — distinctive UI patterns, spacing rhythm
+#### What to Show on Slides
+- Side-by-side: raw test file (30 lines of setup) vs. seed-directive version (3 lines of setup)
+- The macro expansion pipeline (diagram)
+- The `menus.yml` file snippet
+- VS Code screenshot with syntax highlighting
 
 ---
 
-## 10. Implementation Order
+### Milestone 6: Epic 6 — Job Posting (Mar 12)
 
-Each step is independently committable. Nothing outside `final_presentation/` is modified.
+**Slide Group: 1–2 slides**
 
-1. **Scaffold.** Copy the Canvas-submission assets from `.dev/local/epic_9_submission/` into `final_presentation/site/public/assets/`.
-2. **Vite + React + Tailwind bootstrap.** `bun create vite` with the React-TS template, install Tailwind v4, configure `vite.config.ts` with `base` set for GitHub Pages.
-3. **Install Remotion dependencies.** `remotion`, `@remotion/player`, `@remotion/google-fonts`, `@remotion/shapes`, `@remotion/transitions`, `shiki`, `zod`.
-4. **Theme + globals.** Write `theme.ts`, `globals.css`, and the `<Wordmark />` component. Wire Google Fonts.
-5. **Deck shell.** Write `Deck.tsx` with keyboard nav, URL sync, slide counter, fullscreen toggle. Stub slides 01–25 with placeholder titles so navigation works.
-6. **Shared components.** `SlideFrame`, `PersonCard`, `StatCard`, `FeatureCallout`, `CodePanel`.
-7. **Remotion compositions.** `Terminal`, `StatCounter`, `CodeReveal`, `ArchGraph`, `HarnessFlow`. Each is a Remotion composition embedded via `@remotion/player` inside the relevant slide.
-8. **Data files.** Populate `src/data/` with team, stats, security, storage, the 3 verbatim COBOL snippets, and the 8 terminal playback scripts.
-9. **Build slides in narrative order** (01 → 25), previewing each one in the dev server as you go.
-10. **Shiki singleton.** Wire `src/shiki.ts` with a lazy-initialized highlighter preloaded with the `cobol` grammar and custom theme.
-11. **GitHub Actions workflow** for Pages deploy. Push, verify the URL loads.
-12. **`scripts/verify.sh`.** Diffs slide snippets against the real COBOL files; add it to the CI workflow so drift fails the build.
-13. **Rehearse** with all 5 teammates at least twice, stopwatch running. Edit text-only data in `src/data/` based on timing.
-14. **Paste the GitHub Pages URL into Canvas.** Done.
+#### What Was Built
+
+- **Job Search/Internship Submenu** — New menu accessible from main menu option 3
+  - Post a Job/Internship
+  - Browse Jobs/Internships (placeholder)
+  - View My Applications (placeholder)
+  - Back to Main Menu
+- **Post a Job** — Fields: title, description (max 200 chars), employer, location, salary (optional — "NONE" to skip)
+- **Required Field Re-prompting** — Blank entries trigger re-prompt
+- **Persistent Storage** — `JOBS.DAT` with sequential ID assignment
+- **Job Limit Enforcement** — Maximum 25 jobs
+
+#### Key Commits
+
+| Hash | Date | Description |
+|------|------|-------------|
+| `4399d06` | ~Mar 5 | Add Epic #6 requirements PDF |
+| `e7d991e` | ~Mar 6 | Develop Job Search/Internship menu option |
+| `dc17f7b` | ~Mar 6 | Implement Job Search/Internship submenu |
+| `0f5feb3` | ~Mar 7 | Set structure for JOBS.DAT and working-storage job variables |
+| `82230f1` | ~Mar 9 | Load jobs at startup, sequential ID counter |
+| `932ce26` | ~Mar 10 | Implement entire job posting menu logic |
+| `7152c25` | Mar 12 | **Merge PR #23** — Epic 6 into main (84 files, 5716 insertions) |
+
+#### Architectural Notes
+- New copybook: `JOBS_SRC.cpy` (296 lines) — later renamed to `JOBS.cpy`
+- `WS-JOBS.cpy` for working storage
+- GitHub Actions workflow `test-macros.yml` added for macro test validation
+- Test runner refactored into full Python package: `tests/incollege_tests/` (12 modules)
+
+#### Testing Note
+- 30+ job posting test fixtures
+- First use of output macros in production: `{{JOB_MENU}}`, `{{JOB_POST_HEADER}}`
+- Tests cover: valid posting, blank fields, duplicate detection, max limit, multi-user posting, EOF during posting
 
 ---
 
-## 11. One-Screen Summary
+### Milestone 7: Epic 7 — Job Browsing & Applications (Mar 25)
 
-- **What:** a 25-slide, dark-themed, React + Remotion-powered VC pitch website that tells the story of InCollege, demoes the 10 implemented features, tours the architecture, and closes with the sprint story.
-- **Delivery:** hosted on GitHub Pages via a GitHub Actions workflow. Canvas receives the URL. Local `bun run preview` is the offline fallback if classroom wifi dies.
-- **What's in the demos:** 8 animated terminal playbacks driven by recorded input/output pairs from `tests/fixtures/`. Real commands, real responses, frame-perfect timing.
-- **Skipped intentionally:** the 5 rubric items that aren't in the codebase (pre-login search, English/Spanish, saved jobs, plus/standard tiers, system-wide notifications) — confirmed as outdated rubric content.
-- **Everyone presents** — speaker-by-slide map in §5, every teammate gets the mic at least twice.
-- **Every claim is backed** by a real file, commit, or Canvas-submission asset from `.dev/local/epic_9_submission/` — §9 lists them.
-- **Nothing outside `final_presentation/` is modified** during implementation.
+**Slide Group: 1–2 slides**
 
-Sources consulted:
-- [Remotion — @remotion/player](https://www.remotion.dev/docs/player)
-- [Remotion — Passing props to a composition](https://www.remotion.dev/docs/passing-props)
-- [Remotion — @remotion/google-fonts](https://www.remotion.dev/docs/google-fonts/)
-- [Remotion — text animations (typewriter)](https://www.remotion.dev/docs/text-animations)
-- [Shiki — syntax highlighter](https://shiki.style/)
-- [shikijs/textmate-grammars-themes — COBOL grammar bundle](https://github.com/shikijs/textmate-grammars-themes)
-- [Vite — GitHub Pages deployment](https://vitejs.dev/guide/static-deploy.html#github-pages)
-- [Tailwind CSS v4](https://tailwindcss.com/blog/tailwindcss-v4)
+#### What Was Built
+
+- **Browse All Jobs** — Summary listing (title, employer, location)
+- **View Job Details** — Select by number for full details (title, description, employer, location, salary)
+- **Apply to Job** — One-click application from detail view, stored in `APPLICATIONS.DAT`
+- **Duplicate Application Prevention** — Cannot apply to same job twice
+- **Job Application Summary Report** — "View My Applications" shows only current user's applications with formatted header/footer and total count
+
+#### Key Commits
+
+| Hash | Date | Description |
+|------|------|-------------|
+| `988027b` | ~Mar 18 | Add APPLICATIONS.DAT file and related variables |
+| `4537305` | ~Mar 18 | Implement job application summary report generation |
+| `c035bcb` | ~Mar 19 | Implement job browsing and application features with validation |
+| `42049e3` | ~Mar 21 | Implement job browsing with detailed listings and user application tracking |
+| `a380376` | Mar 25 | **Merge PR #24** — Epic 7 into main |
+
+#### Architectural Notes
+- New copybooks: `BROWSEJOBS_SRC.cpy` (189 lines), `APPLYJOB_SRC.cpy` (156 lines), `VIEWAPPS_SRC.cpy`, `JOBSIO_SRC.cpy`
+- `.claude/agents/cobol-master.md` added — AI agent specialized in COBOL programming
+- `.claude/agents/test-writer.md` added — AI agent for generating test fixtures
+
+#### Testing Note
+- 40+ test fixtures covering: browse list, job details, apply, duplicate application, report generation, no jobs available, invalid selections
+- Tests now extensively use `@seed_user` directives + `{{MACRO}}` output expansion
+
+---
+
+### Interlude C: The Great Modularization (Apr 2)
+
+**Slide Group: 1–2 slides**
+
+> *"main.cob was approaching 2000 lines. It was time to break it apart."*
+
+This interlude covers the massive refactor that happened as part of the Epic 8 PR.
+
+#### What Happened
+
+The monolithic `main.cob` was decomposed into **27 copybooks**:
+
+**Working Storage (7 copybooks):**
+| File | Purpose |
+|------|---------|
+| `WS-CONSTANTS.cpy` | Named constants (max accounts=5, max jobs=25, file status codes) |
+| `WS-IO-CONTROL.cpy` | Menu choices, flags, file status variables, input pushback |
+| `WS-ACCOUNTS.cpy` | In-memory accounts table (5 slots) |
+| `WS-PROFILES.cpy` | User profiles, experience, education arrays |
+| `WS-CONNECTIONS.cpy` | Pending requests + established connections tables |
+| `WS-JOBS.cpy` | Job postings + application counters |
+| `WS-MESSAGES.cpy` | Message state, next-ID counter |
+
+**Procedure (13+ copybooks):**
+| File | Lines | Paragraphs |
+|------|-------|------------|
+| `DATALOAD.cpy` | 296 | 1100–1162, 9200–9275 (load all .DAT files) |
+| `AUTH.cpy` | 306 | 3000–4600 (login, create account, password validation) |
+| `PROFILE.cpy` | 751 | 7000–7100 (create/edit/view profiles) |
+| `SEARCH.cpy` | — | 5300 (job search menu) |
+| `JOBS.cpy` | 242 | 5350 (job posting/management) |
+| `BROWSEJOBS.cpy` | 189 | Browse job listings |
+| `APPLYJOB.cpy` | 156 | Apply to jobs |
+| `VIEWAPPS.cpy` | — | Application report |
+| `SENDMESSAGE.cpy` | 285 | 7800–7830 (send message flow) |
+| `VIEWMESSAGE.cpy` | — | 7840–7841 (view messages) |
+| `CONNMGMT.cpy` | — | Connection management |
+| `NETWORK.cpy` | — | 7700 (view network list) |
+| `SENDREQ.cpy` | 170 | Send connection requests |
+| `VIEWREQ.cpy` | 249 | View/accept/reject pending requests |
+| `SKILLS.cpy` | — | 6000 (skills menu) |
+| `JOBSIO.cpy` | — | Job file I/O operations |
+| `CONNWRITE.cpy` | — | Write connections to file |
+
+**After the refactor, `main.cob` dropped to ~388 lines** — purely orchestration:
+- Program identification
+- File definitions
+- `COPY` statements for all working storage
+- Main control flow (0000, 1000, 2000, 5000)
+- I/O utilities (8000, 8100)
+- Termination (9000)
+- `COPY` statements for all procedure copybooks
+
+#### Key Commits
+- `970e33c` — Extract named constants into `WS-CONSTANTS.cpy`
+- `fd827d8` — Extract working storage into 6 domain copybooks
+- `054268e` — Extract procedure paragraphs into 8 feature copybooks
+- `a408a31` — Update COPY statements to remove `_SRC` suffix
+- `063e92e` — Merge refactor/modularize branch
+
+#### What to Show on Slides
+- Before: `main.cob` at ~1950 lines (one giant file)
+- After: `main.cob` at ~388 lines + 27 copybooks
+- Diagram showing the copybook dependency tree
+- The paragraph numbering convention: `XYYY` where X=domain, YYY=function
+
+---
+
+### Milestone 8: Epic 8 — Send Messages (Apr 2)
+
+**Slide Group: 1–2 slides**
+
+#### What Was Built
+
+- **Messages Menu** — New main menu option 8 with submenu:
+  1. Send a New Message
+  2. View My Messages (placeholder for Epic 9)
+  3. Back to Main Menu
+- **Send Message Flow** — Multi-step validation:
+  1. Enter recipient username
+  2. Validate user exists
+  3. Validate user is an established connection
+  4. Enter message content (non-empty, max 200 chars)
+  5. Auto-generate timestamp (`YYYY-MM-DD HH:MM:SS`)
+  6. Write to `MESSAGES.DAT`
+- **New Data File** — `MESSAGES.DAT` (265 bytes per record: ID + sender + recipient + content + timestamp)
+
+#### Key Commits
+
+| Hash | Date | Description |
+|------|------|-------------|
+| `aa37823` | ~Mar 28 | Add Epic 8 PDF |
+| `eb139c1` | ~Mar 28 | Add MESSAGES.DAT file definition and SELECT clause |
+| `337eae6` | ~Mar 30 | Implement message sending functionality and add message menu |
+| `338e230` | ~Mar 31 | Add user existence check and message validation |
+| `f447b0a` | Apr 2 | **Merge PR #29** — Epic 8 into main (84 files, 5716 insertions) |
+
+#### Architectural Notes
+- New copybook: `SENDMESSAGE.cpy` (285 lines)
+- `WS-MESSAGES.cpy` for working storage
+- Main menu now has 9 options (the final form)
+- The modularization refactor was bundled into this same PR
+
+---
+
+## Part C — Epic 9 Deep Dive: View Messages
+
+**Slide Group: 3–4 slides — THE FEATURED EPIC**
+
+> This is the only section where we focus on a single epic in detail, breaking it down into stories and subtasks as discussed in Part A.
+
+### Epic 9 Overview
+
+**Epic:** Messaging — View Messages
+**Goal:** Enable users to view received messages in chronological order with proper sender attribution and recipient isolation.
+
+### Story Breakdown
+
+#### Story 1: View My Messages (Basic)
+**As a user, I want to view messages sent to me so that I can read communications from my connections.**
+
+**Subtasks:**
+1. Add paragraph `7840-VIEW-MESSAGES` to handle the "View My Messages" flow
+2. Open `MESSAGES.DAT` and scan for records where recipient = logged-in user
+3. Display each matching message with: sender, message body, timestamp
+4. Handle empty inbox: "You have no messages at this time."
+5. Handle missing `MESSAGES.DAT` file gracefully (file status 35)
+
+**Implementation Details:**
+- File: `src/VIEWMESSAGE.cpy`
+- Paragraphs: `7840-VIEW-MESSAGES`, `7841-DISPLAY-MESSAGES`
+- Pattern: Open file → read sequentially → filter by recipient → display → close
+- Uses `WS-MSG-FOUND` flag (renamed from `WS-VIEW-MSG-FOUND` per JIRA spec — commit `95dba46`)
+
+**Key commits:**
+| Hash | Date | Description |
+|------|------|-------------|
+| `6424661` | ~Apr 5 | Implement `7840-VIEW-MESSAGES` for Epic 9 Story 1 |
+| `95dba46` | ~Apr 5 | Rename `WS-VIEW-MSG-FOUND` to `WS-MSG-FOUND` per JIRA spec |
+| `de43d92` | ~Apr 6 | Implement message display formatting with header/footer |
+| `767d896` | ~Apr 7 | Update main.cob header comments and section documentation |
+
+#### Story 2: Message Ordering & Formatting
+**As a user, I want messages displayed in chronological order (oldest first) with clear formatting.**
+
+**Subtasks:**
+1. Messages displayed oldest-first (natural file order since appended chronologically)
+2. Each message formatted with header separator, sender line, content line, timestamp line
+3. Footer separator after all messages
+4. Message count or summary
+
+#### Story 3: Recipient Isolation
+**As a user, I want to only see messages addressed to me, not other users' messages.**
+
+**Subtasks:**
+1. Filter `MESSAGES.DAT` records by `MSG-RECIPIENT = WS-CURRENT-USER`
+2. Skip records where recipient doesn't match
+3. Verify isolation across multiple users in test fixtures
+
+#### Story 4: Persistence & Edge Cases
+**As a user, I want messages to persist and be viewable across sessions.**
+
+**Subtasks:**
+1. Messages survive program restart
+2. New messages from other sessions appear on next view
+3. Handle concurrent message state (send + view in same session)
+
+### Test Infrastructure Additions for Epic 9
+
+The Epic 9 PR introduced significant test infrastructure improvements:
+
+#### New Seed Directive: `@seed_message`
+```
+@seed_message sender=alice recipient=bob content="Hello Bob!" timestamp="2026-04-10 14:30:00"
+```
+
+**Implementation:** `tests/incollege_tests/preprocessing.py` — parses `@seed_message`, `tests/incollege_tests/persistence.py` — writes to `MESSAGES.DAT` with correct fixed-width format.
+
+#### New Seed Directive: `@seed_connection`
+```
+@seed_connection user_a=alice user_b=bob
+```
+Writes bidirectional connection records directly to `CONNECTIONS.DAT`.
+
+#### Test Fixtures Created (60+ files)
+Located in `tests/fixtures/view_message/`:
+
+| Test Category | What It Verifies |
+|--------------|------------------|
+| Empty inbox | "You have no messages" when no messages for user |
+| Single message | One message displays correctly with sender/content/timestamp |
+| Multiple messages (same sender) | Multiple messages from one person |
+| Multiple messages (different senders) | Messages from different connections |
+| Recipient isolation | User A cannot see User B's messages |
+| Persistence across restarts | Messages survive program exit/restart |
+| Send and view in same session | Send a message, then view it in same run |
+| No MESSAGES.DAT file | Graceful handling when file doesn't exist |
+| Message ordering | Oldest-first chronological display |
+
+### Epic 9 Final Merge
+
+| Hash | Date | Description |
+|------|------|-------------|
+| `3b3bb70` | Apr 8 | **Merge PR #35** — Impl/view messages (127 files, 3605 insertions) |
+| `46cc1c5` | Apr 8 | Test/view messages PR #36 (test branch merge) |
+
+### What to Show on Slides
+- The epic → story → subtask breakdown (visual hierarchy)
+- Code snippet from `VIEWMESSAGE.cpy` showing the read/filter/display pattern
+- A test fixture example showing `@seed_message` + expected output
+- Diagram of the message flow: send → MESSAGES.DAT → view (filtered by recipient)
+
+---
+
+## Part D — Architecture & Design Patterns
+
+**Slide Group: 2–3 slides**
+
+### 1. Data Architecture
+
+Seven persistent `.DAT` files, all fixed-width sequential:
+
+| File | Record Size | Max Records | Purpose |
+|------|------------|-------------|---------|
+| `ACCOUNTS.DAT` | 32 bytes | 5 | Username (20) + Password (12) |
+| `PROFILES.DAT` | 1,206 bytes | 5 | Full profile with experience/education |
+| `PENDING.DAT` | ~60 bytes | 50 | Pending connection requests |
+| `CONNECTIONS.DAT` | 40 bytes | 50 | Established connections (bidirectional) |
+| `JOBS.DAT` | ~500 bytes | 25 | Job postings with all fields |
+| `APPLICATIONS.DAT` | ~150 bytes | 25 | User job applications |
+| `MESSAGES.DAT` | 265 bytes | unlimited | All messages with timestamps |
+
+### 2. Program Flow Pattern
+
+Every interaction follows the same pattern:
+1. **Load** all `.DAT` files into in-memory tables at startup (`DATALOAD.cpy`)
+2. **Process** user input through menu-driven paragraph calls
+3. **Validate** at every boundary (password rules, field lengths, user existence, connection status)
+4. **Persist** changes to `.DAT` files immediately after state changes
+5. **Display** all output through `8000-WRITE-OUTPUT` (dual: screen + `OUTPUT.TXT`)
+6. **Read** all input through `8100-READ-INPUT` (from `INPUT.TXT`, with pushback support)
+
+### 3. Testing Pipeline
+
+```
+Test Fixture (.in.txt + .out.txt)
+        │
+        ▼
+┌─ Preprocessing ─────────────────────┐
+│  1. Parse @seed_user directives     │
+│  2. Parse @seed_connection          │
+│  3. Parse @seed_message             │
+│  4. Strip comments                  │
+│  5. Output: clean input + seed data │
+└──────────────────────────────────────┘
+        │
+        ▼
+┌─ Persistence Manager ──────────────┐
+│  Write seed data to .DAT files     │
+│  (fixed-width COBOL records)       │
+└─────────────────────────────────────┘
+        │
+        ▼
+┌─ COBOL Execution ──────────────────┐
+│  INPUT.TXT → bin/main → OUTPUT.TXT │
+└─────────────────────────────────────┘
+        │
+        ▼
+┌─ Output Comparison ────────────────┐
+│  1. Expand {{MACROS}} in expected  │
+│  2. Normalize timestamps           │
+│  3. Line-by-line diff              │
+│  4. Generate unified diff on fail  │
+└─────────────────────────────────────┘
+        │
+        ▼
+   PASS ✓ or FAIL ✗ (with diff)
+```
+
+### 4. Key COBOL Patterns Worth Highlighting
+
+- **Input Pushback** (`WS-INPUT-PUSHBACK-LINE`) — A mini lookahead buffer; `VIEWREQ` reads a line, decides it belongs to the caller, pushes it back. `8100-READ-INPUT` checks the pushback flag before reading the file.
+- **Recursive Read Loops** — `PERFORM <paragraph>` from within that paragraph, until EOF. Classic COBOL pattern for sequential file reading.
+- **In-Memory Tables with OCCURS** — Fixed-size arrays (5 accounts, 50 connections, 25 jobs) with counters. Linear search via `PERFORM VARYING`.
+- **Dual I/O Channel** — Every `DISPLAY` goes to both the screen and `OUTPUT.TXT` via `8000-WRITE-OUTPUT`. Every `ACCEPT` comes from `INPUT.TXT` via `8100-READ-INPUT`. This enables fully automated testing.
+- **File Status Checking** — Every file operation checks `WS-<FILE>-STATUS` against `WS-CONST-FS-OK` (00), `WS-CONST-FS-EOF` (10), `WS-CONST-FS-NOT-FOUND` (35). Graceful handling of missing files.
+
+---
+
+## Part E — Closing
+
+**Slide Group: 1–2 slides**
+
+### Summary Statistics
+
+| Metric | Value |
+|--------|-------|
+| Total Epics | 9 |
+| COBOL Source Lines | ~4,350+ across 28 files |
+| Test Fixtures | 150+ |
+| Python Test Infrastructure | ~2,500+ lines across 12 modules |
+| Data Files | 7 persistent .DAT files |
+| Git Commits (main) | ~65 |
+| PRs Merged | 15+ |
+| Semester Duration | Jan 21 – Apr 8, 2026 (11 weeks) |
+
+### The Story Arc (for the presenter to internalize)
+
+> We started with a blank COBOL file and a Dockerfile. By week 2, we had authentication and a test runner. By week 4, we had profiles, search, and 50+ tests. The menu kept growing — from 4 options to 7 to 9 — and every change broke dozens of test files. So we built macros. Then seed directives. Then a packaging system. Then a live debugging CLI. Meanwhile, the codebase grew from one 500-line file to 28 modular copybooks. By the end, we had a full LinkedIn-like networking platform with 150+ automated tests, a COBOL program that handles authentication, profiles, connections, jobs, and messaging — all built in 11 weeks by a team of five who rotated roles every sprint.
+
+---
+
+## Appendix — Diagrams
+
+### A. Application Feature Timeline
+
+```mermaid
+gantt
+    title InCollege Feature Timeline
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %d
+
+    section Epic 1
+    Authentication & Core       :e1, 2026-01-21, 2026-01-27
+
+    section Epic 2
+    User Profiles               :e2, 2026-01-27, 2026-02-01
+
+    section Epic 3
+    User Search                 :e3, 2026-02-03, 2026-02-12
+
+    section Epic 4
+    Connection Requests         :e4, 2026-02-12, 2026-02-19
+
+    section Epic 5
+    Accept/Reject & Network     :e5, 2026-02-19, 2026-03-05
+
+    section Epic 6
+    Job Posting                 :e6, 2026-03-05, 2026-03-12
+
+    section Epic 7
+    Job Browsing & Apply        :e7, 2026-03-12, 2026-03-25
+
+    section Epic 8
+    Send Messages               :e8, 2026-03-25, 2026-04-02
+
+    section Epic 9
+    View Messages               :e9, 2026-04-02, 2026-04-08
+
+    section Test Infra
+    Basic Test Runner           :t1, 2026-01-23, 2026-01-26
+    Comments & Dump Mode        :t2, 2026-03-01, 2026-03-05
+    Macros & Packaging          :t3, 2026-03-05, 2026-03-15
+    Seed Directives             :t4, 2026-03-15, 2026-03-25
+    Seed Connections/Messages   :t5, 2026-04-02, 2026-04-08
+```
+
+### B. Program Control Flow
+
+```mermaid
+flowchart TD
+    START([Program Start]) --> INIT[1000-INITIALIZE<br/>Load all .DAT files]
+    INIT --> BANNER[Display Welcome Banner]
+    BANNER --> PREMENU{Pre-Login Menu}
+
+    PREMENU -->|1. Login| LOGIN[3000-LOGIN-PROCESS<br/>Validate credentials]
+    PREMENU -->|2. Create Account| CREATE[4000-CREATE-ACCOUNT<br/>Password validation]
+    PREMENU -->|3. Exit| TERM[9000-TERMINATE]
+
+    LOGIN -->|Success| MAINMENU{Post-Login Menu<br/>9 Options}
+    LOGIN -->|Failure| LOGIN
+    CREATE --> PREMENU
+
+    MAINMENU -->|1| EDITPROF[7000-CREATE-EDIT-PROFILE]
+    MAINMENU -->|2| VIEWPROF[7100-VIEW-PROFILE]
+    MAINMENU -->|3| JOBMENU[5300-JOB-SEARCH-MENU]
+    MAINMENU -->|4| SEARCH[7500-FIND-SOMEONE]
+    MAINMENU -->|5| PENDING[7500-VIEW-PENDING-REQ]
+    MAINMENU -->|6| SKILLS[6000-SKILLS-MENU]
+    MAINMENU -->|7| NETWORK[7700-VIEW-NETWORK]
+    MAINMENU -->|8| MSGMENU[7800-MESSAGES-MENU]
+    MAINMENU -->|9. Logout| PREMENU
+
+    JOBMENU --> POSTJOB[Post Job]
+    JOBMENU --> BROWSE[Browse Jobs]
+    JOBMENU --> VIEWAPPS[View Applications]
+
+    MSGMENU --> SENDMSG[7810-SEND-MESSAGE]
+    MSGMENU --> VIEWMSG[7840-VIEW-MESSAGES]
+
+    EDITPROF --> MAINMENU
+    VIEWPROF --> MAINMENU
+    JOBMENU --> MAINMENU
+    SEARCH --> MAINMENU
+    PENDING --> MAINMENU
+    SKILLS --> MAINMENU
+    NETWORK --> MAINMENU
+    MSGMENU --> MAINMENU
+
+    TERM --> STOP([STOP RUN])
+```
+
+### C. Data Architecture
+
+```mermaid
+erDiagram
+    ACCOUNTS {
+        string username PK "20 chars"
+        string password "12 chars"
+    }
+    PROFILES {
+        string username PK "20 chars"
+        string has_profile "1 char (Y/N)"
+        string first_name "30 chars"
+        string last_name "30 chars"
+        string university "50 chars"
+        string major "50 chars"
+        string grad_year "4 chars"
+        string about_me "200 chars"
+        int exp_count "1 char (0-3)"
+        int edu_count "1 char (0-3)"
+    }
+    CONNECTIONS {
+        string user_a "20 chars"
+        string user_b "20 chars"
+    }
+    PENDING {
+        string sender "20 chars"
+        string recipient "20 chars"
+        string status "1 char (P)"
+    }
+    JOBS {
+        string job_id "5 chars"
+        string poster "20 chars"
+        string title "50 chars"
+        string description "200 chars"
+        string employer "50 chars"
+        string location "50 chars"
+        string salary "20 chars"
+    }
+    APPLICATIONS {
+        string username "20 chars"
+        string job_id "5 chars"
+        string title "50 chars"
+        string employer "50 chars"
+        string location "50 chars"
+    }
+    MESSAGES {
+        string msg_id "5 chars"
+        string sender "20 chars"
+        string recipient "20 chars"
+        string content "200 chars"
+        string timestamp "20 chars"
+    }
+
+    ACCOUNTS ||--o| PROFILES : "has"
+    ACCOUNTS ||--o{ CONNECTIONS : "participates in"
+    ACCOUNTS ||--o{ PENDING : "sends/receives"
+    ACCOUNTS ||--o{ JOBS : "posts"
+    ACCOUNTS ||--o{ APPLICATIONS : "submits"
+    ACCOUNTS ||--o{ MESSAGES : "sends/receives"
+```
+
+### D. Test Pipeline Architecture
+
+```mermaid
+flowchart LR
+    subgraph Input["Test Input (.in.txt)"]
+        SEED["@seed_user directives"]
+        CONN["@seed_connection directives"]
+        MSG["@seed_message directives"]
+        BODY["Test keypresses + # comments"]
+    end
+
+    subgraph Preprocessing
+        PARSE["Parse seed directives"]
+        STRIP["Strip comments"]
+        PERSIST["PersistenceManager<br/>Write .DAT files"]
+    end
+
+    subgraph Execution
+        INPUT_TXT["INPUT.TXT"]
+        COBOL["bin/main<br/>(COBOL binary)"]
+        OUTPUT_TXT["OUTPUT.TXT"]
+    end
+
+    subgraph Comparison["Output Comparison"]
+        EXPECTED[".out.txt<br/>(with {{MACROS}})"]
+        EXPAND["Expand macros<br/>from menus.yml"]
+        NORMALIZE["Normalize timestamps"]
+        DIFF["Line-by-line diff"]
+    end
+
+    SEED --> PARSE
+    CONN --> PARSE
+    MSG --> PARSE
+    BODY --> STRIP
+    PARSE --> PERSIST
+    STRIP --> INPUT_TXT
+    PERSIST --> COBOL
+    INPUT_TXT --> COBOL
+    COBOL --> OUTPUT_TXT
+
+    EXPECTED --> EXPAND
+    EXPAND --> NORMALIZE
+    OUTPUT_TXT --> NORMALIZE
+    NORMALIZE --> DIFF
+    DIFF --> RESULT{{"✓ PASS / ✗ FAIL"}}
+```
+
+---
+
+## Slide Delegation Notes
+
+Each team member should choose an area of expertise from these groups:
+
+| Area | Covers | Suggested Slides |
+|------|--------|-----------------|
+| **Agile Process** | Part A + role rotation + branching strategy | 2–3 slides |
+| **Core Features** (Epics 1–3) | Milestones 1–3 + early testing | 3–4 slides |
+| **Networking & Jobs** (Epics 4–7) | Milestones 4–7 | 3–4 slides |
+| **Test Infrastructure** | Interludes A + B + test runner evolution | 3–4 slides |
+| **Messaging & Modularization** (Epics 8–9) | Milestone 8 + Interlude C + Part C deep dive | 3–4 slides |
+| **Architecture** | Part D + diagrams | 2–3 slides |
+
+Total estimated slides: **18–22** (aiming for ~20 minute presentation at ~1 min/slide)
