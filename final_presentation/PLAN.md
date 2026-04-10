@@ -28,8 +28,6 @@
 
 ## Part A — How We Work: Agile at a Glance
 
-**Slide Group: 2–3 slides**
-
 ### Content
 
 1. **Epics, Stories, Subtasks** — Define the hierarchy used throughout the semester.
@@ -73,8 +71,6 @@ This is the heart of the presentation. Each milestone tells what was built, cite
 ---
 
 ### Milestone 1: Project Bootstrap & Epic 1 — Authentication (Jan 21 – Jan 27)
-
-**Slide Group: 2–3 slides**
 
 #### What Was Built
 
@@ -123,8 +119,6 @@ tests/fixtures/       (18 test pairs)
 
 ### Milestone 2: Epic 2 — User Profiles (Feb 1)
 
-**Slide Group: 1–2 slides**
-
 #### What Was Built
 
 - **Profile Creation** — Required fields: first name, last name, university, major, graduation year
@@ -157,7 +151,6 @@ tests/fixtures/       (18 test pairs)
 
 ### Milestone 3: Epic 3 — User Search & Profile Viewing (Feb 12)
 
-**Slide Group: 1–2 slides**
 
 #### What Was Built
 
@@ -178,14 +171,12 @@ tests/fixtures/       (18 test pairs)
 
 #### Testing Note
 - 30+ new test fixtures: profile viewing (long text, blanks, persistence), search (found, not found, after edit, EOF)
-- `AGENTS.md` added (621 lines) — documented project guidelines and COBOL standards for AI-assisted development
 - `JIRA_TASK_MAPPING.md` added — maps test fixtures to JIRA stories
 
 ---
 
 ### Interlude A: The Test Runner (Jan 23 – Feb 19)
 
-**Slide Group: 2–3 slides — THIS IS A MAJOR DIFFERENTIATOR**
 
 > *"The tests were becoming hard to manage manually. So we built a real test runner."*
 
@@ -239,7 +230,6 @@ This interlude explains how the test infrastructure evolved from a simple script
 
 ### Milestone 4: Epic 4 — Connection Requests (Feb 19)
 
-**Slide Group: 1–2 slides**
 
 #### What Was Built
 
@@ -274,7 +264,6 @@ This interlude explains how the test infrastructure evolved from a simple script
 
 ### Milestone 5: Epic 5 — Accept/Reject Connections & Network (Mar 5)
 
-**Slide Group: 1–2 slides**
 
 #### What Was Built
 
@@ -302,7 +291,6 @@ This interlude explains how the test infrastructure evolved from a simple script
 
 ### Interlude B: Macros, Seed Directives & Packaging (Mar 5 – Mar 25)
 
-**Slide Group: 2–3 slides — ANOTHER MAJOR DIFFERENTIATOR**
 
 > *"Every time the menu changed, we had to update 100+ test files. There had to be a better way."*
 
@@ -387,7 +375,6 @@ The `PersistenceManager` writes directly to `.DAT` files before execution — no
 
 ### Milestone 6: Epic 6 — Job Posting (Mar 12)
 
-**Slide Group: 1–2 slides**
 
 #### What Was Built
 
@@ -428,7 +415,6 @@ The `PersistenceManager` writes directly to `.DAT` files before execution — no
 
 ### Milestone 7: Epic 7 — Job Browsing & Applications (Mar 25)
 
-**Slide Group: 1–2 slides**
 
 #### What Was Built
 
@@ -450,9 +436,6 @@ The `PersistenceManager` writes directly to `.DAT` files before execution — no
 
 #### Architectural Notes
 - New copybooks: `BROWSEJOBS_SRC.cpy` (189 lines), `APPLYJOB_SRC.cpy` (156 lines), `VIEWAPPS_SRC.cpy`, `JOBSIO_SRC.cpy`
-- `.claude/agents/cobol-master.md` added — AI agent specialized in COBOL programming
-- `.claude/agents/test-writer.md` added — AI agent for generating test fixtures
-
 #### Testing Note
 - 40+ test fixtures covering: browse list, job details, apply, duplicate application, report generation, no jobs available, invalid selections
 - Tests now extensively use `@seed_user` directives + `{{MACRO}}` output expansion
@@ -461,7 +444,6 @@ The `PersistenceManager` writes directly to `.DAT` files before execution — no
 
 ### Interlude C: The Great Modularization (Apr 2)
 
-**Slide Group: 1–2 slides**
 
 > *"main.cob was approaching 2000 lines. It was time to break it apart."*
 
@@ -529,7 +511,6 @@ The monolithic `main.cob` was decomposed into **27 copybooks**:
 
 ### Milestone 8: Epic 8 — Send Messages (Apr 2)
 
-**Slide Group: 1–2 slides**
 
 #### What Was Built
 
@@ -566,7 +547,6 @@ The monolithic `main.cob` was decomposed into **27 copybooks**:
 
 ## Part C — Epic 9 Deep Dive: View Messages
 
-**Slide Group: 3–4 slides — THE FEATURED EPIC**
 
 > This is the only section where we focus on a single epic in detail, breaking it down into stories and subtasks as discussed in Part A.
 
@@ -675,7 +655,6 @@ Located in `tests/fixtures/view_message/`:
 
 ## Part D — Architecture & Design Patterns
 
-**Slide Group: 2–3 slides**
 
 ### 1. Data Architecture
 
@@ -750,7 +729,6 @@ Test Fixture (.in.txt + .out.txt)
 
 ## Part E — Closing
 
-**Slide Group: 1–2 slides**
 
 ### Summary Statistics
 
@@ -975,13 +953,11 @@ flowchart LR
 
 Each team member should choose an area of expertise from these groups:
 
-| Area | Covers | Suggested Slides |
-|------|--------|-----------------|
-| **Agile Process** | Part A + role rotation + branching strategy | 2–3 slides |
-| **Core Features** (Epics 1–3) | Milestones 1–3 + early testing | 3–4 slides |
-| **Networking & Jobs** (Epics 4–7) | Milestones 4–7 | 3–4 slides |
-| **Test Infrastructure** | Interludes A + B + test runner evolution | 3–4 slides |
-| **Messaging & Modularization** (Epics 8–9) | Milestone 8 + Interlude C + Part C deep dive | 3–4 slides |
-| **Architecture** | Part D + diagrams | 2–3 slides |
-
-Total estimated slides: **18–22** (aiming for ~20 minute presentation at ~1 min/slide)
+| Area | Covers |
+|------|--------|
+| **Agile Process** | Part A + role rotation + branching strategy |
+| **Core Features** (Epics 1–3) | Milestones 1–3 + early testing |
+| **Networking & Jobs** (Epics 4–7) | Milestones 4–7 |
+| **Test Infrastructure** | Interludes A + B + test runner evolution |
+| **Messaging & Modularization** (Epics 8–9) | Milestone 8 + Interlude C + Part C deep dive |
+| **Architecture** | Part D + diagrams |
