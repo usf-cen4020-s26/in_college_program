@@ -23,7 +23,7 @@ export function Slide02Team(_props: SlideProps) {
         style={{
           margin: 0,
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(40px, 5.25em, 84px)',
+          fontSize: 'clamp(36px, 4em, 64px)',
           fontWeight: 700,
           letterSpacing: '-0.025em',
           lineHeight: 1.02,

@@ -41,7 +41,7 @@ export function StatCard({ value, label, sublabel, tone = 'brand' }: StatCardPro
         style={{
           fontFamily: 'var(--font-mono)',
           fontWeight: 700,
-          fontSize: 'clamp(36px, 5.5em, 88px)',
+          fontSize: 'clamp(40px, 4.5em, 72px)',
           lineHeight: 1,
           letterSpacing: '-0.02em',
           fontVariantNumeric: 'tabular-nums',

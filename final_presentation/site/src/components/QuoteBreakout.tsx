@@ -63,7 +63,7 @@ export function QuoteBreakout({ kicker, quote, subtitle }: QuoteBreakoutProps) {
           style={{
             margin: 0,
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(28px, 4em, 64px)',
+            fontSize: 'clamp(28px, 3.5em, 52px)',
             fontWeight: 400,
             fontStyle: 'italic',
             lineHeight: 1.3,

@@ -21,7 +21,7 @@ export function Slide39M7Browse({ step }: SlideProps) {
         style={{
           margin: 0,
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(44px, 5em, 80px)',
+          fontSize: 'clamp(36px, 4em, 64px)',
           fontWeight: 700,
           letterSpacing: '-0.02em',
           color: 'var(--color-text-primary)',

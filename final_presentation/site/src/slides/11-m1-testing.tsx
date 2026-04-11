@@ -19,7 +19,7 @@ export function Slide11M1Testing({ step }: SlideProps) {
         style={{
           margin: 0,
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(48px, 5.5em, 88px)',
+          fontSize: 'clamp(36px, 4em, 64px)',
           fontWeight: 700,
           letterSpacing: '-0.02em',
           color: 'var(--color-text-primary)',

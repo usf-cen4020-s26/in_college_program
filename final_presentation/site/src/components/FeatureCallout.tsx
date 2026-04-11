@@ -8,37 +8,35 @@ interface FeatureCalloutProps {
 }
 
 /**
- * Labeled feature box used on the security and feature slides. Renders
- * a bg-panel card with an icon + title row, a muted detail paragraph,
- * and a small mono citation (e.g. `src/AUTH.cpy:230`).
+ * Labeled feature box used on the security and feature slides.
  */
 export function FeatureCallout({ title, detail, citation, icon }: FeatureCalloutProps) {
   return (
     <div
       style={{
-        padding: '26px 28px',
-        borderRadius: 18,
+        padding: 'clamp(12px, 1.25em, 22px) clamp(14px, 1.5em, 24px)',
+        borderRadius: 14,
         background: 'var(--color-bg-panel)',
-        border: '1px solid rgba(112,181,249,0.12)',
+        border: '1px solid rgba(133,197,255,0.12)',
         boxShadow:
           '0 24px 48px -28px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.04)',
         display: 'flex',
         flexDirection: 'column',
-        gap: 14,
+        gap: 'clamp(6px, 0.5em, 10px)',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 0.75em, 12px)' }}>
         {icon && (
           <div
             style={{
-              width: 36,
-              height: 36,
+              width: 'clamp(24px, 2em, 32px)',
+              height: 'clamp(24px, 2em, 32px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: 10,
+              borderRadius: 8,
               background: 'rgba(10,102,194,0.22)',
-              border: '1px solid rgba(112,181,249,0.28)',
+              border: '1px solid rgba(133,197,255,0.28)',
               color: 'var(--color-brand-accent)',
               flexShrink: 0,
             }}
@@ -50,7 +48,7 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
           style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 700,
-            fontSize: 22,
+            fontSize: 'clamp(14px, 1.25em, 20px)',
             letterSpacing: '-0.01em',
             color: 'var(--color-text-primary)',
             lineHeight: 1.2,
@@ -64,8 +62,8 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
         style={{
           margin: 0,
           fontFamily: 'var(--font-body)',
-          fontSize: 15,
-          lineHeight: 1.55,
+          fontSize: 'clamp(11px, 0.9em, 15px)',
+          lineHeight: 1.5,
           color: 'var(--color-text-muted)',
         }}
       >
@@ -76,7 +74,7 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
         <div
           style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 12,
+            fontSize: 'clamp(8px, 0.625em, 10px)',
             color: 'var(--color-text-dim)',
             letterSpacing: '0.01em',
           }}

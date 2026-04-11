@@ -55,17 +55,17 @@ export function SlideFrame({
       />
 
       {/* Content column */}
-      <div className={paddingClass} style={{ gap: 'var(--spacing-gap)' }}>
-        {/* Top rail */}
+      <div className={paddingClass} style={{ gap: 'clamp(8px, 1em, 20px)' }}>
+        {/* Top rail — compact */}
         {(act || showWordmark) && (
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full items-center justify-between" style={{ flexShrink: 0 }}>
             {act ? (
               <span
                 className="font-medium uppercase"
                 style={{
                   color: 'var(--color-text-dim)',
-                  fontSize: 'clamp(10px, 0.875em, 14px)',
-                  letterSpacing: '0.24em',
+                  fontSize: 'clamp(8px, 0.75em, 12px)',
+                  letterSpacing: '0.2em',
                   fontFamily: 'var(--font-body)',
                 }}
               >
@@ -74,7 +74,7 @@ export function SlideFrame({
             ) : (
               <span />
             )}
-            {showWordmark ? <Wordmark size={24} /> : <span />}
+            {showWordmark ? <Wordmark size={20} /> : <span />}
           </div>
         )}
 
@@ -83,11 +83,12 @@ export function SlideFrame({
           <div
             style={{
               color: 'var(--color-brand-accent)',
-              fontSize: 'clamp(12px, 1.125em, 18px)',
+              fontSize: 'clamp(10px, 0.875em, 14px)',
               fontFamily: 'var(--font-body)',
-              letterSpacing: '0.18em',
+              letterSpacing: '0.16em',
               textTransform: 'uppercase',
               fontWeight: 600,
+              flexShrink: 0,
             }}
           >
             {kicker}
@@ -97,7 +98,7 @@ export function SlideFrame({
         {/* Body */}
         <div
           className="flex min-h-0 flex-1 flex-col"
-          style={{ gap: 'var(--spacing-gap)' }}
+          style={{ gap: 'clamp(8px, 1em, 20px)', overflow: 'hidden' }}
         >
           {children}
         </div>

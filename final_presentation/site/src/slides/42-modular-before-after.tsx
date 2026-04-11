@@ -36,7 +36,7 @@ export function Slide42ModularBA({ step }: SlideProps) {
         style={{
           margin: 0,
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(40px, 5em, 80px)',
+          fontSize: 'clamp(36px, 4em, 64px)',
           fontWeight: 700,
           letterSpacing: '-0.02em',
           color: 'var(--color-text-primary)',

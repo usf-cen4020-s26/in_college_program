@@ -84,7 +84,7 @@ export function SectionTitle({
           style={{
             margin: 0,
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(48px, 7.5em, 130px)',
+            fontSize: 'clamp(48px, 6.5em, 100px)',
             fontWeight: 700,
             letterSpacing: '-0.03em',
             lineHeight: 1,

@@ -1,21 +1,18 @@
+import { useEffect, useState } from 'react';
 import type { SlideProps } from './types';
 import { SlideFrame } from '../components/SlideFrame';
-import { Player } from '@remotion/player';
-import { StatCounter } from '../remotion/compositions';
-
-const FPS = 30;
-const DURATION = 120;
 
 const STATS = [
-  { value: 9, label: 'Epics', suffix: '' },
-  { value: 28, label: 'Source Files', suffix: '' },
-  { value: 4350, label: 'Lines of COBOL', suffix: '+' },
-  { value: 195, label: 'Test Fixtures', suffix: '' },
-  { value: 7, label: '.DAT Files', suffix: '' },
+  { to: 9, label: 'Epics', suffix: '' },
+  { to: 28, label: 'Source Files', suffix: '' },
+  { to: 4350, label: 'Lines of COBOL', suffix: '+' },
+  { to: 195, label: 'Test Fixtures', suffix: '' },
+  { to: 7, label: '.DAT Files', suffix: '' },
 ] as const;
 
 /**
- * Slide 6 — By the Numbers. Five animated stat counters.
+ * Slide 6 — By the Numbers. Five animated stat counters using
+ * a lightweight CSS/JS counter instead of heavy Remotion Player.
  */
 export function Slide06Numbers(_props: SlideProps) {
   return (
@@ -29,6 +26,7 @@ export function Slide06Numbers(_props: SlideProps) {
           letterSpacing: '-0.02em',
           color: 'var(--color-text-primary)',
           textAlign: 'center',
+          flexShrink: 0,
         }}
       >
         By the <span className="text-gradient">Numbers.</span>
@@ -40,14 +38,16 @@ export function Slide06Numbers(_props: SlideProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          minHeight: 0,
         }}
       >
         <div
           style={{
             display: 'flex',
-            gap: 'clamp(12px, 2em, 40px)',
+            gap: 'clamp(8px, 1em, 20px)',
             flexWrap: 'wrap',
             justifyContent: 'center',
+            alignItems: 'stretch',
           }}
         >
           {STATS.map((stat, i) => (
@@ -57,46 +57,26 @@ export function Slide06Numbers(_props: SlideProps) {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 8,
-                padding: 'clamp(16px, 1.5em, 28px)',
-                borderRadius: 16,
+                justifyContent: 'center',
+                gap: 6,
+                padding: 'clamp(12px, 1.25em, 24px) clamp(16px, 1.5em, 28px)',
+                borderRadius: 14,
                 background: 'var(--color-bg-card)',
                 border: '1px solid rgba(133,197,255,0.1)',
-                minWidth: 'clamp(120px, 10em, 180px)',
-                animation: `s01-rise 800ms cubic-bezier(0.16,1,0.3,1) both ${200 + i * 100}ms`,
+                minWidth: 'clamp(90px, 8em, 150px)',
+                animation: `s06-rise 800ms cubic-bezier(0.16,1,0.3,1) both ${200 + i * 100}ms`,
               }}
             >
-              <div
-                style={{
-                  width: 'clamp(100px, 8em, 160px)',
-                  height: 'clamp(48px, 4em, 72px)',
-                }}
-              >
-                <Player
-                  component={StatCounter}
-                  inputProps={{
-                    to: stat.value,
-                    suffix: stat.suffix,
-                  }}
-                  durationInFrames={DURATION}
-                  fps={FPS}
-                  compositionWidth={400}
-                  compositionHeight={160}
-                  autoPlay
-                  loop={false}
-                  controls={false}
-                  clickToPlay={false}
-                  style={{ width: '100%', height: '100%' }}
-                />
-              </div>
+              <AnimatedNumber to={stat.to} suffix={stat.suffix} delay={300 + i * 100} />
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(10px, 0.8em, 14px)',
+                  fontSize: 'clamp(8px, 0.625em, 11px)',
                   fontWeight: 600,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                   color: 'var(--color-text-dim)',
+                  textAlign: 'center',
                 }}
               >
                 {stat.label}
@@ -107,11 +87,52 @@ export function Slide06Numbers(_props: SlideProps) {
       </div>
 
       <style>{`
-        @keyframes s01-rise {
+        @keyframes s06-rise {
           0% { opacity: 0; transform: translateY(14px); }
           100% { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </SlideFrame>
+  );
+}
+
+function AnimatedNumber({ to, suffix, delay }: { to: number; suffix: string; delay: number }) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    const start = performance.now();
+    const duration = 1200;
+    let raf: number;
+
+    const tick = (now: number) => {
+      const elapsed = now - start - delay;
+      if (elapsed < 0) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      setValue(Math.round(eased * to));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [to, delay]);
+
+  return (
+    <div
+      className="text-gradient"
+      style={{
+        fontFamily: 'var(--font-mono)',
+        fontWeight: 700,
+        fontSize: 'clamp(36px, 4.5em, 72px)',
+        lineHeight: 1,
+        letterSpacing: '-0.02em',
+        fontVariantNumeric: 'tabular-nums',
+      }}
+    >
+      {value.toLocaleString('en-US')}{suffix}
+    </div>
   );
 }

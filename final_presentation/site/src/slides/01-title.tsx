@@ -58,7 +58,7 @@ export function Slide01Title(_props: SlideProps) {
           style={{
             margin: 0,
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(80px, 13.75em, 220px)',
+            fontSize: 'clamp(60px, 10em, 160px)',
             fontWeight: 700,
             letterSpacing: '-0.045em',
             lineHeight: 0.95,

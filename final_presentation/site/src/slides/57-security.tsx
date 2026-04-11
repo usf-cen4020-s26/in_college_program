@@ -13,7 +13,7 @@ export function Slide57Security({ step }: SlideProps) {
         style={{
           margin: 0,
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(48px, 5.5em, 88px)',
+          fontSize: 'clamp(28px, 3.5em, 56px)',
           fontWeight: 700,
           letterSpacing: '-0.02em',
           lineHeight: 1.05,
@@ -27,12 +27,12 @@ export function Slide57Security({ step }: SlideProps) {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          gap: 16,
+          gap: 10,
           justifyContent: 'center',
         }}
       >
         <StepReveal currentStep={step} visibleAt={0}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <FeatureCallout
               title="Password policy"
               detail="8-12 chars, requires uppercase, digit, and special character. Rejects weak passwords instantly."
@@ -52,7 +52,7 @@ export function Slide57Security({ step }: SlideProps) {
         </StepReveal>
 
         <StepReveal currentStep={step} visibleAt={1}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <FeatureCallout
               title="File status checks"
               detail="Every FILE OPEN checks FILE STATUS before proceeding. Graceful handling of missing or corrupt data."

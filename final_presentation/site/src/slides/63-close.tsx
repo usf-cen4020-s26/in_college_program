@@ -54,7 +54,7 @@ export function Slide63Close(_props: SlideProps) {
           style={{
             margin: 0,
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(72px, 10em, 180px)',
+            fontSize: 'clamp(56px, 8em, 130px)',
             fontWeight: 700,
             letterSpacing: '-0.04em',
             lineHeight: 1,
