@@ -14,7 +14,7 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
   return (
     <div
       style={{
-        padding: 'clamp(12px, 1.25em, 22px) clamp(14px, 1.5em, 24px)',
+        padding: 'clamp(16px, 1.5em, 28px) clamp(18px, 1.75em, 32px)',
         borderRadius: 14,
         background: 'var(--color-bg-panel)',
         border: '1px solid rgba(133,197,255,0.12)',
@@ -29,8 +29,8 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
         {icon && (
           <div
             style={{
-              width: 'clamp(24px, 2em, 32px)',
-              height: 'clamp(24px, 2em, 32px)',
+              width: 'clamp(28px, 2.5em, 40px)',
+              height: 'clamp(28px, 2.5em, 40px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -48,7 +48,7 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
           style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 700,
-            fontSize: 'clamp(14px, 1.25em, 20px)',
+            fontSize: 'clamp(18px, 1.5em, 26px)',
             letterSpacing: '-0.01em',
             color: 'var(--color-text-primary)',
             lineHeight: 1.2,
@@ -62,7 +62,7 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
         style={{
           margin: 0,
           fontFamily: 'var(--font-body)',
-          fontSize: 'clamp(11px, 0.9em, 15px)',
+          fontSize: 'clamp(14px, 1.1em, 19px)',
           lineHeight: 1.5,
           color: 'var(--color-text-muted)',
         }}
@@ -74,7 +74,7 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
         <div
           style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 'clamp(10px, 0.75em, 12px)',
+            fontSize: 'clamp(11px, 0.85em, 14px)',
             color: 'var(--color-text-dim)',
             letterSpacing: '0.01em',
           }}

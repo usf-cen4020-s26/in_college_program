@@ -131,7 +131,7 @@ function HierarchyCard({
         <div
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: 'clamp(12px, 1em, 18px)',
+            fontSize: 'clamp(14px, 1.15em, 20px)',
             color: 'var(--color-text-muted)',
             lineHeight: 1.4,
           }}
@@ -141,7 +141,7 @@ function HierarchyCard({
         <div
           style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 'clamp(10px, 0.75em, 13px)',
+            fontSize: 'clamp(12px, 0.9em, 15px)',
             color: 'var(--color-text-dim)',
             marginTop: 6,
             fontStyle: 'italic',

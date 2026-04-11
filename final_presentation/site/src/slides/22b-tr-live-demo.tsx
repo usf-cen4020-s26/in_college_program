@@ -2,19 +2,20 @@ import { Player } from '@remotion/player';
 import type { SlideProps } from './types';
 import { SlideFrame } from '../components/SlideFrame';
 import { Terminal } from '../remotion/compositions';
-import { messagingArcScript } from '../data/terminals/messaging-arc';
+import { liveCLIDemoScript } from '../data/terminals/live-cli-demo';
 import { scriptDurationFrames } from '../lib/terminalDuration';
 
 const FPS = 30;
-const SPEED_FACTOR = 0.3;
-const DURATION = Math.ceil(scriptDurationFrames(messagingArcScript, FPS, 60) / SPEED_FACTOR);
+const SPEED_FACTOR = 0.4;
+const DURATION = Math.ceil(scriptDurationFrames(liveCLIDemoScript, FPS, 60) / SPEED_FACTOR);
 
 /**
- * Slide 53 — Terminal: Full Messaging Arc.
+ * Slide 22b — Live CLI Demo.
+ * Full-screen terminal showing the test runner's interactive mode.
  */
-export function Slide53Terminal(_props: SlideProps) {
+export function Slide22bTRLiveDemo(_props: SlideProps) {
   return (
-    <SlideFrame act="PART C · EPIC 9 DEEP DIVE" kicker="LIVE DEMO">
+    <SlideFrame act="INTERLUDE" kicker="TEST RUNNER · LIVE DEMO">
       <h1
         style={{
           margin: 0,
@@ -25,7 +26,7 @@ export function Slide53Terminal(_props: SlideProps) {
           lineHeight: 1.05,
         }}
       >
-        <span className="text-gradient">The Full Arc</span>
+        <span className="text-gradient">Live Mode</span> in Action
       </h1>
 
       <div
@@ -41,9 +42,9 @@ export function Slide53Terminal(_props: SlideProps) {
         <Player
           component={Terminal}
           inputProps={{
-            script: messagingArcScript,
-            promptLabel: 'incollege $ ',
-            title: 'messaging — full arc',
+            script: liveCLIDemoScript,
+            promptLabel: '$ ',
+            title: 'incollege-test — live mode',
             accent: 'brand',
             speedFactor: SPEED_FACTOR,
           }}

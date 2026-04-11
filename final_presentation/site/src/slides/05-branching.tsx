@@ -98,13 +98,13 @@ function BranchBox({
         border: `1px solid ${color}33`,
         borderTop: `3px solid ${color}`,
         textAlign: 'center',
-        minWidth: 'clamp(140px, 12em, 220px)',
+        minWidth: 'clamp(160px, 14em, 260px)',
       }}
     >
       <div
         style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: 'clamp(14px, 1.25em, 22px)',
+          fontSize: 'clamp(18px, 1.5em, 26px)',
           fontWeight: 600,
           color,
           marginBottom: 8,
@@ -115,7 +115,7 @@ function BranchBox({
       <div
         style={{
           fontFamily: 'var(--font-body)',
-          fontSize: 'clamp(10px, 0.8em, 14px)',
+          fontSize: 'clamp(12px, 1em, 16px)',
           color: 'var(--color-text-dim)',
         }}
       >

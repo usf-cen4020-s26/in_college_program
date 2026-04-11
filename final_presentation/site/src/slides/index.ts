@@ -31,6 +31,7 @@ import { Slide19TRBirth } from './19-tr-birth';
 import { Slide20TRFileIO } from './20-tr-fileio';
 import { Slide21TRComments } from './21-tr-comments';
 import { Slide22TRLive } from './22-tr-live';
+import { Slide22bTRLiveDemo } from './22b-tr-live-demo';
 
 // Part B — Milestone 4: Connection Requests
 import { Slide23M4Title } from './23-m4-title';
@@ -125,6 +126,7 @@ export const SLIDES: readonly SlideEntry[] = [
   { id: '20-tr-fileio', title: 'Phase 2: File I/O', act: 'INTERLUDE', speaker: 'Trevor', component: Slide20TRFileIO, steps: 2 },
   { id: '21-tr-comments', title: 'Comments & Debug', act: 'INTERLUDE', speaker: 'Trevor', component: Slide21TRComments, steps: 2 },
   { id: '22-tr-live', title: 'Live CLI & Packaging', act: 'INTERLUDE', speaker: 'Trevor', component: Slide22TRLive, steps: 2 },
+  { id: '22b-tr-demo', title: 'Live Mode Demo', act: 'INTERLUDE', speaker: 'Trevor', component: Slide22bTRLiveDemo },
 
   // ── Part B · Milestone 4: Connection Requests ────────────────────────
   { id: '23-m4-title', title: 'Connection Requests', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Olga', component: Slide23M4Title },

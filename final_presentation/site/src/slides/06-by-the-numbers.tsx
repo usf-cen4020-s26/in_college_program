@@ -59,11 +59,11 @@ export function Slide06Numbers(_props: SlideProps) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 6,
-                padding: 'clamp(12px, 1.25em, 24px) clamp(16px, 1.5em, 28px)',
-                borderRadius: 14,
+                padding: 'clamp(16px, 1.75em, 32px) clamp(20px, 2em, 36px)',
+                borderRadius: 16,
                 background: 'var(--color-bg-card)',
                 border: '1px solid rgba(133,197,255,0.1)',
-                minWidth: 'clamp(90px, 8em, 150px)',
+                minWidth: 'clamp(120px, 10em, 200px)',
                 animation: `s06-rise 800ms cubic-bezier(0.16,1,0.3,1) both ${200 + i * 100}ms`,
               }}
             >
@@ -71,7 +71,7 @@ export function Slide06Numbers(_props: SlideProps) {
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(10px, 0.8em, 13px)',
+                  fontSize: 'clamp(12px, 1em, 16px)',
                   fontWeight: 600,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',

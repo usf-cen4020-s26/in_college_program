@@ -29,6 +29,7 @@ export function Slide33WhySeeds(_props: SlideProps) {
           gap: 'clamp(16px, 1.5em, 28px)',
           flex: 1,
           alignItems: 'start',
+          alignContent: 'center',
         }}
       >
         <FeatureCallout

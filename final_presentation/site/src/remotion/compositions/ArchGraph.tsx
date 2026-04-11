@@ -22,8 +22,8 @@ export type ArchGraphProps = {
 
 const VIEWBOX = { w: 1920, h: 1080 };
 const CENTER = { x: VIEWBOX.w / 2, y: VIEWBOX.h / 2 };
-const CENTER_RADIUS = 80;
-const NODE_RADIUS = 32;
+const CENTER_RADIUS = 70;
+const NODE_RADIUS = 22;
 const STAGGER_FRAMES = 6;
 
 /**
@@ -45,7 +45,7 @@ export function ArchGraph({ center, clusters }: ArchGraphProps) {
     // Center of the sector this cluster occupies.
     const sectorCenter = clusterIdx * sectorAngle - Math.PI / 2;
     // Radius of the ring this cluster's nodes sit on.
-    const ringRadius = Math.min(VIEWBOX.w, VIEWBOX.h) * 0.33;
+    const ringRadius = Math.min(VIEWBOX.w, VIEWBOX.h) * 0.38;
 
     // Spread nodes across the sector. Keep them bunched so clusters
     // remain visually distinct.
@@ -64,7 +64,7 @@ export function ArchGraph({ center, clusters }: ArchGraphProps) {
     });
 
     // Label sits a little further out than the ring, along the sector center.
-    const labelRadius = ringRadius + 140;
+    const labelRadius = ringRadius + 100;
     const labelX = CENTER.x + Math.cos(sectorCenter) * labelRadius;
     const labelY = CENTER.y + Math.sin(sectorCenter) * labelRadius;
 
@@ -213,12 +213,12 @@ export function ArchGraph({ center, clusters }: ArchGraphProps) {
                 />
                 <text
                   x={x}
-                  y={y + NODE_RADIUS + 22}
+                  y={y + NODE_RADIUS + 14}
                   textAnchor="middle"
                   dominantBaseline="hanging"
                   fill={palette.text.primary}
                   fontFamily={typography.mono}
-                  fontSize={16}
+                  fontSize={13}
                   fontWeight={500}
                 >
                   {node.label}

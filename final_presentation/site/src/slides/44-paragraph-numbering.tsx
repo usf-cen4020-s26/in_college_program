@@ -36,7 +36,7 @@ export function Slide44Paragraphs(_props: SlideProps) {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 'clamp(6px, 0.6em, 12px)',
+          gap: 'clamp(4px, 0.4em, 8px)',
           flex: 1,
           justifyContent: 'center',
         }}
@@ -48,7 +48,7 @@ export function Slide44Paragraphs(_props: SlideProps) {
               display: 'flex',
               alignItems: 'center',
               gap: 'clamp(16px, 1.5em, 28px)',
-              padding: 'clamp(12px, 1em, 20px) clamp(16px, 1.5em, 28px)',
+              padding: 'clamp(8px, 0.7em, 14px) clamp(14px, 1.25em, 24px)',
               borderRadius: 14,
               background: 'var(--color-bg-card)',
               border: '1px solid rgba(112,181,249,0.08)',

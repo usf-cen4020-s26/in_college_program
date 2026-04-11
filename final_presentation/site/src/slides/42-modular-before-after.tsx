@@ -98,6 +98,8 @@ export function Slide42ModularBA({ step }: SlideProps) {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              justifyContent: 'center',
+              flex: 1,
               gap: 20,
             }}
           >

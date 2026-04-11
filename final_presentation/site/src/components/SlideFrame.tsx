@@ -98,7 +98,7 @@ export function SlideFrame({
         {/* Body */}
         <div
           className="slide-body flex min-h-0 flex-1 flex-col"
-          style={{ gap: 'clamp(8px, 1em, 20px)', overflow: 'hidden' }}
+          style={{ gap: 'clamp(8px, 1em, 20px)', overflow: 'hidden', paddingBottom: 'clamp(4px, 0.5em, 12px)' }}
         >
           {children}
         </div>

@@ -25,8 +25,8 @@ export function Slide60FinalStats(_props: SlideProps) {
           flex: 1,
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 'clamp(8px, 1em, 16px)',
-          alignContent: 'start',
+          gap: 'clamp(12px, 1.25em, 22px)',
+          alignContent: 'center',
           minHeight: 0,
         }}
       >
@@ -72,7 +72,7 @@ function AnimatedStatCard({
   return (
     <div
       style={{
-        padding: 'clamp(8px, 1em, 14px) clamp(10px, 1.25em, 18px)',
+        padding: 'clamp(14px, 1.5em, 24px) clamp(16px, 1.75em, 28px)',
         borderRadius: 14,
         background: 'var(--color-bg-panel)',
         border: '1px solid rgba(133,197,255,0.12)',
@@ -90,7 +90,7 @@ function AnimatedStatCard({
         style={{
           fontFamily: 'var(--font-mono)',
           fontWeight: 700,
-          fontSize: 'clamp(28px, 3.5em, 56px)',
+          fontSize: 'clamp(36px, 4.5em, 64px)',
           lineHeight: 1,
           letterSpacing: '-0.02em',
           fontVariantNumeric: 'tabular-nums',
@@ -102,7 +102,7 @@ function AnimatedStatCard({
         style={{
           fontFamily: 'var(--font-display)',
           fontWeight: 600,
-          fontSize: 'clamp(9px, 0.85em, 14px)',
+          fontSize: 'clamp(11px, 1em, 16px)',
           textTransform: 'uppercase',
           letterSpacing: '0.16em',
           color: 'var(--color-text-muted)',

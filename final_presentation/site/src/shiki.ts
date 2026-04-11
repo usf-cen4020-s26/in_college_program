@@ -48,6 +48,14 @@ const inCollegeTheme = {
       scope: ['entity.name.section', 'entity.name.tag'],
       settings: { foreground: '#70B5F9', fontStyle: 'bold' },
     },
+    {
+      scope: ['markup.inserted', 'punctuation.definition.inserted'],
+      settings: { foreground: '#22C55E' },
+    },
+    {
+      scope: ['markup.deleted', 'punctuation.definition.deleted'],
+      settings: { foreground: '#EF4444' },
+    },
   ],
 } as const;
 
@@ -57,7 +65,7 @@ export async function getHighlighter(): Promise<Highlighter> {
 
   loading = createHighlighter({
     themes: [inCollegeTheme as unknown as Parameters<typeof createHighlighter>[0]['themes'][number]],
-    langs: ['cobol'],
+    langs: ['cobol', 'diff', 'bash'],
   }).then((hl) => {
     instance = hl;
     return hl;

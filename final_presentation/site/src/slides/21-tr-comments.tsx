@@ -7,10 +7,12 @@ alice
 Alice1!
 4`;
 
-const AFTER_CODE = `1        # Login
-alice    # Username
-Alice1!  # Password
-4        # Find someone`;
+const AFTER_LINES = [
+  { value: '1        ', comment: '# Login' },
+  { value: 'alice    ', comment: '# Username' },
+  { value: 'Alice1!  ', comment: '# Password' },
+  { value: '4        ', comment: '# Find someone' },
+];
 
 /**
  * Slide 21 — Test Runner Phases 3-4: Comments & Debug Mode.
@@ -62,7 +64,15 @@ export function Slide21TRComments({ step }: SlideProps) {
               whiteSpace: 'pre',
             }}
           >
-            {AFTER_CODE}
+            {AFTER_LINES.map((line, i) => (
+              <span key={i}>
+                {line.value}
+                {line.comment && (
+                  <span style={{ color: '#5F6B82', fontStyle: 'italic' }}>{line.comment}</span>
+                )}
+                {'\n'}
+              </span>
+            ))}
           </pre>
         }
       />

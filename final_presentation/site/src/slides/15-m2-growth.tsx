@@ -29,6 +29,8 @@ export function Slide15M2Growth(_props: SlideProps) {
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 32,
           alignItems: 'start',
+          flex: 1,
+          alignContent: 'center',
         }}
       >
         <StatCard value="1,220" label="lines in main.cob" />

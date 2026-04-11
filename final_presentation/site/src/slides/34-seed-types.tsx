@@ -12,7 +12,7 @@ export function Slide34SeedTypes({ step }: SlideProps) {
         style={{
           margin: 0,
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(28px, 3.5em, 56px)',
+          fontSize: 'clamp(36px, 4em, 64px)',
           fontWeight: 700,
           letterSpacing: '-0.02em',
           color: 'var(--color-text-primary)',
@@ -67,10 +67,10 @@ function SeedCard({ name, color, code }: { name: string; color: string; code: st
     >
       <div
         style={{
-          padding: 'clamp(4px, 0.4em, 8px) clamp(8px, 1em, 16px)',
+          padding: 'clamp(6px, 0.6em, 12px) clamp(12px, 1.25em, 20px)',
           borderBottom: '1px solid var(--color-bg-code-border)',
           fontFamily: 'var(--font-mono)',
-          fontSize: 'clamp(10px, 0.8em, 13px)',
+          fontSize: 'clamp(14px, 1.1em, 18px)',
           fontWeight: 600,
           color,
           letterSpacing: '0.08em',
@@ -81,9 +81,9 @@ function SeedCard({ name, color, code }: { name: string; color: string; code: st
       <pre
         style={{
           margin: 0,
-          padding: 'clamp(8px, 0.75em, 14px) clamp(10px, 1em, 16px)',
+          padding: 'clamp(10px, 1em, 18px) clamp(14px, 1.25em, 22px)',
           fontFamily: 'var(--font-mono)',
-          fontSize: 'clamp(9px, 0.7em, 13px)',
+          fontSize: 'clamp(13px, 1em, 17px)',
           lineHeight: 1.5,
           color: 'var(--color-text-primary)',
           whiteSpace: 'pre-wrap',

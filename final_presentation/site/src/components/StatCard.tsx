@@ -54,7 +54,7 @@ export function StatCard({ value, label, sublabel, tone = 'brand' }: StatCardPro
         style={{
           fontFamily: 'var(--font-display)',
           fontWeight: 600,
-          fontSize: 'clamp(9px, 0.8125em, 13px)',
+          fontSize: 'clamp(11px, 1em, 16px)',
           textTransform: 'uppercase',
           letterSpacing: '0.2em',
           color: 'var(--color-text-primary)',

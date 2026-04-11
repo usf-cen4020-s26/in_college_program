@@ -74,34 +74,25 @@ export function Slide39M7Browse({ step }: SlideProps) {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 20,
+            gap: 14,
             justifyContent: 'center',
+            overflow: 'auto',
           }}
         >
           <FeatureCallout
-            title="Browse Summary View"
-            detail="See all available jobs at a glance: title, employer, and location."
+            title="Browse & View Details"
+            detail="See all available jobs at a glance, then drill into any listing for description and salary."
             citation="src/BROWSEJOBS.cpy:5200"
           />
           <FeatureCallout
-            title="View Details"
-            detail="Drill into any listing for the full description and salary."
-            citation="src/BROWSEJOBS.cpy:5250"
-          />
-          <FeatureCallout
             title="Apply"
-            detail="One-click apply writes to APPLICATIONS.DAT with the poster recorded."
+            detail="One-click apply writes to APPLICATIONS.DAT — duplicates blocked before writing."
             citation="src/APPLYJOB.cpy:5300"
           />
           <StepReveal currentStep={step} visibleAt={1}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <FeatureCallout
-                title="Duplicate Prevention"
-                detail="Cannot apply to the same job twice — checked before writing."
-                citation="src/APPLYJOB.cpy:5327"
-              />
-              <FeatureCallout
-                title="Application Summary Report"
+                title="Application Summary"
                 detail="View My Applications shows every job you applied to with status."
                 citation="src/VIEWAPPS.cpy:5400"
               />
