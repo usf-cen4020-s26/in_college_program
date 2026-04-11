@@ -64,7 +64,7 @@ export function SlideFrame({
                 className="font-medium uppercase"
                 style={{
                   color: 'var(--color-text-dim)',
-                  fontSize: 'clamp(8px, 0.75em, 12px)',
+                  fontSize: 'clamp(9px, 0.8em, 13px)',
                   letterSpacing: '0.2em',
                   fontFamily: 'var(--font-body)',
                 }}
@@ -83,7 +83,7 @@ export function SlideFrame({
           <div
             style={{
               color: 'var(--color-brand-accent)',
-              fontSize: 'clamp(10px, 0.875em, 14px)',
+              fontSize: 'clamp(11px, 0.95em, 15px)',
               fontFamily: 'var(--font-body)',
               letterSpacing: '0.16em',
               textTransform: 'uppercase',
@@ -97,7 +97,7 @@ export function SlideFrame({
 
         {/* Body */}
         <div
-          className="flex min-h-0 flex-1 flex-col"
+          className="slide-body flex min-h-0 flex-1 flex-col"
           style={{ gap: 'clamp(8px, 1em, 20px)', overflow: 'hidden' }}
         >
           {children}

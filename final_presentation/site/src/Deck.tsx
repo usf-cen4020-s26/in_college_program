@@ -139,7 +139,7 @@ export function Deck() {
       <div
         className={`deck-stage${isBreakout ? ' breakout' : ''}`}
         style={{
-          fontSize: `clamp(8px, calc(min(100vw, 100vh * ${deck.width} / ${deck.height}) / ${deck.width} * 16), 16px)`,
+          fontSize: `clamp(10px, calc(min(100vw, 100vh * ${deck.width} / ${deck.height}) / ${deck.width} * 16), 16px)`,
         }}
       >
         <Component slideIndex={index + 1} totalSlides={total} step={stepIdx} />

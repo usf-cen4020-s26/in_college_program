@@ -20,15 +20,14 @@ export function Slide60FinalStats(_props: SlideProps) {
   return (
     <SlideFrame act="PART D · ARCHITECTURE" kicker="BY THE NUMBERS" variant="hero">
       <div
+        className="stats-grid"
         style={{
           flex: 1,
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          gridTemplateRows: '1fr 1fr',
           gap: 'clamp(8px, 1em, 16px)',
-          alignContent: 'stretch',
+          alignContent: 'start',
           minHeight: 0,
-          overflow: 'hidden',
         }}
       >
         {STATS.map((s, i) => (
@@ -73,7 +72,7 @@ function AnimatedStatCard({
   return (
     <div
       style={{
-        padding: 'clamp(10px, 1.25em, 20px) clamp(12px, 1.5em, 24px)',
+        padding: 'clamp(8px, 1em, 14px) clamp(10px, 1.25em, 18px)',
         borderRadius: 14,
         background: 'var(--color-bg-panel)',
         border: '1px solid rgba(133,197,255,0.12)',
@@ -91,7 +90,7 @@ function AnimatedStatCard({
         style={{
           fontFamily: 'var(--font-mono)',
           fontWeight: 700,
-          fontSize: 'clamp(32px, 4em, 64px)',
+          fontSize: 'clamp(28px, 3.5em, 56px)',
           lineHeight: 1,
           letterSpacing: '-0.02em',
           fontVariantNumeric: 'tabular-nums',
@@ -103,7 +102,7 @@ function AnimatedStatCard({
         style={{
           fontFamily: 'var(--font-display)',
           fontWeight: 600,
-          fontSize: 'clamp(7px, 0.625em, 11px)',
+          fontSize: 'clamp(9px, 0.85em, 14px)',
           textTransform: 'uppercase',
           letterSpacing: '0.16em',
           color: 'var(--color-text-muted)',

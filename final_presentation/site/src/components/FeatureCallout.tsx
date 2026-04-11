@@ -74,7 +74,7 @@ export function FeatureCallout({ title, detail, citation, icon }: FeatureCallout
         <div
           style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 'clamp(8px, 0.625em, 10px)',
+            fontSize: 'clamp(10px, 0.75em, 12px)',
             color: 'var(--color-text-dim)',
             letterSpacing: '0.01em',
           }}

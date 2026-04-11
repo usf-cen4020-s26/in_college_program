@@ -70,7 +70,7 @@ function SeedCard({ name, color, code }: { name: string; color: string; code: st
           padding: 'clamp(4px, 0.4em, 8px) clamp(8px, 1em, 16px)',
           borderBottom: '1px solid var(--color-bg-code-border)',
           fontFamily: 'var(--font-mono)',
-          fontSize: 'clamp(8px, 0.625em, 11px)',
+          fontSize: 'clamp(10px, 0.8em, 13px)',
           fontWeight: 600,
           color,
           letterSpacing: '0.08em',

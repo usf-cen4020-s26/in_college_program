@@ -71,7 +71,7 @@ export function Slide06Numbers(_props: SlideProps) {
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(8px, 0.625em, 11px)',
+                  fontSize: 'clamp(10px, 0.8em, 13px)',
                   fontWeight: 600,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',

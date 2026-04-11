@@ -201,7 +201,7 @@ function EpicNode({
       <span
         style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: 'clamp(7px, 0.5em, 10px)',
+          fontSize: 'clamp(9px, 0.7em, 12px)',
           color: 'var(--color-text-dim)',
           textAlign: 'center',
           whiteSpace: 'nowrap',
