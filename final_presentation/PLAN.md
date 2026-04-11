@@ -31,7 +31,7 @@
 ### Content
 
 1. **Epics, Stories, Subtasks** — Define the hierarchy used throughout the semester.
-   - **Epic** = a major capability (e.g., "Job Posting", "Messaging").
+   - **Epic** = a major functionality (e.g., "Job Posting", "Messaging").
    - **Story** = a user-visible feature within an epic (e.g., "As a user, I can post a job with a title, description, employer, location, and optional salary").
    - **Subtask** = an implementation or testing unit (e.g., "Implement salary validation", "Write test for blank description re-prompt").
 
@@ -102,7 +102,7 @@ The foundation of the entire application:
 #### How It Was Tested
 
 This is where testing is introduced for the first time in the presentation:
-- **18 test fixtures** covering: login success/failure, account creation, password validation, EOF at every menu point
+- **18 test fixtures** (running total: **18**) covering: login success/failure, account creation, password validation, EOF at every menu point
 - Tests are simple `.in.txt` / `.out.txt` file pairs — input is piped into the COBOL binary via `INPUT.TXT`, output compared line-by-line against expected `OUTPUT.TXT`
 - The test runner (`test_runner.py`) was born here — a Python script that discovers fixtures, runs the binary, and diffs output
 
@@ -139,7 +139,7 @@ tests/fixtures/       (18 test pairs)
 | `275594b` | Feb 1 | Increase OUTPUT-RECORD to 500 chars for long profile fields |
 
 #### How It Was Tested (brief)
-- Existing 18 tests updated for new menu structure
+- Existing 18 tests updated for new menu structure + new fixtures added (running total: **~28**)
 - New fixtures for: profile creation, editing, viewing, graduation year validation, long text, persistence across logins, special characters
 - Still using basic `.in.txt` / `.out.txt` pairs — no macros yet
 
@@ -170,7 +170,7 @@ tests/fixtures/       (18 test pairs)
 | `5429c98` | Feb 12 | Streamline test execution, enhance test directory discovery |
 
 #### Testing Note
-- 30+ new test fixtures: profile viewing (long text, blanks, persistence), search (found, not found, after edit, EOF)
+- 30+ new test fixtures (running total: **~58**): profile viewing (long text, blanks, persistence), search (found, not found, after edit, EOF)
 - `JIRA_TASK_MAPPING.md` added — maps test fixtures to JIRA stories
 
 ---
@@ -256,7 +256,7 @@ This interlude explains how the test infrastructure evolved from a simple script
 - **All existing test fixtures had to be updated** for the new 7-option menu — this pain point motivates the macro system
 
 #### Testing Note
-- 100+ test fixtures added/updated
+- 100+ test fixtures added/updated (running total: **~100+**)
 - Connection request test categories: send success, duplicate prevention, non-existent user, already connected, persistence across sessions
 - Seed user macros (`@seed_user`) first introduced here in test branches — `d360be2`
 
@@ -324,9 +324,12 @@ Expected output files use `{{MAIN_MENU}}` — expanded at test time. Menu change
 
 #### 2. Seed Directives — `@seed_user`, `@seed_connection`, `@seed_message`
 
-**Problem:** Testing connection features requires creating 2+ accounts first. Every test file starts with 30+ lines of account creation keypresses.
+**Problem:** Testing connection features requires creating 2+ accounts first. Every test file starts with 30+ lines of account creation keypresses. This was unsustainable for three reasons:
+1. **Speed** — Each test spent most of its execution time on boilerplate setup rather than testing the actual feature.
+2. **Brittleness** — Any change to the account creation flow (e.g., a new validation rule or prompt wording) broke every test that manually created accounts.
+3. **Scalability** — As features grew more complex (messaging requires accounts + profiles + connections), setup ballooned to 60–80 lines before the first line of actual test input.
 
-**Solution:** Declarative directives at the top of `.in.txt`:
+**Solution:** Declarative seed directives at the top of `.in.txt` that bypass the UI entirely and write directly to `.DAT` files before execution:
 ```
 @seed_user username=alice password=Alice1! first_name=Alice last_name=Smith \
   university=USF major=CS grad_year=2027
@@ -342,7 +345,9 @@ Alice1!  # Password
 2        # View My Messages
 ```
 
-The `PersistenceManager` writes directly to `.DAT` files before execution — no interactive account creation needed.
+The `PersistenceManager` writes directly to `.DAT` files before execution — no interactive account creation needed. This means tests are **faster** (no COBOL execution for setup), **isolated** (each test starts from a known state), and **resilient** (immune to UI changes in unrelated flows).
+
+**Why this matters for the project:** Seed directives turned test authoring from a 15-minute manual process into a 2-minute declarative one. They also enabled the team to write focused, minimal tests — a messaging test only tests messaging, not account creation. This separation of concerns is what allowed us to scale from 50 fixtures to 150+ without the test suite becoming unmaintainable.
 
 **Key commits:**
 - `d360be2` — First seed user macros for test input files (Epic 5)
@@ -370,6 +375,7 @@ The `PersistenceManager` writes directly to `.DAT` files before execution — no
 - The macro expansion pipeline (diagram)
 - The `menus.yml` file snippet
 - VS Code screenshot with syntax highlighting
+- **Seeding explanation for the client:** Briefly explain *why* we built seed directives — frame it as: "We needed a way to set up test scenarios without going through the entire UI. Seed directives write data directly to the program's files, making tests faster, more focused, and immune to UI changes in unrelated features. This is what allowed us to scale to 150+ test fixtures."
 
 ---
 
@@ -407,7 +413,7 @@ The `PersistenceManager` writes directly to `.DAT` files before execution — no
 - Test runner refactored into full Python package: `tests/incollege_tests/` (12 modules)
 
 #### Testing Note
-- 30+ job posting test fixtures
+- 30+ job posting test fixtures (running total: **~130+**)
 - First use of output macros in production: `{{JOB_MENU}}`, `{{JOB_POST_HEADER}}`
 - Tests cover: valid posting, blank fields, duplicate detection, max limit, multi-user posting, EOF during posting
 
@@ -437,7 +443,7 @@ The `PersistenceManager` writes directly to `.DAT` files before execution — no
 #### Architectural Notes
 - New copybooks: `BROWSEJOBS_SRC.cpy` (189 lines), `APPLYJOB_SRC.cpy` (156 lines), `VIEWAPPS_SRC.cpy`, `JOBSIO_SRC.cpy`
 #### Testing Note
-- 40+ test fixtures covering: browse list, job details, apply, duplicate application, report generation, no jobs available, invalid selections
+- 40+ test fixtures (running total: **~150+**) covering: browse list, job details, apply, duplicate application, report generation, no jobs available, invalid selections
 - Tests now extensively use `@seed_user` directives + `{{MACRO}}` output expansion
 
 ---
@@ -655,6 +661,77 @@ Located in `tests/fixtures/view_message/`:
 
 ## Part D — Architecture & Design Patterns
 
+
+### 0. Copybook Showcase (Animated Slide)
+
+> *This is a single slide that uses web-native animation to reveal all 27 copybooks, grouped by domain. Since this is a website-based presentation, we can go beyond static bullet points — think an animated dependency map that builds itself on screen.*
+
+**Concept:** One slide, but the copybooks appear in animated groups. Start with `main.cob` at the center, then animate outward:
+
+1. **Phase 1 — Working Storage layer** (fade/fly in from top):
+   | Copybook | One-Line Purpose |
+   |----------|-----------------|
+   | `WS-CONSTANTS.cpy` | Named constants — max accounts, max jobs, file status codes |
+   | `WS-IO-CONTROL.cpy` | Menu choices, flags, input pushback buffer |
+   | `WS-ACCOUNTS.cpy` | In-memory accounts table (5 slots) |
+   | `WS-PROFILES.cpy` | Profile data, experience & education arrays |
+   | `WS-CONNECTIONS.cpy` | Pending requests + established connections |
+   | `WS-JOBS.cpy` | Job postings + application counters |
+   | `WS-MESSAGES.cpy` | Message state and next-ID counter |
+
+2. **Phase 2 — Data Loading** (animate from left):
+   | Copybook | One-Line Purpose |
+   |----------|-----------------|
+   | `DATALOAD.cpy` | Reads all 7 `.DAT` files into memory at startup |
+
+3. **Phase 3 — Authentication** (animate next):
+   | Copybook | One-Line Purpose |
+   |----------|-----------------|
+   | `AUTH.cpy` | Login, account creation, password validation |
+
+4. **Phase 4 — Feature Copybooks** (animate in rapid succession, grouped by domain):
+
+   **Profiles & Search:**
+   | Copybook | One-Line Purpose |
+   |----------|-----------------|
+   | `PROFILE.cpy` | Create, edit, and view user profiles |
+   | `SEARCH.cpy` | Find another user by name |
+
+   **Connections:**
+   | Copybook | One-Line Purpose |
+   |----------|-----------------|
+   | `SENDREQ.cpy` | Send a connection request |
+   | `VIEWREQ.cpy` | View, accept, or reject pending requests |
+   | `CONNMGMT.cpy` | Connection management orchestration |
+   | `CONNWRITE.cpy` | Write connection records to file |
+   | `NETWORK.cpy` | Display established connections list |
+
+   **Jobs:**
+   | Copybook | One-Line Purpose |
+   |----------|-----------------|
+   | `JOBS.cpy` | Post a new job listing |
+   | `BROWSEJOBS.cpy` | Browse all available jobs |
+   | `APPLYJOB.cpy` | Apply to a job from the detail view |
+   | `VIEWAPPS.cpy` | View my submitted applications |
+   | `JOBSIO.cpy` | Job file I/O operations |
+
+   **Messaging:**
+   | Copybook | One-Line Purpose |
+   |----------|-----------------|
+   | `SENDMESSAGE.cpy` | Compose and send a message to a connection |
+   | `VIEWMESSAGE.cpy` | View received messages (filtered by recipient) |
+
+   **Other:**
+   | Copybook | One-Line Purpose |
+   |----------|-----------------|
+   | `SKILLS.cpy` | "Learn a New Skill" submenu |
+
+5. **Phase 5 — Summary stat** (fade in at bottom):
+   > `main.cob`: 1,950 lines → 388 lines. 27 copybooks. Zero functionality lost.
+
+**Animation Style:** Since this is Remotion (React-based video/slides), use staggered `spring()` animations for each group. Each copybook card could be a small rounded box with the filename and one-line purpose, laid out spatially around `main.cob` like a constellation or mind-map. The grouping (WS, Auth, Profiles, Connections, Jobs, Messaging) should use distinct colors or regions.
+
+---
 
 ### 1. Data Architecture
 
@@ -960,4 +1037,4 @@ Each team member should choose an area of expertise from these groups:
 | **Networking & Jobs** (Epics 4–7) | Milestones 4–7 |
 | **Test Infrastructure** | Interludes A + B + test runner evolution |
 | **Messaging & Modularization** (Epics 8–9) | Milestone 8 + Interlude C + Part C deep dive |
-| **Architecture** | Part D + diagrams |
+| **Architecture** | Part D (including animated Copybook Showcase slide) + diagrams |
