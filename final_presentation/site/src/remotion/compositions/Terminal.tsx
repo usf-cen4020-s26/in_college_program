@@ -20,6 +20,8 @@ export type TerminalProps = {
   promptLabel?: string;
   title?: string;
   accent?: 'brand' | 'success' | 'warn';
+  /** Multiplier applied to all timing. Values < 1 slow down, > 1 speed up. Default 1. */
+  speedFactor?: number;
 };
 
 type RenderedLine = {
@@ -53,10 +55,12 @@ export function Terminal({
   promptLabel = '',
   title = 'incollege — session',
   accent = 'brand',
+  speedFactor = 1,
 }: TerminalProps) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const elapsedMs = (frame / fps) * 1000;
+  // speedFactor < 1 slows down: at 0.5 the virtual clock runs at half speed
+  const elapsedMs = (frame / fps) * 1000 * speedFactor;
   const accentColor = ACCENT_COLORS[accent];
 
   const lines = renderScript(script, elapsedMs, promptLabel);

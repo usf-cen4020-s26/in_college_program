@@ -24,16 +24,16 @@ export function StatCard({ value, label, sublabel, tone = 'brand' }: StatCardPro
   return (
     <div
       style={{
-        padding: '36px 40px 34px',
+        padding: 'clamp(16px, 2.25em, 36px) clamp(16px, 2.5em, 40px)',
         borderRadius: 20,
         background: 'var(--color-bg-panel)',
-        border: '1px solid rgba(112,181,249,0.12)',
+        border: '1px solid rgba(133,197,255,0.12)',
         boxShadow:
           '0 30px 60px -32px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04)',
         display: 'flex',
         flexDirection: 'column',
-        gap: 10,
-        minWidth: 260,
+        gap: 8,
+        minWidth: 0,
       }}
     >
       <div
@@ -41,7 +41,7 @@ export function StatCard({ value, label, sublabel, tone = 'brand' }: StatCardPro
         style={{
           fontFamily: 'var(--font-mono)',
           fontWeight: 700,
-          fontSize: 88,
+          fontSize: 'clamp(36px, 5.5em, 88px)',
           lineHeight: 1,
           letterSpacing: '-0.02em',
           fontVariantNumeric: 'tabular-nums',
@@ -54,7 +54,7 @@ export function StatCard({ value, label, sublabel, tone = 'brand' }: StatCardPro
         style={{
           fontFamily: 'var(--font-display)',
           fontWeight: 600,
-          fontSize: 13,
+          fontSize: 'clamp(9px, 0.8125em, 13px)',
           textTransform: 'uppercase',
           letterSpacing: '0.2em',
           color: 'var(--color-text-primary)',

@@ -6,19 +6,20 @@
 
 @theme {
   --color-bg-base: #050814;
-  --color-bg-panel: #0c1327;
-  --color-bg-elevated: #131c37;
+  --color-bg-panel: #111d3a;
+  --color-bg-elevated: #1a2847;
+  --color-bg-card: #141e38;
   --color-bg-code: #0b1222;
   --color-bg-code-border: #1e293b;
 
   --color-brand-primary: #0a66c2;
-  --color-brand-accent: #70b5f9;
+  --color-brand-accent: #85c5ff;
   --color-brand-sky: #38bdf8;
   --color-brand-deep: #082f5c;
 
   --color-text-primary: #f5f7fa;
-  --color-text-muted: #9ca3b4;
-  --color-text-dim: #5f6b82;
+  --color-text-muted: #b0bad0;
+  --color-text-dim: #7889a5;
 
   --color-state-success: #22c55e;
   --color-state-warn: #f59e0b;
@@ -64,6 +65,31 @@ button {
 }
 
 /* ------------------------------------------------------------------ */
+/* Responsive spacing overrides                                        */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 1024px) {
+  :root {
+    --spacing-page: 64px;
+    --spacing-gap: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --spacing-page: 40px;
+    --spacing-gap: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --spacing-page: 24px;
+    --spacing-gap: 16px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Deck-scoped helpers                                                 */
 /* ------------------------------------------------------------------ */
 
@@ -71,7 +97,7 @@ button {
   position: fixed;
   inset: 0;
   display: grid;
-  place-items: start center;
+  place-items: center;
   background:
     radial-gradient(
       ellipse 1400px 700px at 50% -100px,
@@ -90,6 +116,16 @@ button {
   background: var(--color-bg-base);
   overflow: hidden;
   box-shadow: 0 60px 120px -40px rgba(10, 102, 194, 0.35);
+  transition: all 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.deck-stage.breakout {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  aspect-ratio: auto;
+  box-shadow: none;
 }
 
 .deck-slide {
@@ -102,7 +138,7 @@ button {
 
 /* Headline gradient used on title slides */
 .text-gradient {
-  background: linear-gradient(135deg, #0a66c2 0%, #38bdf8 55%, #70b5f9 100%);
+  background: linear-gradient(135deg, #0a66c2 0%, #38bdf8 55%, #85c5ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -114,7 +150,7 @@ button {
   border: 1px solid var(--color-bg-code-border);
   border-radius: 12px;
   font-family: var(--font-mono);
-  font-size: 18px;
+  font-size: clamp(12px, 1.1em, 18px);
   line-height: 1.55;
   overflow: hidden;
   box-shadow:
@@ -141,4 +177,20 @@ button {
   height: 4px;
   border-radius: 2px;
   background: linear-gradient(90deg, #0a66c2 0%, #38bdf8 100%);
+}
+
+/* ------------------------------------------------------------------ */
+/* Step reveal animation                                               */
+/* ------------------------------------------------------------------ */
+
+.step-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.step-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }

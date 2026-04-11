@@ -7,21 +7,22 @@
 export const palette = {
   bg: {
     base: '#050814',
-    panel: '#0C1327',
-    elevated: '#131C37',
+    panel: '#111d3a',
+    elevated: '#1a2847',
+    card: '#141e38',
     code: '#0B1222',
     codeBorder: '#1E293B',
   },
   brand: {
     primary: '#0A66C2',
-    accent: '#70B5F9',
+    accent: '#85C5FF',
     sky: '#38BDF8',
     deep: '#082F5C',
   },
   text: {
     primary: '#F5F7FA',
-    muted: '#9CA3B4',
-    dim: '#5F6B82',
+    muted: '#B0BAD0',
+    dim: '#7889A5',
   },
   state: {
     success: '#22C55E',
@@ -29,8 +30,8 @@ export const palette = {
     danger: '#EF4444',
   },
   grad: {
-    headline: 'linear-gradient(135deg, #0A66C2 0%, #38BDF8 55%, #70B5F9 100%)',
-    glow: 'radial-gradient(ellipse 1200px 600px at 50% -200px, rgba(10,102,194,0.35) 0%, rgba(10,102,194,0.0) 70%)',
+    headline: 'linear-gradient(135deg, #0A66C2 0%, #38BDF8 55%, #85C5FF 100%)',
+    glow: 'radial-gradient(ellipse 1200px 600px at 50% -200px, rgba(10,102,194,0.45) 0%, rgba(10,102,194,0.0) 70%)',
   },
 } as const;
 
@@ -58,5 +59,4 @@ export const motion = {
 export const deck = {
   width: 1920,
   height: 1080,
-  totalSlides: 25,
 } as const;

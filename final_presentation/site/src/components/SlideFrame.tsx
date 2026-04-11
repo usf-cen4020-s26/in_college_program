@@ -30,14 +30,16 @@ export function SlideFrame({
 }: SlideFrameProps) {
   const glow =
     variant === 'hero'
-      ? 'radial-gradient(ellipse 1600px 900px at 50% -200px, rgba(10,102,194,0.52) 0%, rgba(10,102,194,0) 72%)'
+      ? 'radial-gradient(ellipse 1600px 900px at 50% -200px, rgba(10,102,194,0.58) 0%, rgba(10,102,194,0) 72%)'
       : variant === 'quiet'
-        ? 'radial-gradient(ellipse 1200px 520px at 50% -240px, rgba(10,102,194,0.18) 0%, rgba(10,102,194,0) 70%)'
-        : 'radial-gradient(ellipse 1400px 700px at 50% -200px, rgba(10,102,194,0.35) 0%, rgba(10,102,194,0) 70%)';
+        ? 'radial-gradient(ellipse 1200px 520px at 50% -240px, rgba(10,102,194,0.22) 0%, rgba(10,102,194,0) 70%)'
+        : 'radial-gradient(ellipse 1400px 700px at 50% -200px, rgba(10,102,194,0.45) 0%, rgba(10,102,194,0) 70%)';
 
   const paddingClass = clsx(
     'relative flex h-full w-full flex-col',
-    variant === 'hero' ? 'px-[var(--spacing-page)] py-[72px]' : 'p-[var(--spacing-page)]',
+    variant === 'hero'
+      ? 'px-[var(--spacing-page)] py-[clamp(32px,5%,72px)]'
+      : 'p-[var(--spacing-page)]',
   );
 
   return (
@@ -62,7 +64,7 @@ export function SlideFrame({
                 className="font-medium uppercase"
                 style={{
                   color: 'var(--color-text-dim)',
-                  fontSize: 14,
+                  fontSize: 'clamp(10px, 0.875em, 14px)',
                   letterSpacing: '0.24em',
                   fontFamily: 'var(--font-body)',
                 }}
@@ -81,7 +83,7 @@ export function SlideFrame({
           <div
             style={{
               color: 'var(--color-brand-accent)',
-              fontSize: 18,
+              fontSize: 'clamp(12px, 1.125em, 18px)',
               fontFamily: 'var(--font-body)',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
