@@ -6,7 +6,10 @@ import { messagingArcScript } from '../data/terminals/messaging-arc';
 import { scriptDurationFrames } from '../lib/terminalDuration';
 
 const FPS = 30;
-const DURATION_IN_FRAMES = scriptDurationFrames(messagingArcScript, FPS, 90);
+const SPEED_FACTOR = 0.5;
+const DURATION_IN_FRAMES = Math.ceil(
+  scriptDurationFrames(messagingArcScript, FPS, 90) / SPEED_FACTOR,
+);
 
 /**
  * Slide 12 — Melaine — "Messaging, end to end".
@@ -63,6 +66,7 @@ export function Slide12MessagingArc(_props: SlideProps) {
               promptLabel: 'incollege $ ',
               title: 'alice → bob — messages',
               accent: 'brand',
+              speedFactor: SPEED_FACTOR,
             }}
             durationInFrames={DURATION_IN_FRAMES}
             fps={FPS}

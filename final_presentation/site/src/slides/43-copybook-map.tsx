@@ -17,7 +17,7 @@ const CLUSTERS: ArchGraphCluster[] = MODULE_CLUSTERS.map((cluster) => ({
 })).filter((cluster) => cluster.nodes.length > 0);
 
 /**
- * Slide 43 — The Copybook Map: 27 modules, one orchestrator.
+ * Slide 43 — The Copybook Map: 24 copybooks, one orchestrator.
  */
 export function Slide43CopybookMap(_props: SlideProps) {
   return (
@@ -33,7 +33,7 @@ export function Slide43CopybookMap(_props: SlideProps) {
           lineHeight: 1.05,
         }}
       >
-        27 Modules, <span className="text-gradient">One Orchestrator</span>
+        24 Copybooks, <span className="text-gradient">One Orchestrator</span>
       </h1>
 
       <div

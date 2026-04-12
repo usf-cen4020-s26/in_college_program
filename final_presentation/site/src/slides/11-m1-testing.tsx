@@ -52,7 +52,21 @@ export function Slide11M1Testing({ step }: SlideProps) {
             }}
           >
             .in.txt / .out.txt file pairs — input piped into COBOL binary,
-            output compared line-by-line.
+            output compared line-by-line. <em>Hold on to this format — it's
+            the foundation everything else bolts onto.</em>
+          </p>
+          <p
+            style={{
+              margin: 0,
+              fontFamily: 'var(--font-mono)',
+              fontSize: 'clamp(10px, 0.72em, 13px)',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: 'var(--color-brand-accent)',
+              opacity: 0.72,
+            }}
+          >
+            → The runner, macros, and packaging all extend this file pair
           </p>
         </div>
 

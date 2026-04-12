@@ -7,7 +7,10 @@ import { myApplicationsScript } from '../data/terminals/my-applications';
 import { scriptDurationFrames } from '../lib/terminalDuration';
 
 const FPS = 30;
-const DURATION_IN_FRAMES = scriptDurationFrames(myApplicationsScript, FPS, 60);
+const SPEED_FACTOR = 0.5;
+const DURATION_IN_FRAMES = Math.ceil(
+  scriptDurationFrames(myApplicationsScript, FPS, 60) / SPEED_FACTOR,
+);
 
 /**
  * Slide 11 — Victoria — "See where you applied".
@@ -58,6 +61,7 @@ export function Slide11MyApplications(_props: SlideProps) {
               promptLabel: 'incollege $ ',
               title: 'alice@incollege — my applications',
               accent: 'brand',
+              speedFactor: SPEED_FACTOR,
             }}
             durationInFrames={DURATION_IN_FRAMES}
             fps={FPS}

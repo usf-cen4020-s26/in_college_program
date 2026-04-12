@@ -2,35 +2,34 @@ import type { SlideProps } from './types';
 import { SlideFrame } from '../components/SlideFrame';
 import { StepReveal } from '../components/StepReveal';
 
-const STEPS_ROW_1 = [
+const STEPS = [
   { label: 'Fixture', sub: '.in.txt + .out.txt' },
   { label: 'Preprocess', sub: 'seeds + comments' },
-  { label: 'Write .DAT files', sub: 'seed data' },
+  { label: 'Write .DAT', sub: 'seed data' },
   { label: 'Execute COBOL', sub: 'bin/main' },
-];
-
-const STEPS_ROW_2 = [
-  { label: 'Expand {{macros}}', sub: 'timestamps, etc.' },
-  { label: 'Line-by-line diff', sub: 'expected vs actual' },
+  { label: 'Expand macros', sub: 'timestamps, etc.' },
+  { label: 'Diff', sub: 'expected vs actual' },
   { label: 'PASS / FAIL', sub: 'report result' },
 ];
 
 const BOX_STYLE: React.CSSProperties = {
-  padding: '18px 22px',
-  borderRadius: 14,
+  padding: '14px 12px',
+  borderRadius: 12,
   background: 'var(--color-bg-panel)',
   border: '1px solid rgba(112,181,249,0.14)',
-  boxShadow: '0 12px 32px -16px rgba(0,0,0,0.6)',
+  boxShadow: '0 10px 28px -16px rgba(0,0,0,0.6)',
   display: 'flex',
-  flexDirection: 'column' as const,
+  flexDirection: 'column',
   alignItems: 'center',
-  gap: 6,
+  justifyContent: 'center',
+  gap: 4,
   flex: '1 1 0',
   minWidth: 0,
+  textAlign: 'center',
 };
 
 const ARROW: React.CSSProperties = {
-  fontSize: 24,
+  fontSize: 20,
   color: 'var(--color-brand-accent)',
   lineHeight: 1,
   flexShrink: 0,
@@ -38,6 +37,7 @@ const ARROW: React.CSSProperties = {
 
 /**
  * Slide 58 — Testing Pipeline: How Every Test Runs.
+ * Single horizontal flow so the 7-step pipeline never overflows the page.
  */
 export function Slide58Pipeline({ step }: SlideProps) {
   return (
@@ -61,22 +61,40 @@ export function Slide58Pipeline({ step }: SlideProps) {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: 32,
+          alignItems: 'center',
+          gap: 24,
+          minHeight: 0,
         }}
       >
         <StepReveal currentStep={step} visibleAt={0}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            {STEPS_ROW_1.map((s, i) => (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'stretch',
+              gap: 8,
+              width: '100%',
+            }}
+          >
+            {STEPS.map((s, i) => (
               <div key={s.label} style={{ display: 'contents' }}>
-                {i > 0 && <span style={ARROW}>&#8594;</span>}
+                {i > 0 && (
+                  <span
+                    style={{
+                      ...ARROW,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    &#8594;
+                  </span>
+                )}
                 <div style={BOX_STYLE}>
                   <span
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontWeight: 700,
-                      fontSize: 'clamp(14px, 1.1em, 18px)',
+                      fontSize: 'clamp(12px, 0.95em, 16px)',
                       color: 'var(--color-text-primary)',
-                      textAlign: 'center',
                     }}
                   >
                     {s.label}
@@ -84,8 +102,9 @@ export function Slide58Pipeline({ step }: SlideProps) {
                   <span
                     style={{
                       fontFamily: 'var(--font-mono)',
-                      fontSize: 'clamp(11px, 0.8em, 13px)',
+                      fontSize: 'clamp(10px, 0.72em, 12px)',
                       color: 'var(--color-text-muted)',
+                      lineHeight: 1.25,
                     }}
                   >
                     {s.sub}
@@ -97,35 +116,22 @@ export function Slide58Pipeline({ step }: SlideProps) {
         </StepReveal>
 
         <StepReveal currentStep={step} visibleAt={1}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            {STEPS_ROW_2.map((s, i) => (
-              <div key={s.label} style={{ display: 'contents' }}>
-                {i > 0 && <span style={ARROW}>&#8594;</span>}
-                <div style={BOX_STYLE}>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontWeight: 700,
-                      fontSize: 'clamp(14px, 1.1em, 18px)',
-                      color: 'var(--color-text-primary)',
-                      textAlign: 'center',
-                    }}
-                  >
-                    {s.label}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: 'clamp(11px, 0.8em, 13px)',
-                      color: 'var(--color-text-muted)',
-                    }}
-                  >
-                    {s.sub}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <p
+            style={{
+              margin: 0,
+              fontFamily: 'var(--font-body)',
+              fontSize: 'clamp(14px, 1em, 18px)',
+              color: 'var(--color-text-muted)',
+              textAlign: 'center',
+              maxWidth: '72ch',
+              lineHeight: 1.55,
+            }}
+          >
+            Every fixture walks the same seven stages. The runner parses seed
+            directives, seeds <code>.DAT</code> files, runs the COBOL binary,
+            expands macros in the expected output, diffs line-by-line, and
+            reports the verdict — deterministic end-to-end.
+          </p>
         </StepReveal>
       </div>
     </SlideFrame>

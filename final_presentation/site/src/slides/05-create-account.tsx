@@ -7,7 +7,10 @@ import { createAccountScript } from '../data/terminals/create-account';
 import { scriptDurationFrames } from '../lib/terminalDuration';
 
 const FPS = 30;
-const DURATION_IN_FRAMES = scriptDurationFrames(createAccountScript, FPS, 60);
+const SPEED_FACTOR = 0.5;
+const DURATION_IN_FRAMES = Math.ceil(
+  scriptDurationFrames(createAccountScript, FPS, 60) / SPEED_FACTOR,
+);
 
 /**
  * Slide 05 — Aaron — "Create an account".
@@ -60,6 +63,7 @@ export function Slide05CreateAccount(_props: SlideProps) {
               promptLabel: 'incollege $ ',
               title: 'alice@incollege — ~',
               accent: 'brand',
+              speedFactor: SPEED_FACTOR,
             }}
             durationInFrames={DURATION_IN_FRAMES}
             fps={FPS}

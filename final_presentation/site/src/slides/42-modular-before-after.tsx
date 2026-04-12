@@ -6,11 +6,11 @@ const groups: { label: string; count: number; color: string }[] = [
   { label: 'WS', count: 7, color: '#94A3B8' },
   { label: 'Auth', count: 1, color: '#38BDF8' },
   { label: 'Data', count: 1, color: '#0A66C2' },
-  { label: 'Profiles', count: 2, color: '#70B5F9' },
+  { label: 'Profiles', count: 1, color: '#70B5F9' },
   { label: 'Connections', count: 5, color: '#22D3EE' },
   { label: 'Jobs', count: 5, color: '#F59E0B' },
   { label: 'Messaging', count: 2, color: '#A855F7' },
-  { label: 'Other', count: 4, color: '#EF4444' },
+  { label: 'Other', count: 2, color: '#EF4444' },
 ];
 
 const pillStyle = (color: string) => ({
@@ -145,7 +145,7 @@ export function Slide42ModularBA({ step }: SlideProps) {
                 textTransform: 'uppercase',
               }}
             >
-              27 copybooks
+              24 copybooks
             </span>
 
             {/* Pill grid */}

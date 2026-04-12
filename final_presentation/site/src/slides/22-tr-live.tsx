@@ -2,7 +2,15 @@ import type { SlideProps } from './types';
 import { SlideFrame } from '../components/SlideFrame';
 import { StepReveal } from '../components/StepReveal';
 
-const CLI_COMMANDS = [':help', ':dump', ':show', ':undo', ':rerun', ':quit'];
+const CLI_COMMANDS = [
+  ':help',
+  ':dump',
+  ':show',
+  ':undo',
+  ':clear',
+  ':rerun',
+  ':quit',
+];
 
 /**
  * Slide 22 — Test Runner Phases 5-6: Live CLI & Packaging.
@@ -121,9 +129,10 @@ export function Slide22TRLive({ step }: SlideProps) {
                 color: 'var(--color-text-muted)',
               }}
             >
-              The test runner ships as a standalone Python package with a CLI entry point.
-              Teams install it via pip and run tests with a single command — no manual
-              setup needed.
+              <code>package_tests.py</code> bundles every fixture into a submission zip —
+              but first it fully expands <code>{'{{macros}}'}</code> and every{' '}
+              <code>@seed_*</code> directive so the archive contains zero runtime
+              indirection.
             </p>
             <p
               style={{
@@ -134,8 +143,8 @@ export function Slide22TRLive({ step }: SlideProps) {
                 color: 'var(--color-text-muted)',
               }}
             >
-              Configuration lives in a TOML file alongside the fixtures, keeping
-              test definitions version-controlled and reproducible.
+              Graders run the packaged fixtures against any COBOL binary with no Python
+              tooling required — what we develop against is exactly what they grade.
             </p>
           </div>
         </StepReveal>

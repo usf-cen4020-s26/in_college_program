@@ -7,7 +7,10 @@ import { findSomeoneScript } from '../data/terminals/find-someone';
 import { scriptDurationFrames } from '../lib/terminalDuration';
 
 const FPS = 30;
-const DURATION_IN_FRAMES = scriptDurationFrames(findSomeoneScript, FPS, 60);
+const SPEED_FACTOR = 0.5;
+const DURATION_IN_FRAMES = Math.ceil(
+  scriptDurationFrames(findSomeoneScript, FPS, 60) / SPEED_FACTOR,
+);
 
 /**
  * Slide 07 — Olga — "Find someone you know".
@@ -59,6 +62,7 @@ export function Slide07FindSomeone(_props: SlideProps) {
               promptLabel: 'incollege $ ',
               title: 'alice@incollege — search',
               accent: 'brand',
+              speedFactor: SPEED_FACTOR,
             }}
             durationInFrames={DURATION_IN_FRAMES}
             fps={FPS}

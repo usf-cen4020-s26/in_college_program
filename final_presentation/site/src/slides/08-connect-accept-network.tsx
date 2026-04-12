@@ -6,7 +6,10 @@ import { connectAcceptScript } from '../data/terminals/connect-accept';
 import { scriptDurationFrames } from '../lib/terminalDuration';
 
 const FPS = 30;
-const DURATION_IN_FRAMES = scriptDurationFrames(connectAcceptScript, FPS, 60);
+const SPEED_FACTOR = 0.5;
+const DURATION_IN_FRAMES = Math.ceil(
+  scriptDurationFrames(connectAcceptScript, FPS, 60) / SPEED_FACTOR,
+);
 
 const STEPS = ['Send Request', 'Accept', 'View Network'] as const;
 
@@ -63,6 +66,7 @@ export function Slide08ConnectAcceptNetwork(_props: SlideProps) {
               promptLabel: 'incollege $ ',
               title: 'alice ↔ bob — connections',
               accent: 'brand',
+              speedFactor: SPEED_FACTOR,
             }}
             durationInFrames={DURATION_IN_FRAMES}
             fps={FPS}

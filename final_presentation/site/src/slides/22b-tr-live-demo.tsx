@@ -6,8 +6,10 @@ import { liveCLIDemoScript } from '../data/terminals/live-cli-demo';
 import { scriptDurationFrames } from '../lib/terminalDuration';
 
 const FPS = 30;
-const SPEED_FACTOR = 0.4;
-const DURATION = Math.ceil(scriptDurationFrames(liveCLIDemoScript, FPS, 60) / SPEED_FACTOR);
+const SPEED_FACTOR = 0.5;
+const DURATION = Math.ceil(
+  scriptDurationFrames(liveCLIDemoScript, FPS, 60) / SPEED_FACTOR,
+);
 
 /**
  * Slide 22b — Live CLI Demo.
@@ -43,8 +45,8 @@ export function Slide22bTRLiveDemo(_props: SlideProps) {
           component={Terminal}
           inputProps={{
             script: liveCLIDemoScript,
-            promptLabel: '$ ',
-            title: 'incollege-test — live mode',
+            promptLabel: 'input: ',
+            title: 'live_cli.py — bin/main',
             accent: 'brand',
             speedFactor: SPEED_FACTOR,
           }}

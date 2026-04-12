@@ -47,6 +47,21 @@ export function Slide25M4MenuProblem(_props: SlideProps) {
           "Every time the menu changed, we had to update 100+ test files."
         </blockquote>
 
+        <p
+          style={{
+            margin: 0,
+            fontFamily: 'var(--font-mono)',
+            fontSize: 'clamp(11px, 0.8em, 14px)',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: 'var(--color-brand-accent)',
+            opacity: 0.78,
+            textAlign: 'center',
+          }}
+        >
+          → Park this thought. Interlude B is the fix.
+        </p>
+
         <div
           style={{
             display: 'flex',
