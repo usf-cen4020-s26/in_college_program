@@ -30,7 +30,12 @@ type RenderedLine = {
 };
 
 const DEFAULT_TYPE_SPEED_MS = 60;
-const VISIBLE_LINES = 28;
+// How many lines the drawn content area can actually fit before the
+// bottom starts clipping. Derived from the 1920x1080 composition:
+// 1080 − 64*2 (outer pad) − 48 (titlebar) − 32 (top inner pad)
+// − 44 (bottom inner pad) = 828 px ÷ 46 px/line ≈ 18 → keep one row of
+// safety margin so descenders on the last line aren't shaved off.
+const VISIBLE_LINES = 17;
 const LINE_HEIGHT_PX = 46;
 const MONO_FONT_SIZE_PX = 30;
 const CURSOR_ON_FRAMES = 6;

@@ -3,7 +3,7 @@ import { SlideFrame } from '../components/SlideFrame';
 import { StepReveal } from '../components/StepReveal';
 import { CodePanel } from '../components/CodePanel';
 
-const DIFF_EXAMPLE = `- Enter your choice:
+const DIFF_EXAMPLE = `- Enter your choice::
 + Enter your choice:
   1. Create/Edit My Profile
   2. View My Profile`;
