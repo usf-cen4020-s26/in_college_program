@@ -75,7 +75,7 @@ export function Slide04Rotation({ step }: SlideProps) {
 
 function RotationRow({ row }: { row: typeof ROLE_ROTATION[number] }) {
   const cells = [
-    { value: row.epic === 9 ? '9*' : String(row.epic), color: 'var(--color-text-primary)' },
+    { value: String(row.epic), color: 'var(--color-text-primary)' },
     { value: row.scrumMaster, color: ROLE_COLORS.scrumMaster },
     { value: row.coder1, color: ROLE_COLORS.coder1 },
     { value: row.coder2, color: ROLE_COLORS.coder2 },
