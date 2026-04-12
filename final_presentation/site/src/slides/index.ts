@@ -96,12 +96,12 @@ import { Slide63Close } from './63-close';
 
 export const SLIDES: readonly SlideEntry[] = [
   // ── Part A · Agile at a Glance ──────────────────────────────────────
-  { id: '01-title', title: 'InCollege', act: 'PART A · AGILE AT A GLANCE', speaker: 'Trevor', component: Slide01Title },
-  { id: '02-team', title: 'Meet the Team', act: 'PART A · AGILE AT A GLANCE', speaker: 'Trevor', component: Slide02Team },
-  { id: '03-how-we-work', title: 'How We Work', act: 'PART A · AGILE AT A GLANCE', speaker: 'Trevor', component: Slide03HowWeWork, steps: 3 },
-  { id: '04-rotation', title: 'Rotating Roles', act: 'PART A · AGILE AT A GLANCE', speaker: 'Trevor', component: Slide04Rotation, steps: 2 },
-  { id: '05-branching', title: 'Branching Strategy', act: 'PART A · AGILE AT A GLANCE', speaker: 'Trevor', component: Slide05Branching, steps: 2 },
-  { id: '06-numbers', title: 'By the Numbers', act: 'PART A · AGILE AT A GLANCE', speaker: 'Trevor', component: Slide06Numbers },
+  { id: '01-title', title: 'InCollege', act: 'PART A · AGILE AT A GLANCE', speaker: 'Aaron', component: Slide01Title },
+  { id: '02-team', title: 'Meet the Team', act: 'PART A · AGILE AT A GLANCE', speaker: 'Aaron', component: Slide02Team },
+  { id: '03-how-we-work', title: 'How We Work', act: 'PART A · AGILE AT A GLANCE', speaker: 'Aaron', component: Slide03HowWeWork, steps: 3 },
+  { id: '04-rotation', title: 'Rotating Roles', act: 'PART A · AGILE AT A GLANCE', speaker: 'Aaron', component: Slide04Rotation, steps: 2 },
+  { id: '05-branching', title: 'Branching Strategy', act: 'PART A · AGILE AT A GLANCE', speaker: 'Aaron', component: Slide05Branching, steps: 2 },
+  { id: '06-numbers', title: 'By the Numbers', act: 'PART A · AGILE AT A GLANCE', speaker: 'Aaron', component: Slide06Numbers },
 
   // ── Part B · Milestone 1: Authentication ─────────────────────────────
   { id: '07-m1-title', title: 'Authentication', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Aaron', component: Slide07M1Title },
@@ -112,9 +112,9 @@ export const SLIDES: readonly SlideEntry[] = [
   { id: '12-m1-arch', title: 'Architecture: Week 1', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Aaron', component: Slide12M1Architecture },
 
   // ── Part B · Milestone 2: User Profiles ──────────────────────────────
-  { id: '13-m2-title', title: 'User Profiles', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Aaron', component: Slide13M2Title },
-  { id: '14-m2-features', title: 'Build Your Profile', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Aaron', component: Slide14M2Features, steps: 2 },
-  { id: '15-m2-growth', title: 'Growing Pains', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Aaron', component: Slide15M2Growth },
+  { id: '13-m2-title', title: 'User Profiles', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Victoria', component: Slide13M2Title },
+  { id: '14-m2-features', title: 'Build Your Profile', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Victoria', component: Slide14M2Features, steps: 2 },
+  { id: '15-m2-growth', title: 'Growing Pains', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Victoria', component: Slide15M2Growth },
 
   // ── Part B · Milestone 3: User Search ────────────────────────────────
   { id: '16-m3-title', title: 'User Search', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Olga', component: Slide16M3Title },
@@ -157,10 +157,10 @@ export const SLIDES: readonly SlideEntry[] = [
   { id: '40-m7-progress', title: 'Running Totals', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Victoria', component: Slide40M7Progress },
 
   // ── Interlude C · The Great Modularization ───────────────────────────
-  { id: '41-int-c', title: 'Modularization', act: 'INTERLUDE', speaker: 'Trevor', component: Slide41IntCTitle, breakout: true },
-  { id: '42-modular-ba', title: 'Before vs After', act: 'INTERLUDE', speaker: 'Trevor', component: Slide42ModularBA, steps: 2 },
-  { id: '43-copybook-map', title: 'Copybook Map', act: 'INTERLUDE', speaker: 'Trevor', component: Slide43CopybookMap },
-  { id: '44-paragraphs', title: 'Paragraph Numbering', act: 'INTERLUDE', speaker: 'Trevor', component: Slide44Paragraphs },
+  { id: '41-int-c', title: 'Modularization', act: 'INTERLUDE', speaker: 'Melaine', component: Slide41IntCTitle, breakout: true },
+  { id: '42-modular-ba', title: 'Before vs After', act: 'INTERLUDE', speaker: 'Melaine', component: Slide42ModularBA, steps: 2 },
+  { id: '43-copybook-map', title: 'Copybook Map', act: 'INTERLUDE', speaker: 'Melaine', component: Slide43CopybookMap },
+  { id: '44-paragraphs', title: 'Paragraph Numbering', act: 'INTERLUDE', speaker: 'Melaine', component: Slide44Paragraphs },
 
   // ── Part B · Milestone 8: Send Messages ──────────────────────────────
   { id: '45-m8-title', title: 'Send Messages', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Melaine', component: Slide45M8Title },
@@ -168,21 +168,21 @@ export const SLIDES: readonly SlideEntry[] = [
   { id: '47-m8-data', title: 'MESSAGES.DAT', act: 'PART B · BUILDING INCOLLEGE', speaker: 'Melaine', component: Slide47M8Data },
 
   // ── Part C · Epic 9 Deep Dive ────────────────────────────────────────
-  { id: '48-epic9-title', title: 'View Messages', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Melaine', component: Slide48Epic9Title, breakout: true },
-  { id: '49-story1', title: 'Basic View', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Melaine', component: Slide49Story1, steps: 2 },
-  { id: '50-story2', title: 'Ordering', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Melaine', component: Slide50Story2, steps: 2 },
-  { id: '51-story3', title: 'Isolation', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Melaine', component: Slide51Story3 },
-  { id: '52-story4', title: 'Persistence', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Melaine', component: Slide52Story4 },
-  { id: '53-terminal', title: 'Full Messaging Arc', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Melaine', component: Slide53Terminal },
-  { id: '54-testing', title: 'Epic 9 Testing', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Melaine', component: Slide54Testing },
+  { id: '48-epic9-title', title: 'View Messages', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Trevor', component: Slide48Epic9Title, breakout: true },
+  { id: '49-story1', title: 'Basic View', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Trevor', component: Slide49Story1, steps: 2 },
+  { id: '50-story2', title: 'Ordering', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Trevor', component: Slide50Story2, steps: 2 },
+  { id: '51-story3', title: 'Isolation', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Trevor', component: Slide51Story3 },
+  { id: '52-story4', title: 'Persistence', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Trevor', component: Slide52Story4 },
+  { id: '53-terminal', title: 'Full Messaging Arc', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Trevor', component: Slide53Terminal },
+  { id: '54-testing', title: 'Epic 9 Testing', act: 'PART C · EPIC 9 DEEP DIVE', speaker: 'Trevor', component: Slide54Testing },
 
   // ── Part D · Architecture & Design Patterns ──────────────────────────
-  { id: '55-data-arch', title: 'Data Architecture', act: 'PART D · ARCHITECTURE', speaker: 'Olga', component: Slide55DataArch, steps: 2 },
-  { id: '56-program-flow', title: 'Program Flow', act: 'PART D · ARCHITECTURE', speaker: 'Trevor', component: Slide56ProgramFlow, steps: 2 },
-  { id: '57-security', title: 'Security', act: 'PART D · ARCHITECTURE', speaker: 'Trevor', component: Slide57Security, steps: 2 },
+  { id: '55-data-arch', title: 'Data Architecture', act: 'PART D · ARCHITECTURE', speaker: 'Melaine', component: Slide55DataArch, steps: 2 },
+  { id: '56-program-flow', title: 'Program Flow', act: 'PART D · ARCHITECTURE', speaker: 'Melaine', component: Slide56ProgramFlow, steps: 2 },
+  { id: '57-security', title: 'Security', act: 'PART D · ARCHITECTURE', speaker: 'Melaine', component: Slide57Security, steps: 2 },
   { id: '58-pipeline', title: 'Testing Pipeline', act: 'PART D · ARCHITECTURE', speaker: 'Trevor', component: Slide58Pipeline, steps: 2 },
-  { id: '59-patterns', title: 'COBOL Patterns', act: 'PART D · ARCHITECTURE', speaker: 'Trevor', component: Slide59Patterns, steps: 4 },
-  { id: '60-stats', title: 'Final Statistics', act: 'PART D · ARCHITECTURE', speaker: 'Trevor', component: Slide60FinalStats },
+  { id: '59-patterns', title: 'COBOL Patterns', act: 'PART D · ARCHITECTURE', speaker: 'Melaine', component: Slide59Patterns, steps: 4 },
+  { id: '60-stats', title: 'Final Statistics', act: 'PART D · ARCHITECTURE', speaker: 'Melaine', component: Slide60FinalStats },
 
   // ── Part E · Closing ─────────────────────────────────────────────────
   { id: '61-journey', title: 'The Journey', act: 'PART E · CLOSING', speaker: 'Trevor', component: Slide61Journey },
