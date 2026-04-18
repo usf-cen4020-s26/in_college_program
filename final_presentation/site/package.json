@@ -11,7 +11,8 @@
     "export:record": "tsx scripts/recordSlides.ts",
     "export:transcode": "tsx scripts/transcodeVideos.ts",
     "export:pptx": "tsx scripts/buildPptx.ts",
-    "export": "tsx scripts/recordSlides.ts && tsx scripts/transcodeVideos.ts && tsx scripts/buildPptx.ts"
+    "export:concat": "tsx scripts/concatVideos.ts",
+    "export": "tsx scripts/recordSlides.ts && tsx scripts/transcodeVideos.ts && tsx scripts/buildPptx.ts && tsx scripts/concatVideos.ts"
   },
   "dependencies": {
     "@remotion/google-fonts": "^4.0.447",

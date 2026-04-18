@@ -13,8 +13,9 @@ dist-ssr
 *.local
 
 # PPTX export artifacts (videos + assembled deck)
-out
+out/**
 !out/*.pptx
+!out/incollege-presentation.mp4
 
 # Editor directories and files
 .vscode/*
