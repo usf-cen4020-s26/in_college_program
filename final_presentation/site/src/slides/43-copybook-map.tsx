@@ -45,7 +45,10 @@ export function Slide43CopybookMap(_props: SlideProps) {
           minHeight: 0,
         }}
       >
-        <div style={{ width: '100%', height: '100%', maxHeight: 760 }}>
+        <div
+          data-record-dwell-ms={Math.ceil((DURATION_IN_FRAMES / FPS) * 1000)}
+          style={{ width: '100%', height: '100%', maxHeight: 760 }}
+        >
           <Player
             component={ArchGraph}
             inputProps={{

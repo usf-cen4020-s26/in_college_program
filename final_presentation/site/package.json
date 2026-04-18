@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "export:record": "tsx scripts/recordSlides.ts",
+    "export:transcode": "tsx scripts/transcodeVideos.ts",
+    "export:pptx": "tsx scripts/buildPptx.ts",
+    "export": "tsx scripts/recordSlides.ts && tsx scripts/transcodeVideos.ts && tsx scripts/buildPptx.ts"
   },
   "dependencies": {
     "@remotion/google-fonts": "^4.0.447",
@@ -32,7 +36,11 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "jszip": "^3.10.1",
+    "playwright": "^1.59.1",
+    "pptxgenjs": "^4.0.1",
     "tailwindcss": "^4.2.2",
+    "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.0",
     "vite": "^8.0.4"

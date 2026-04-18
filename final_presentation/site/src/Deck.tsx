@@ -2,6 +2,21 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SLIDES } from './slides';
 import { deck } from './theme';
 
+// Expose a slim slide manifest so the offline PPTX recorder (Playwright)
+// can iterate slides without parsing TS source. Kept side-effectful at
+// module load so it's available before React mounts.
+if (typeof window !== 'undefined') {
+  (window as unknown as { __DECK__?: unknown }).__DECK__ = {
+    total: SLIDES.length,
+    slides: SLIDES.map((s) => ({
+      id: s.id,
+      title: s.title,
+      steps: s.steps ?? 1,
+      breakout: s.breakout ?? false,
+    })),
+  };
+}
+
 /**
  * Deck shell.
  *

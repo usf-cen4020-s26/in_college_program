@@ -32,6 +32,7 @@ export function Slide22bTRLiveDemo(_props: SlideProps) {
       </h1>
 
       <div
+        data-record-dwell-ms={Math.ceil((DURATION / FPS) * 1000)}
         style={{
           flex: 1,
           minHeight: 0,

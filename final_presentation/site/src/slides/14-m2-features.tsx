@@ -43,6 +43,7 @@ export function Slide14M2Features({ step }: SlideProps) {
         }}
       >
         <div
+          data-record-dwell-ms={Math.ceil((DURATION / FPS) * 1000)}
           style={{
             borderRadius: 20,
             overflow: 'hidden',

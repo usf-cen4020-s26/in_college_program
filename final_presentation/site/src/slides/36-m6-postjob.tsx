@@ -41,6 +41,7 @@ export function Slide36M6PostJob(_props: SlideProps) {
         }}
       >
         <div
+          data-record-dwell-ms={Math.ceil((DURATION / FPS) * 1000)}
           style={{
             borderRadius: 20,
             overflow: 'hidden',

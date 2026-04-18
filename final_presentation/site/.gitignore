@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# PPTX export artifacts (videos + assembled deck)
+out
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

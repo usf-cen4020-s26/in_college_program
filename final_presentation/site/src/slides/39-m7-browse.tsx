@@ -42,6 +42,7 @@ export function Slide39M7Browse({ step }: SlideProps) {
         }}
       >
         <div
+          data-record-dwell-ms={Math.ceil((DURATION / FPS) * 1000)}
           style={{
             borderRadius: 20,
             overflow: 'hidden',
