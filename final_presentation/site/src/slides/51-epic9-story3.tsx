@@ -2,7 +2,9 @@ import type { SlideProps } from './types';
 import { SlideFrame } from '../components/SlideFrame';
 import { CodePanel } from '../components/CodePanel';
 
-const COBOL_CODE = `IF MSG-RECIPIENT = WS-CURRENT-USER
+const COBOL_CODE = `IF FUNCTION TRIM(MSG-RECIPIENT)
+   = FUNCTION TRIM(
+       WS-USERNAME(WS-CURRENT-USER-INDEX))
     PERFORM 8000-WRITE-OUTPUT
 END-IF`;
 

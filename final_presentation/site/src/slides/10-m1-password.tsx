@@ -5,14 +5,31 @@ import { CodePanel } from '../components/CodePanel';
 import { FeatureCallout } from '../components/FeatureCallout';
 
 const COBOL_SNIPPET = `4400-VALIDATE-PASSWORD.
-    MOVE 'N' TO WS-PASSWORD-VALID
-    IF WS-PASSWORD-LENGTH < 8 OR > 12
-        PERFORM 8000-WRITE-OUTPUT
-        GO TO 4400-EXIT
+    MOVE 0 TO WS-HAS-CAPITAL
+    MOVE 0 TO WS-HAS-DIGIT
+    MOVE 0 TO WS-HAS-SPECIAL
+    IF WS-PASSWORD-LENGTH < 8 OR
+       WS-PASSWORD-LENGTH > 12
+        EXIT PARAGRAPH
     END-IF
-    INSPECT WS-NEW-PASSWORD TALLYING
-        WS-UPPER-COUNT FOR CHARACTERS
-        BEFORE INITIAL 'a'`;
+    PERFORM VARYING WS-CHAR-INDEX FROM 1 BY 1
+        UNTIL WS-CHAR-INDEX > WS-PASSWORD-LENGTH
+        MOVE WS-PASSWORD-INPUT(WS-CHAR-INDEX:1)
+            TO WS-CURRENT-CHAR
+        IF WS-CURRENT-CHAR >= "A" AND
+           WS-CURRENT-CHAR <= "Z"
+            MOVE 1 TO WS-HAS-CAPITAL
+        END-IF
+        IF WS-CURRENT-CHAR >= "0" AND
+           WS-CURRENT-CHAR <= "9"
+            MOVE 1 TO WS-HAS-DIGIT
+        END-IF
+        IF WS-CURRENT-CHAR = "!" OR "@"
+           OR "#" OR "$" OR "%" OR "^"
+           OR "&" OR "*"
+            MOVE 1 TO WS-HAS-SPECIAL
+        END-IF
+    END-PERFORM`;
 
 /**
  * Slide 10 — Password Rules.
@@ -69,11 +86,11 @@ export function Slide10M1Password({ step }: SlideProps) {
             />
             <FeatureCallout
               title="1 uppercase letter"
-              detail="INSPECT TALLYING counts uppercase characters using the BEFORE INITIAL technique."
+              detail="Character-by-character loop checks A–Z range; sets WS-HAS-CAPITAL on first match."
             />
             <FeatureCallout
               title="1 digit + 1 special char"
-              detail="Additional INSPECT passes verify at least one numeric and one non-alphanumeric character."
+              detail="Range check 0–9 sets WS-HAS-DIGIT; explicit OR chain for ! @ # $ % ^ & * sets WS-HAS-SPECIAL."
             />
           </div>
         </StepReveal>

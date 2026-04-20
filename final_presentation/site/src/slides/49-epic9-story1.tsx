@@ -4,9 +4,9 @@ import { StepReveal } from '../components/StepReveal';
 import { CodePanel } from '../components/CodePanel';
 
 const COBOL_CODE = `7840-VIEW-MESSAGES.
+    MOVE 0 TO WS-MSG-FOUND
     OPEN INPUT MESSAGES-FILE
-    MOVE 'N' TO WS-MSG-FOUND
-    PERFORM 7841-DISPLAY-MESSAGES
+    PERFORM 7841-VIEW-MESSAGES-LOOP
     CLOSE MESSAGES-FILE`;
 
 const BOX_STYLE: React.CSSProperties = {

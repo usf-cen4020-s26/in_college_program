@@ -4,16 +4,17 @@ import { StepReveal } from '../components/StepReveal';
 import { CodePanel } from '../components/CodePanel';
 import { FeatureCallout } from '../components/FeatureCallout';
 
-const COBOL_SNIPPET = `    ADD 1 TO WS-CONN-COUNT
-    MOVE WS-CURRENT-USER TO
-        WS-CONN-USER-A(WS-CONN-COUNT)
-    MOVE WS-REQ-SENDER(WS-REQ-IDX) TO
-        WS-CONN-USER-B(WS-CONN-COUNT)
-    ADD 1 TO WS-CONN-COUNT
-    MOVE WS-REQ-SENDER(WS-REQ-IDX) TO
-        WS-CONN-USER-A(WS-CONN-COUNT)
-    MOVE WS-CURRENT-USER TO
-        WS-CONN-USER-B(WS-CONN-COUNT)`;
+const COBOL_SNIPPET = `9400-ADD-CONNECTION.
+    MOVE WS-USERNAME(WS-CURRENT-USER-INDEX)
+        TO CONN-USER-A
+    MOVE WS-VIEWREQ-SENDER-USERNAME
+        TO CONN-USER-B
+    WRITE CONNECTION-REC
+    ADD 1 TO WS-CONNECTIONS-COUNT
+    MOVE CONN-USER-A
+        TO WS-CONN-USER-A(WS-CONNECTIONS-COUNT)
+    MOVE CONN-USER-B
+        TO WS-CONN-USER-B(WS-CONNECTIONS-COUNT)`;
 
 /**
  * Slide 27 — Bidirectional Connections.
@@ -55,9 +56,9 @@ export function Slide27M5Bidirectional({ step }: SlideProps) {
 
         <StepReveal currentStep={step} visibleAt={1}>
           <FeatureCallout
-            title="Symmetric records"
-            detail="Both A→B and B→A records are created, so either user can find the other in their network."
-            citation="src/CONNECTIONS.cpy"
+            title="Single record, bidirectional lookup"
+            detail="One A→B record is written. The lookup code checks both A and B slots, so either user finds the other."
+            citation="src/CONNWRITE.cpy"
           />
         </StepReveal>
       </div>
