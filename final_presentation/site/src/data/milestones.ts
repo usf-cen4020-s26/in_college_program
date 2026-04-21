@@ -1,0 +1,167 @@
+export type Milestone = {
+  id: number;
+  epic: number;
+  title: string;
+  dateRange: string;
+  features: string[];
+  testCount: number;
+  locCount: number;
+  datFiles: number;
+  keyCommit?: string;
+};
+
+export const MILESTONES: readonly Milestone[] = [
+  {
+    id: 1,
+    epic: 1,
+    title: 'Authentication',
+    dateRange: 'Jan 21 – Jan 27',
+    features: [
+      'DevContainer & CI pipeline',
+      'Core COBOL program (main.cob)',
+      'Account creation with password validation',
+      'Login with credential matching',
+      'Max 5 accounts enforced',
+      'ACCOUNTS.DAT persistence',
+    ],
+    testCount: 18,
+    locCount: 520,
+    datFiles: 1,
+    keyCommit: '4c1b395',
+  },
+  {
+    id: 2,
+    epic: 2,
+    title: 'User Profiles',
+    dateRange: 'Feb 1',
+    features: [
+      'Profile creation (name, university, major, year)',
+      'About Me (max 200 chars)',
+      'Up to 3 work experiences',
+      'Up to 3 education entries',
+      'Profile viewing & editing',
+      'Graduation year validation (1950–2050)',
+    ],
+    testCount: 28,
+    locCount: 1220,
+    datFiles: 2,
+    keyCommit: 'c7a84cb',
+  },
+  {
+    id: 3,
+    epic: 3,
+    title: 'User Search',
+    dateRange: 'Feb 12',
+    features: [
+      'Find Someone You Know',
+      'Search by full name (first + last)',
+      'View found user profile',
+      'Not found handling',
+    ],
+    testCount: 58,
+    locCount: 1400,
+    datFiles: 2,
+    keyCommit: '4e82b98',
+  },
+  {
+    id: 4,
+    epic: 4,
+    title: 'Connection Requests',
+    dateRange: 'Feb 19',
+    features: [
+      'Send connection request by name',
+      'View pending requests',
+      'Duplicate prevention',
+      'PENDING.DAT storage',
+      'Menu grows: 4 → 7 options',
+    ],
+    testCount: 100,
+    locCount: 1600,
+    datFiles: 3,
+    keyCommit: '45b408e',
+  },
+  {
+    id: 5,
+    epic: 5,
+    title: 'Accept/Reject & Network',
+    dateRange: 'Mar 5',
+    features: [
+      'Accept connection request (bidirectional)',
+      'Reject connection request',
+      'View My Network',
+      'CONNECTIONS.DAT storage',
+      'Input pushback mechanism',
+    ],
+    testCount: 110,
+    locCount: 1750,
+    datFiles: 4,
+    keyCommit: '10b4050',
+  },
+  {
+    id: 6,
+    epic: 6,
+    title: 'Job Posting',
+    dateRange: 'Mar 12',
+    features: [
+      'Job Search/Internship submenu',
+      'Post a job (title, desc, employer, location, salary)',
+      'Required field re-prompting',
+      'JOBS.DAT storage (max 25)',
+    ],
+    testCount: 130,
+    locCount: 1850,
+    datFiles: 5,
+    keyCommit: '7152c25',
+  },
+  {
+    id: 7,
+    epic: 7,
+    title: 'Job Browsing & Applications',
+    dateRange: 'Mar 25',
+    features: [
+      'Browse all jobs (summary view)',
+      'View job details',
+      'Apply to a job',
+      'Duplicate application prevention',
+      'Application summary report',
+    ],
+    testCount: 150,
+    locCount: 1950,
+    datFiles: 6,
+    keyCommit: 'a380376',
+  },
+  {
+    id: 8,
+    epic: 8,
+    title: 'Send Messages',
+    dateRange: 'Apr 2',
+    features: [
+      'Messages menu (option 8)',
+      'Send message to connections only',
+      'Recipient & connection validation',
+      'Max 200 chars, auto-timestamp',
+      'MESSAGES.DAT (265 bytes/record)',
+    ],
+    testCount: 165,
+    locCount: 4350,
+    datFiles: 7,
+    keyCommit: 'f447b0a',
+  },
+  {
+    id: 9,
+    epic: 9,
+    title: 'View Messages',
+    dateRange: 'Apr 2 – Apr 8',
+    features: [
+      'View received messages',
+      'Chronological ordering (oldest first)',
+      'Recipient isolation',
+      'Formatted display with headers',
+      'Persistence across sessions',
+    ],
+    testCount: 195,
+    locCount: 4350,
+    datFiles: 7,
+    keyCommit: '3b3bb70',
+  },
+];
