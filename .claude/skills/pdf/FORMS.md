@@ -177,7 +177,7 @@ For checkboxes:
 ```
 
 Create validation images by running this script from this file's directory for each page:
-`python scripts/create_validation_image.py <page_number> <path_to_fields.json> <input_image_path> <output_image_path>
+`python scripts/create_validation_image.py <page_number> <path_to_fields.json> <input_image_path> <output_image_path>`
 
 The validation images will have red rectangles where text should be entered, and blue rectangles covering label text.
 
